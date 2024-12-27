@@ -1,0 +1,22 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.image {
+    height: 100vh !important;
+    width: 100%;
+}
+
+.image img {
+    height: 100%;
+    width: 100%;
+}
+
+.formulaire {
+    border: 3px solid rgb(215, 0, 0);
+    margin: 10px 50px;
+    min-height: 30vh;
+    padding: 30px 20px;
+}
