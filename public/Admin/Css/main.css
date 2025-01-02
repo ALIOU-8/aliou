@@ -527,6 +527,42 @@ main .breadcrumbs li .divider {
 /* MAIN  */
 
 
+/* PROFIL  */
+
+.carte {
+    background: var(--light);
+    border-radius: 3px;
+    box-shadow: 4px 4px 4px rgb(170, 168, 168);
+    padding: 15px 0px;
+    margin: 0px 10px;
+}
+
+.carte a {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    padding-left: 25px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: var(--dark);
+}
+
+.carte a:hover,
+.carte a.active {
+    background: rgba(255, 0, 0, 0.159);
+    border-right: 5px solid rgba(255, 0, 0, 0.772);
+    color: var(--red);
+}
+
+.header img {
+    height: 100px;
+    width: 100px;
+}
+
+
+/* PROFIL  */
+
+
 /* CONTENT  */
 
 

@@ -21,16 +21,16 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="" class="{{ Route::is('personnels.*') ? 'active' : '' }}">
                     <i class="bx bxs-user icon"></i>Gestion Personnel <i class="bx bx-chevron-right icon-right"></i>
                 </a>
                 <ul class="side-dropdown">
-                    <li><a href="#">Ajout</a></li>
-                    <li><a href="#">Liste</a></li>
+                    <li><a href="{{ route('personnels.ajout') }}">Ajout</a></li>
+                    <li><a href="{{ route('personnels.liste') }}">Liste</a></li>
                 </ul>
             </li>
             <li>
-                <a href="#" class="{{ Route::is('contribuables.*') ? 'active' : '' }}">
+                <a href="" class="{{ Route::is('contribuables.*') ? 'active' : '' }}">
                     <i class="bx bxs-user icon"></i>Gestion Contribuables <i class="bx bx-chevron-right icon-right"></i>
                 </a>
                 <ul class="side-dropdown">
@@ -39,21 +39,21 @@
                 </ul>
             </li>
             <li>
-                <a href="#">
+                <a href="" class="{{ Route::is('biens.*') ? 'active' : '' }}">
                     <i class="bx bx-building-house icon"></i>Gestion Bien <i class="bx bx-chevron-right icon-right"></i>
                 </a>
                 <ul class="side-dropdown">
-                    <li><a href="#">Ajout</a></li>
-                    <li><a href="#">Liste</a></li>
+                    <li><a href="{{ route('biens.ajout') }}">Ajout</a></li>
+                    <li><a href="{{ route('biens.liste') }}">Liste</a></li>
                 </ul>
             </li>
             <li>
-                <a href="#">
+                <a href="" class="{{ Route::is('cfu.*') ? 'active' : '' }}">
                     <i class="bx bx-building-house icon"></i>Gestion CFU <i class="bx bx-chevron-right icon-right"></i>
                 </a>
                 <ul class="side-dropdown">
-                    <li><a href="#">Ajoutez recensement</a></li>
-                    <li><a href="#">Liste</a></li>
+                    <li><a href="{{route('cfu.ajout')}}">Ajoutez recensement</a></li>
+                    <li><a href="{{route('cfu.liste')}}">Liste</a></li>
                 </ul>
             </li>
             <li>
@@ -156,7 +156,7 @@
             <div class="profile">
                 <img src="{{asset('Admin/Assets/image1.jpg')}}" alt="">
                 <ul class="profile-link">
-                    <li><a href=""><i class="bx bxs-user-circle icon"></i>Profil</a></li>
+                    <li><a href="{{route('profil')}}"><i class="bx bxs-user-circle icon"></i>Profil</a></li>
                     {{-- <li><a href=""><i class="bx bxs-cog icon"></i>Setting</a></li> --}}
                     <li><a href=""><i class="bx bxs-log-out-circle icon"></i>Logout</a></li>
                 </ul>

@@ -4,18 +4,17 @@
     <ul class="breadcrumbs">
         <li><a href="{{route('dashboard')}}">Home</a></li>
         <li class="divider">/</li>
-        <li><a href="" class="active">Biens</a></li>
+        <li><a href="" class="active">CFU</a></li>
     </ul>
     <div class="container justify-content-center">
         <div class="row d-flex justify-content-center">
             <div class="col-md-12 ">
                 <div class="card border border-light">
                     <div class="card-body">
-                        <div class="h5 text-center text-success">La liste des biens</div>
+                        <div class="h5 text-center text-success">La liste des cfu</div>
                         <div class="row d-flex justify-content-between align-items-center me-1">
                             <div class="col-4 d-flex gap-4">
                                 <a href="" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
-                                <a href="{{route('biens.type')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Type de biens <i class="bx bx-printer"></i></a>
                             </div>
                             <div class="col-4">
                                 <input type="text" placeholder="Rechercher..." class="form-control border border-success m-3">
@@ -43,7 +42,8 @@
                                         <td>Sano & Frères</td>
                                         <td>Telico en face de l'institut</td>
                                         <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('biens.modif')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
+                                            <a href="{{route('cfu.modif')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
+                                            <a href="{{route('cfu.modif')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
                                             <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer">Supprimer<i class="bx bx-trash"></i></a>
                                             {{-- Modal pour confirmer la suppression  --}}
                                             <div class="modal fade" id="supprimer" aria-labelledby="supprimer" aria-hidden="true">
@@ -72,65 +72,8 @@
                                         <td>Sano & Frères</td>
                                         <td>Telico en face de l'institut</td>
                                         <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('biens.modif')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
-                                            <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer">Supprimer<i class="bx bx-trash"></i></a>
-                                            {{-- Modal pour confirmer la suppression  --}}
-                                            <div class="modal fade" id="supprimer" aria-labelledby="supprimer" aria-hidden="true">
-                                                <div class="modal-dialog center">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h6 class="modal-title" id="supprimer">Voulez-vous supprimez ce bien ?</h6>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="text-start">Propriétaire du bien</div>
-                                                            <div class="text-start">Type du bien</div>
-                                                            <div class="text-start">Libéllé du bien</div>
-                                                            <button type="submit" class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1">Confirmer <i class="bx bx-check"></i></button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Sano Ismael</td>
-                                        <td>Magasin</td>
-                                        <td>5788</td>
-                                        <td>Sano & Frères</td>
-                                        <td>Telico en face de l'institut</td>
-                                        <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('biens.modif')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
-                                            <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer">Supprimer<i class="bx bx-trash"></i></a>
-                                            {{-- Modal pour confirmer la suppression  --}}
-                                            <div class="modal fade" id="supprimer" aria-labelledby="supprimer" aria-hidden="true">
-                                                <div class="modal-dialog center">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h6 class="modal-title" id="supprimer">Voulez-vous supprimez ce bien ?</h6>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="text-start">Propriétaire du bien</div>
-                                                            <div class="text-start">Type du bien</div>
-                                                            <div class="text-start">Libéllé du bien</div>
-                                                            <button type="submit" class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1">Confirmer <i class="bx bx-check"></i></button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Sano Ismael</td>
-                                        <td>Magasin</td>
-                                        <td>5788</td>
-                                        <td>Sano & Frères</td>
-                                        <td>Telico en face de l'institut</td>
-                                        <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('biens.modif')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
+                                            <a href="{{route('cfu.modif')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
+                                            <a href="{{route('cfu.modif')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
                                             <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer">Supprimer<i class="bx bx-trash"></i></a>
                                             {{-- Modal pour confirmer la suppression  --}}
                                             <div class="modal fade" id="supprimer" aria-labelledby="supprimer" aria-hidden="true">
