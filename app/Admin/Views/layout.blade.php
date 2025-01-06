@@ -21,57 +21,57 @@
                 </a>
             </li>
             <li>
-                <a href="" class="{{ Route::is('personnels.*') ? 'active' : '' }}">
-                    <i class="bx bxs-user icon"></i>Gestion Personnel <i class="bx bx-chevron-right icon-right"></i>
+                <a href="{{route('personnels.liste')}}" class="{{ Route::is('personnels.*') ? 'active' : '' }}">
+                    <i class="bx bxs-user icon"></i>Gestion Personnel
                 </a>
-                <ul class="side-dropdown">
-                    <li><a href="{{ route('personnels.ajout') }}">Ajout</a></li>
-                    <li><a href="{{ route('personnels.liste') }}">Liste</a></li>
-                </ul>
             </li>
             <li>
-                <a href="" class="{{ Route::is('contribuables.*') ? 'active' : '' }}">
-                    <i class="bx bxs-user icon"></i>Gestion Contribuables <i class="bx bx-chevron-right icon-right"></i>
+                <a href="{{route('contribuables.liste')}}" class="{{ Route::is('contribuables.*') ? 'active' : '' }}">
+                    <i class="bx bxs-user icon"></i>Gestion Contribuables
                 </a>
-                <ul class="side-dropdown">
-                    <li><a href="{{ route('contribuables.ajout') }}" class="{{ Route::is('contribuables.ajout') ? 'active' : '' }}">Ajout</a></li>
-                    <li><a href="{{ route('contribuables.liste') }}" class="{{ Route::is('contribuables.liste') ? 'active' : '' }}">Liste</a></li>
-                </ul>
             </li>
             <li>
-                <a href="" class="{{ Route::is('biens.*') ? 'active' : '' }}">
-                    <i class="bx bx-building-house icon"></i>Gestion Bien <i class="bx bx-chevron-right icon-right"></i>
+                <a href="{{route('biens.liste')}}" class="{{ Route::is('biens.*') ? 'active' : '' }}">
+                    <i class="bx bx-building-house icon"></i>Gestion Biens
                 </a>
-                <ul class="side-dropdown">
-                    <li><a href="{{ route('biens.ajout') }}">Ajout</a></li>
-                    <li><a href="{{ route('biens.liste') }}">Liste</a></li>
-                </ul>
             </li>
             <li>
                 <a href="" class="{{ Route::is('cfu.*') ? 'active' : '' }}">
                     <i class="bx bx-building-house icon"></i>Gestion CFU <i class="bx bx-chevron-right icon-right"></i>
                 </a>
                 <ul class="side-dropdown">
-                    <li><a href="{{route('cfu.ajout')}}">Ajoutez recensement</a></li>
                     <li><a href="{{route('cfu.liste')}}">Liste</a></li>
+                    <li><a href="{{route('cfu.statistique')}}">Statistique</a></li>
                 </ul>
             </li>
             <li>
-                <a href="#">
+                <a href="" class="{{ Route::is('tpu.*') ? 'active' : '' }}">
                     <i class="bx bxs-business icon"></i>Gestion TPU <i class="bx bx-chevron-right icon-right"></i>
                 </a>
                 <ul class="side-dropdown">
-                    <li><a href="#">Ajoutez recensement</a></li>
-                    <li><a href="#">Liste</a></li>
+                    <li><a href="{{route('tpu.ajout')}}">Ajoutez recensement</a></li>
+                    <li><a href="{{route('tpu.liste')}}">Liste</a></li>
+                    <li><a href="{{route('tpu.liste')}}">Statistique</a></li>
                 </ul>
             </li>
             <li>
-                <a href="#">
-                    <i class="bx bxs-inbox icon"></i>Gestion Patente/Licence <i class="bx bx-chevron-right icon-right"></i>
+                <a href="" class="{{ Route::is('patente.*') ? 'active' : '' }}">
+                    <i class="bx bxs-inbox icon"></i>Gestion Patente <i class="bx bx-chevron-right icon-right"></i>
                 </a>
                 <ul class="side-dropdown">
-                    <li><a href="#">Ajoutez recensement</a></li>
-                    <li><a href="#">Liste</a></li>
+                    <li><a href="{{route('patente.ajout')}}">Ajoutez recensement</a></li>
+                    <li><a href="{{route('patente.liste')}}">Liste</a></li>
+                    <li><a href="{{route('patente.liste')}}">Statistique</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="" class="{{ Route::is('licence.*') ? 'active' : '' }}">
+                    <i class="bx bxs-inbox icon"></i>Gestion Licence <i class="bx bx-chevron-right icon-right"></i>
+                </a>
+                <ul class="side-dropdown">
+                    <li><a href="{{route('licence.ajout')}}">Ajoutez recensement</a></li>
+                    <li><a href="{{route('licence.liste')}}">Liste</a></li>
+                    <li><a href="{{route('licence.liste')}}">Statistique</a></li>
                 </ul>
             </li>
             <li>
@@ -81,6 +81,7 @@
                 <ul class="side-dropdown">
                     <li><a href="#">Ajout</a></li>
                     <li><a href="#">Liste</a></li>
+                    <li><a href="#">Statistique</a></li>
                 </ul>
             </li>
             <li>
@@ -89,7 +90,7 @@
                 </a>
                 <ul class="side-dropdown">
                     <li><a href="#">Ajout utilisateur</a></li>
-                    <li><a href="#">Ajout recensement général</a></li>
+                    <li><a href="#">Ajout recensement</a></li>
                     <li><a href="#">Configurer le site</a></li>
                 </ul>
             </li>

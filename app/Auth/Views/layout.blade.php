@@ -13,10 +13,10 @@
 <body>
     <div class="container-fluid">
         <div class="row">
-            <div class="image col-7 p-0">
+            <div class="image col-md-7  p-0">
                 <img src="{{asset('Admin/Assets/login.jpg')}}" alt="" class="img img-fluid ">
             </div>
-            <div class="col-5">
+            <div class="col-md-5">
                 <div class="d-flex justify-content-center pt-5">
                     <img src="{{asset('Admin/Assets/impot.jpg')}}" alt="" class="img img-fluid ">
                 </div>

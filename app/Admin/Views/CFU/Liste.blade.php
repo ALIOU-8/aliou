@@ -13,10 +13,13 @@
                     <div class="card-body">
                         <div class="h5 text-center text-success">La liste des cfu</div>
                         <div class="row d-flex justify-content-between align-items-center me-1">
-                            <div class="col-4 d-flex gap-4">
+                            <div class="col-md-2">
+                                <a href="{{route('cfu.ajout')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Nouveau <i class="bx bx-plus"></i></a>
+                            </div>
+                            <div class="col-md-2">
                                 <a href="" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
                             </div>
-                            <div class="col-4">
+                            <div class="col-md-4 ms-auto">
                                 <input type="text" placeholder="Rechercher..." class="form-control border border-success m-3">
                             </div>
                         </div>

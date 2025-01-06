@@ -18,4 +18,8 @@ class PersonnelsController extends Controller
     public function modif () {
         return view('Admin::Personnels.Modif');
     }
+
+    public function voir () {
+        return view('Admin::Personnels.Voir');
+    }
 }

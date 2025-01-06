@@ -23,6 +23,10 @@
                                         <option value="">628013577</option>
                                     </select>
                                 </div>
+                                <div class="col-md-6 d-block">
+                                    <div class="h6 mt-2">Informations du client</div>
+                                    <div class="h5 fw-bolder">Nom et Prénom : <span class="fw-normal">Sano Ismael</span></div>
+                                </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label" for="id_typeBien">Type de bien</label>
                                     <select name="id_typeBien" id="id_typeBien" class="form-control">
@@ -39,7 +43,7 @@
                                     <label class="form-label" for="libelle">Libéllé</label>
                                     <input class="form-control" type="text" name="libelle">
                                 </div>
-                                <div class="col-md-12 mb-3">
+                                <div class="col-md-6 mb-3">
                                     <label class="form-label" for="adresse">Adresse</label>
                                     <input class="form-control" type="text" name="adresse">
                                 </div> 

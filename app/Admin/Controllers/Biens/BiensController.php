@@ -19,6 +19,10 @@ class BiensController extends Controller
         return view('Admin::Biens.Modif');
     }
 
+    public function voir () {
+        return view('Admin::Biens.Voir');
+    }
+
     public function type () {
         return view('Admin::Biens.Type');
     }

@@ -4,7 +4,9 @@
     <ul class="breadcrumbs">
         <li><a href="{{route('dashboard')}}">Home</a></li>
         <li class="divider">/</li>
-        <li><a href="" class="active">Personnels</a></li>
+        <li><a href="{{route('personnels.liste')}}">Personnels</a></li>
+        <li class="divider">/</li>
+        <li><a href="" class="active">Modifier personnel</a></li>
     </ul>
     <div class="container justify-content-center">
         <div class="row d-flex justify-content-center">

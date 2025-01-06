@@ -8,14 +8,14 @@
     </ul>
     <div class="container">
         <div class="row">
-            <div class="col-3">
+            <div class="col-md-3">
                 <div class="carte">
                     <a href="" class="active"><i class="bx bxs-user me-2 fs-6"></i>Profil</a>
                     <a href=""><i class="bx bxs-chat me-2 fs-6"></i>Message</a>
                     <a href=""><i class="bx bxs-bell me-2 fs-6"></i>Notification</a>
                 </div>
             </div>
-            <div class="col-9">
+            <div class="col-md-9">
                 <div class="card border shadow mb-5">
                     <div class="card-body border sahadow">
                         <div class="header">

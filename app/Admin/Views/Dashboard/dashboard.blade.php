@@ -46,7 +46,7 @@
    </div>
    <div class="container mt-5">
     <div class="row">
-        <div class="col-6">
+        <div class="col-md-6">
             <div class="card">
                 <div class="card-body shadow">
                     <div class="h6 text-success text-center">Choix de l'année</div>
@@ -60,7 +60,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-6">
+        <div class="col-md-6">
             <div class="card">
                 <div class="card-body border shadow">
                     <div class="h6 text-danger text-center">Statistiques du recensement pour l'année 2024 </div>

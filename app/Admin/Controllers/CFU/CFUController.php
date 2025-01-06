@@ -18,4 +18,8 @@ class CFUController extends Controller
     public function modif () {
         return view('Admin::Biens.Modif');
     }
+
+    public function statistique()  {
+        return view('Admin::CFU.statistique');
+    }
 }

@@ -1,0 +1,22 @@
+Front End
+        Personnels
+    Fonctions
+        Contribuables
+    Invitations
+    Messages
+        Biens (Un boutton voir qui permet de voir a qui appartient ce bien et si cet utilisateur a d'autres biens permettre de voir les autres biens du propriétaire )
+        Types Biens
+    Notifications
+    Parametres
+    Recensement licence
+    Recensement Patente
+    Recensement TPU
+    Recensement CFU (Un boutton voir qui permet de voir les Caractéristique et les Occupants pour cet immeuble et si le propriétaire n'a pas d'autres immeubles aussi pareil pour les autres Recensement)
+    Caractéristique CFU
+    Occupant CFU
+    Recensement Annuel
+    Impot
+    Types Impot
+    Réçus
+    Paiements
+    Matrice
