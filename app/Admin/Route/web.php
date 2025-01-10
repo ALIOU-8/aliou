@@ -26,7 +26,12 @@ use Illuminate\Support\Facades\Route;
     Route::prefix('contribuables')->group(function () {
         Route::get('/', [ContribuableController::class, 'index'])->name('contribuables.liste');
         Route::get('/ajout', [ContribuableController::class, 'ajout'])->name('contribuables.ajout');
-        Route::get('/modif', [ContribuableController::class, 'modif'])->name('contribuables.modif');
+        Route::get('/modif/{id}', [ContribuableController::class, 'modif'])->name('contribuables.modif');
+        Route::post('/store', [ContribuableController::class, 'store'])->name('contribuables.store');
+        Route::put('/update/{id}', [ContribuableController::class, 'update'])->name('contribuables.update');
+        Route::put('/supprime/{id}', [ContribuableController::class, 'delete'])->name('contribuables.supprime');
+        Route::get('/restaurer', [ContribuableController::class, 'restaurer'])->name('contribuables.restaurer');
+        Route::put('/restaurer/{id}', [ContribuableController::class, 'restaure'])->name('contribuables.resto');
     });
 
     //Les routes pour les personnels

@@ -173,12 +173,12 @@
     </section> 
     <!-- navbar  -->
     <!-- footer  -->
-    <footer class="footer">
+    <section id="footer">
         <div class="d-flex justify-content-between align-items-center">
             <div class="h6">copyright 2024 © tous droit reservé</div>
             <div class="h6">DGI de Mamou </div>
         </div>
-    </footer>
+    </section>
 
      <!-- end footer  -->
      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
