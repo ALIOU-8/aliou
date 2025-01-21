@@ -18,4 +18,12 @@ class PatenteController extends Controller
     public function modif () {
         return view('Admin::Patente.Modif');
     }
+
+    public function voir () {
+        return view('Admin::Patente.Voir');
+    }
+
+    public function corbeille () {
+        return view('Admin::Patente.Corbeille');
+    }
 }

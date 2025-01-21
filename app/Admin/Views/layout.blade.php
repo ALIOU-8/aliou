@@ -36,63 +36,34 @@
                 </a>
             </li>
             <li>
-                <a href="" class="{{ Route::is('cfu.*') ? 'active' : '' }}">
-                    <i class="bx bx-building-house icon"></i>Gestion CFU <i class="bx bx-chevron-right icon-right"></i>
+                <a href="{{route('cfu.liste')}}" class="{{ Route::is('cfu.*') ? 'active' : '' }}">
+                    <i class="bx bx-building-house icon"></i>Gestion CFU
                 </a>
-                <ul class="side-dropdown">
-                    <li><a href="{{route('cfu.liste')}}">Liste</a></li>
-                    <li><a href="{{route('cfu.statistique')}}">Statistique</a></li>
-                </ul>
             </li>
             <li>
-                <a href="" class="{{ Route::is('tpu.*') ? 'active' : '' }}">
-                    <i class="bx bxs-business icon"></i>Gestion TPU <i class="bx bx-chevron-right icon-right"></i>
+                <a href="{{route('tpu.liste')}}" class="{{ Route::is('tpu.*') ? 'active' : '' }}">
+                    <i class="bx bxs-business icon"></i>Gestion TPU
                 </a>
-                <ul class="side-dropdown">
-                    <li><a href="{{route('tpu.ajout')}}">Ajoutez recensement</a></li>
-                    <li><a href="{{route('tpu.liste')}}">Liste</a></li>
-                    <li><a href="{{route('tpu.liste')}}">Statistique</a></li>
-                </ul>
             </li>
             <li>
-                <a href="" class="{{ Route::is('patente.*') ? 'active' : '' }}">
-                    <i class="bx bxs-inbox icon"></i>Gestion Patente <i class="bx bx-chevron-right icon-right"></i>
+                <a href="{{route('patente.liste')}}" class="{{ Route::is('patente.*') ? 'active' : '' }}">
+                    <i class="bx bxs-inbox icon"></i>Gestion Patente
                 </a>
-                <ul class="side-dropdown">
-                    <li><a href="{{route('patente.ajout')}}">Ajoutez recensement</a></li>
-                    <li><a href="{{route('patente.liste')}}">Liste</a></li>
-                    <li><a href="{{route('patente.liste')}}">Statistique</a></li>
-                </ul>
             </li>
             <li>
-                <a href="" class="{{ Route::is('licence.*') ? 'active' : '' }}">
-                    <i class="bx bxs-inbox icon"></i>Gestion Licence <i class="bx bx-chevron-right icon-right"></i>
+                <a href="{{route('licence.liste')}}" class="{{ Route::is('licence.*') ? 'active' : '' }}">
+                    <i class="bx bxs-inbox icon"></i>Gestion Licence
                 </a>
-                <ul class="side-dropdown">
-                    <li><a href="{{route('licence.ajout')}}">Ajoutez recensement</a></li>
-                    <li><a href="{{route('licence.liste')}}">Liste</a></li>
-                    <li><a href="{{route('licence.liste')}}">Statistique</a></li>
-                </ul>
             </li>
             <li>
-                <a href="#">
-                    <i class="bx bxs-wallet icon"></i>Gestion Impôts <i class="bx bx-chevron-right icon-right"></i>
+                <a href="{{route('impot.liste')}}" class="{{ Route::is('impot.*') ? 'active' : '' }}">
+                    <i class="bx bxs-wallet icon"></i>Gestion Impôts
                 </a>
-                <ul class="side-dropdown">
-                    <li><a href="#">Ajout</a></li>
-                    <li><a href="#">Liste</a></li>
-                    <li><a href="#">Statistique</a></li>
-                </ul>
             </li>
             <li>
-                <a href="#">
-                    <i class="bx bx-cog icon"></i>Paramètre <i class="bx bx-chevron-right icon-right"></i>
+                <a href="" class="{{ Route::is('parametre.*') ? 'active' : '' }}">
+                    <i class="bx bxs-cog icon"></i>Paramètre
                 </a>
-                <ul class="side-dropdown">
-                    <li><a href="#">Ajout utilisateur</a></li>
-                    <li><a href="#">Ajout recensement</a></li>
-                    <li><a href="#">Configurer le site</a></li>
-                </ul>
             </li>
         </ul>        
     

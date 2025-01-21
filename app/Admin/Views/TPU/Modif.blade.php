@@ -4,14 +4,16 @@
     <ul class="breadcrumbs">
         <li><a href="{{route('dashboard')}}">Home</a></li>
         <li class="divider">/</li>
-        <li><a href="" class="active">Biens</a></li>
+        <li><a href="{{route('tpu.liste')}}">TPU</a></li>
+        <li class="divider">/</li>
+        <li><a href="" class="active">Modification TPU</a></li>
     </ul>
     <div class="container justify-content-center">
         <div class="row d-flex justify-content-center">
-            <div class="col-md-12 ">
+            <div class="col-md-12 mb-5">
                 <div class="card border border-light">
                     <div class="card-body">
-                        <div class="h5 mb-2 text-center text-success">Modificatioin d'un bien</div>
+                        <div class="h5 mb-2 text-center text-success"> Recensement TPU </div>
                         <div class="h6 mb-3 text-success">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab mollitia ratione quaerat natus rem iusto asperiores facilis libero est doloremque velit, suscipit repellendus cupiditate illo dolor perspiciatis labore reiciendis vitae?</div>
                         <form action="" class="form">
                             <div class="row">
@@ -24,27 +26,23 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="id_typeBien">Type de bien</label>
+                                    <label class="form-label" for="id_typeBien">Année de recensement</label>
                                     <select name="id_typeBien" id="id_typeBien" class="form-control">
-                                        <option value=""></option>
-                                        <option value="">Boutique</option>
-                                        <option value="">Magasin</option>
+                                        <option value="">Année en cours</option>
+                                        <option value="">Année antérieure</option>
+                                        <option value="">Année antérieure - 1</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="numBoutique">Numéro de Boutique</label>
-                                    <input class="form-control" type="text" name="numBoutique">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="libelle">Libéllé</label>
+                                    <label class="form-label" for="libelle">Catégorie</label>
                                     <input class="form-control" type="text" name="libelle">
                                 </div>
-                                <div class="col-md-12 mb-3">
-                                    <label class="form-label" for="adresse">Adresse</label>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label" for="adresse">Date du Rendez-vous</label>
                                     <input class="form-control" type="text" name="adresse">
-                                </div> 
+                                </div>           
                                 <div class="d-flex justify-content-start">
-                                    <button class="btn btn-outline-success col-6 col-md-3">Valider la modificatioin</button>
+                                    <button class="btn btn-outline-success col-6 col-md-3 d-flex justify-content-center align-items-center gap-1">Valider la modification <i class="bx bx-save"></i></button>
                                 </div>
                             </div>
                         </form>

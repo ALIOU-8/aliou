@@ -19,6 +19,9 @@
                             <div class="col-md-2 ">
                                 <a href="" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
                             </div>
+                            <div class="col-md-2">
+                                <a href="{{route('personnels.corbeille')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Corbeille <i class="bx bx-trash"></i></a>
+                            </div>
                             <div class="col-md-4 ms-auto">
                                 <input type="text" placeholder="Rechercher..." class="form-control border border-success m-3">
                             </div>
@@ -93,76 +96,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>2204</td>
-                                        <td>Bah</td>
-                                        <td>Mamadou Saliou</td>
-                                        <td>620394850</td>
-                                        <td>Etudiant</td>
-                                        <td>A1</td>
-                                        <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('personnels.voir')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
-                                            <a href="" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
-                                            <a href="" class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1">Supprimer<i class="bx bx-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>2204</td>
-                                        <td>Mansaré</td>
-                                        <td>François Tatoulou</td>
-                                        <td>620202081</td>
-                                        <td>Etudiant</td>
-                                        <td>A1</td>
-                                        <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('personnels.voir')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
-                                            <a href="" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
-                                            <a href="" class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1">Supprimer<i class="bx bx-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>2204</td>
-                                        <td>Diallo</td>
-                                        <td>Mamadou Lamarana</td>
-                                        <td>628783477</td>
-                                        <td>Etudiant</td>
-                                        <td>A1</td>
-                                        <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('personnels.voir')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
-                                            <a href="" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
-                                            <a href="" class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1">Supprimer<i class="bx bx-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>2204</td>
-                                        <td>Diallo</td>
-                                        <td>Mamadou Aliou</td>
-                                        <td>620394850</td>
-                                        <td>Etudiant</td>
-                                        <td>A1</td>
-                                        <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('personnels.voir')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
-                                            <a href="" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
-                                            <a href="" class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1">Supprimer<i class="bx bx-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>6</td>
-                                        <td>2204</td>
-                                        <td>Barry</td>
-                                        <td>Alpha Ibrahim</td>
-                                        <td>620202081</td>
-                                        <td>Etudiant</td>
-                                        <td>A1</td>
-                                        <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('personnels.voir')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
-                                            <a href="" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
-                                            <a href="" class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1">Supprimer<i class="bx bx-trash"></i></a>
                                         </td>
                                     </tr>
                                 </tbody>

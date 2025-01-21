@@ -4,6 +4,7 @@ use App\Admin\Controllers\Biens\BiensController;
 use App\Admin\Controllers\CFU\CFUController;
 use App\Admin\Controllers\Contribuables\ContribuableController;
 use App\Admin\Controllers\Dashboard\DashboardController;
+use App\Admin\Controllers\Impots\ImpotsController;
 use App\Admin\Controllers\Licence\LicenceController;
 use App\Admin\Controllers\Patente\PatenteController;
 use App\Admin\Controllers\Personnels\PersonnelsController;
@@ -40,6 +41,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/ajout', [PersonnelsController::class, 'ajout'])->name('personnels.ajout');
         Route::get('/modif', [PersonnelsController::class, 'modif'])->name('personnels.modif');
         Route::get('/voir', [PersonnelsController::class, 'voir'])->name('personnels.voir');
+        Route::get('/corbeille', [PersonnelsController::class, 'corbeille'])->name('personnels.corbeille');
     });
 
     //Les routes pour les biens
@@ -49,6 +51,8 @@ use Illuminate\Support\Facades\Route;
         Route::get('/modif', [BiensController::class, 'modif'])->name('biens.modif');
         Route::get('/type', [BiensController::class, 'type'])->name('biens.type');
         Route::get('/voir', [BiensController::class, 'voir'])->name('biens.voir');
+        Route::get('/corbeille', [BiensController::class, 'corbeille'])->name('biens.corbeille');
+
     });
 
     //Les routes pour la gestion CFU
@@ -56,7 +60,9 @@ use Illuminate\Support\Facades\Route;
         Route::get('/', [CFUController::class, 'index'])->name('cfu.liste');
         Route::get('/ajout', [CFUController::class, 'ajout'])->name('cfu.ajout');
         Route::get('/modif', [CFUController::class, 'modif'])->name('cfu.modif');
-        Route::get('/statistique', [CFUController::class, 'statistique'])->name('cfu.statistique');
+        Route::get('/voir', [CFUController::class, 'voir'])->name('cfu.voir');
+        Route::get('/corbeille', [CFUController::class, 'corbeille'])->name('cfu.corbeille');
+        // Route::get('/statistique', [CFUController::class, 'statistique'])->name('cfu.statistique');
 
     });
 
@@ -65,6 +71,8 @@ use Illuminate\Support\Facades\Route;
         Route::get('/', [TPUController::class, 'index'])->name('tpu.liste');
         Route::get('/ajout', [TPUController::class, 'ajout'])->name('tpu.ajout');
         Route::get('/modif', [TPUController::class, 'modif'])->name('tpu.modif');
+        Route::get('/voir', [TPUController::class, 'voir'])->name('tpu.voir');
+        Route::get('/corbeille', [TPUController::class, 'corbeille'])->name('tpu.corbeille');
     });
 
     //Les routes pour la gestion Patente
@@ -72,6 +80,8 @@ use Illuminate\Support\Facades\Route;
         Route::get('/', [PatenteController::class, 'index'])->name('patente.liste');
         Route::get('/ajout', [PatenteController::class, 'ajout'])->name('patente.ajout');
         Route::get('/modif', [PatenteController::class, 'modif'])->name('patente.modif');
+        Route::get('/voir', [PatenteController::class, 'voir'])->name('patente.voir');
+        Route::get('/corbeille', [PatenteController::class, 'corbeille'])->name('patente.corbeille');
     });
 
     //Les routes pour la gestion Licence
@@ -79,4 +89,22 @@ use Illuminate\Support\Facades\Route;
         Route::get('/', [LicenceController::class, 'index'])->name('licence.liste');
         Route::get('/ajout', [LicenceController::class, 'ajout'])->name('licence.ajout');
         Route::get('/modif', [LicenceController::class, 'modif'])->name('licence.modif');
+        Route::get('/voir', [LicenceController::class, 'voir'])->name('licence.voir');
+        Route::get('/corbeille', [LicenceController::class, 'corbeille'])->name('licence.corbeille');
+    });
+
+    //Les routes pour la gestion impot
+    Route::prefix('impot')->group(function () {
+        Route::get('/', [ImpotsController::class, 'index'])->name('impot.liste');
+        Route::get('/ajout', [ImpotsController::class, 'ajout'])->name('impot.ajout');
+        Route::get('/modif', [ImpotsController::class, 'modif'])->name('impot.modif');
+        Route::get('/voir', [ImpotsController::class, 'voir'])->name('impot.voir');
+        Route::get('/corbeille', [ImpotsController::class, 'corbeille'])->name('impot.corbeille');
+        Route::get('/imposition{id}', [ImpotsController::class, 'imposition'])->name('impot.imposition');
+
+    });
+
+    //Les routes pour paramètre
+    Route::prefix('parametre')->group(function () {
+        // Route::get('', [LicenceController::class, 'index'])->name('impot.liste');
     });

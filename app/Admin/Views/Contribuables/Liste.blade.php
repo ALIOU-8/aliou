@@ -47,6 +47,27 @@
                                         <td>{{ $contribuable->telephone }}</td>
                                         <td>{{ $contribuable->profession }}</td>
                                         <td class="d-flex justify-content-center gap-2">
+                                            <a class="btn btn-outline-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#voir{{$contribuable->id}}">Voir<i class="bx bx-show"></i></a>
+                                            {{-- Modal pour voir  --}}
+                                            <div class="modal fade" id="voir{{$contribuable->id}}" aria-labelledby="voir" aria-hidden="true">
+                                                <div class="modal-dialog center">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h6 class="modal-title" id="voir">Informations sur le contribuable <span class="text-danger text-uppercase">{{$contribuable->nom .' '. $contribuable->prenom}}</span></h6>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="row">
+                                                                <div class="h6">Type de bien : Boutique</div>
+                                                                <div class="h6">Num du bien : Btq001</div>
+                                                                <div class="h6">Nom du bien : Sano & Frères</div>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="text-end">Total bien: 2</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <a href="{{route('contribuables.modif',$contribuable->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
                                             <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer{{$contribuable->id}}">Supprimer<i class="bx bx-trash"></i></a>
                                             {{-- Modal pour confirmer la suppression  --}}

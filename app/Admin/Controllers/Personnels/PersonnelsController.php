@@ -22,4 +22,8 @@ class PersonnelsController extends Controller
     public function voir () {
         return view('Admin::Personnels.Voir');
     }
+
+    public function corbeille () {
+        return view ('Admin::Personnels.Corbeille');
+    }
 }

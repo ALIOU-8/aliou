@@ -18,4 +18,12 @@ class LicenceController extends Controller
     public function modif () {
         return view('Admin::Licence.Modif');
     }
+
+    public function voir () {
+        return view('Admin::Licence.Voir');
+    }
+
+    public function corbeille () {
+        return view('Admin::Licence.Corbeille');
+    }
 }

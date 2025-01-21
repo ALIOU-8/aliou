@@ -6,7 +6,7 @@
         <li class="divider">/</li>
         <li><a href="{{route('cfu.liste')}}">CFU</a></li>
         <li class="divider">/</li>
-        <li><a href="" class="active">Ajout CFU</a></li>
+        <li><a href="" class="active">Voir CFU</a></li>
     </ul>
     <div class="container justify-content-center">
         <div class="row d-flex justify-content-center">
@@ -74,9 +74,6 @@
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label" for="libelle">Nombre unité Occupée</label>
                                     <input class="form-control" type="text" name="libelle">
-                                </div>                
-                                <div class="d-flex justify-content-start">
-                                    <button class="btn btn-outline-success col-6 col-md-3 d-flex justify-content-center align-items-center gap-1">Enregistrer <i class="bx bx-save"></i></button>
                                 </div>
                             </div>
                         </form>

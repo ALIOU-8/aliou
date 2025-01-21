@@ -18,4 +18,12 @@ class TPUController extends Controller
     public function modif () {
         return view('Admin::TPU.Modif');
     }
+
+    public function voir () {
+        return view('Admin::TPU.Voir');
+    }
+
+    public function corbeille () {
+        return view('Admin::TPU.Corbeille');
+    }
 }

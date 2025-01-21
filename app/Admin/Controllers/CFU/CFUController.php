@@ -16,10 +16,18 @@ class CFUController extends Controller
     }
 
     public function modif () {
-        return view('Admin::Biens.Modif');
+        return view('Admin::CFU.Modif');
     }
 
-    public function statistique()  {
-        return view('Admin::CFU.statistique');
+    public function voir () {
+        return view('Admin::CFU.Voir');
     }
+
+    public function corbeille () {
+        return view('Admin::CFU.Corbeille');
+    }
+
+    // public function statistique()  {
+    //     return view('Admin::CFU.statistique');
+    // }
 }

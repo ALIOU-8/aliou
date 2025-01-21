@@ -4,7 +4,9 @@
     <ul class="breadcrumbs">
         <li><a href="{{route('dashboard')}}">Home</a></li>
         <li class="divider">/</li>
-        <li><a href="" class="active">TPU</a></li>
+        <li><a href="{{route('tpu.liste')}}">TPU</a></li>
+        <li class="divider">/</li>
+        <li><a href="" class="active">Ajout TPU</a></li>
     </ul>
     <div class="container justify-content-center">
         <div class="row d-flex justify-content-center">
@@ -32,7 +34,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="libelle">Montant</label>
+                                    <label class="form-label" for="libelle">Catégorie</label>
                                     <input class="form-control" type="text" name="libelle">
                                 </div>
                                 <div class="col-md-6 mb-3">

@@ -26,4 +26,8 @@ class BiensController extends Controller
     public function type () {
         return view('Admin::Biens.Type');
     }
+
+    public function corbeille() {
+        return view('Admin::Biens.Corbeille');
+    }
 }

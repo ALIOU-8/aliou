@@ -6,7 +6,7 @@
         <li class="divider">/</li>
         <li><a href="{{route('patente.liste')}}">Patente</a></li>
         <li class="divider">/</li>
-        <li><a href="" class="active">Modification Patente</a></li>
+        <li><a href="" class="active">Voir Patente</a></li>
     </ul>
     <div class="container justify-content-center">
         <div class="row d-flex justify-content-center">
@@ -41,9 +41,7 @@
                                     <label class="form-label" for="adresse">Date du Rendez-vous</label>
                                     <input class="form-control" type="text" name="adresse">
                                 </div>           
-                                <div class="d-flex justify-content-start">
-                                    <button class="btn btn-outline-success col-6 col-md-3 d-flex justify-content-center align-items-center gap-1">Valider la modification <i class="bx bx-save"></i></button>
-                                </div>
+                                
                             </div>
                         </form>
                     </div>

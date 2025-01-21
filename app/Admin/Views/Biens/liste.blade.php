@@ -19,9 +19,12 @@
                             <div class="col-md-2">
                                 <a href="" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
                             </div>
-                            <div class="col-md-3">
-                                <a href="{{route('biens.type')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Type de biens <i class="bx bx-printer"></i></a>
+                            <div class="col-md-2">
+                                <a href="{{route('biens.corbeille')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Corbeille <i class="bx bx-tra"></i></a>
                             </div>
+                            {{-- <div class="col-md-3">
+                                <a href="{{route('biens.type')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Type de biens <i class="bx bx-printer"></i></a>
+                            </div> --}}
                             <div class="col-md-4 ms-auto">
                                 <input type="text" placeholder="Rechercher..." class="form-control border border-success m-3">
                             </div>
