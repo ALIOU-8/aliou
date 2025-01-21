@@ -6,6 +6,7 @@ use App\Admin\Controllers\Contribuables\ContribuableController;
 use App\Admin\Controllers\Dashboard\DashboardController;
 use App\Admin\Controllers\Impots\ImpotsController;
 use App\Admin\Controllers\Licence\LicenceController;
+use App\Admin\Controllers\Parametre\ParametreController;
 use App\Admin\Controllers\Patente\PatenteController;
 use App\Admin\Controllers\Personnels\PersonnelsController;
 use App\Admin\Controllers\Profil\ProfilController;
@@ -97,14 +98,14 @@ use Illuminate\Support\Facades\Route;
     Route::prefix('impot')->group(function () {
         Route::get('/', [ImpotsController::class, 'index'])->name('impot.liste');
         Route::get('/ajout', [ImpotsController::class, 'ajout'])->name('impot.ajout');
-        Route::get('/modif', [ImpotsController::class, 'modif'])->name('impot.modif');
-        Route::get('/voir', [ImpotsController::class, 'voir'])->name('impot.voir');
-        Route::get('/corbeille', [ImpotsController::class, 'corbeille'])->name('impot.corbeille');
+        Route::get('/modif{id}', [ImpotsController::class, 'modif'])->name('impot.modif');
+        Route::get('/voir{id}', [ImpotsController::class, 'voir'])->name('impot.voir');
+        Route::get('/payer{id}', [ImpotsController::class, 'payer'])->name('impot.payer');
         Route::get('/imposition{id}', [ImpotsController::class, 'imposition'])->name('impot.imposition');
 
     });
 
     //Les routes pour paramètre
     Route::prefix('parametre')->group(function () {
-        // Route::get('', [LicenceController::class, 'index'])->name('impot.liste');
+        Route::get('/', [ParametreController::class, 'index'])->name('parametre.index');
     });

@@ -74,26 +74,9 @@
                                         <td>Néant</td>
                                         <td class="text-success">Payé</td>
                                         <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('impot.voir')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
-                                            <a class="btn btn-outline-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#payer">Payer<i class="bx bx-money"></i></a>
-                                            {{-- Modal pour confirmer la suppression  --}}
-                                            <div class="modal fade" id="payer" aria-labelledby="payer" aria-hidden="true">
-                                                <div class="modal-dialog center">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h6 class="modal-title" id="payer">Voulez-vous supprimez ce bien ?</h6>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="text-start">Propriétaire du bien</div>
-                                                            <div class="text-start">Type du bien</div>
-                                                            <div class="text-start">Libéllé du bien</div>
-                                                            <button type="submit" class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1">Confirmer <i class="bx bx-check"></i></button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <a href="{{route('impot.modif')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
+                                            <a href="{{route('impot.voir',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
+                                            <a href="{{route('impot.payer',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Payer<i class="bx bx-money"></i></a>
+                                            <a href="{{route('impot.modif',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
                                         </td>
                                     </tr>
                                     <tr>
@@ -108,26 +91,9 @@
                                         <td>Néant</td>
                                         <td class="text-warning">Encours</td>
                                         <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('impot.voir')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
-                                            <a class="btn btn-outline-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#payer">Payer<i class="bx bx-money"></i></a>
-                                            {{-- Modal pour confirmer la suppression  --}}
-                                            <div class="modal fade" id="payer" aria-labelledby="payer" aria-hidden="true">
-                                                <div class="modal-dialog center">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h6 class="modal-title" id="payer">Voulez-vous supprimez ce bien ?</h6>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="text-start">Propriétaire du bien</div>
-                                                            <div class="text-start">Type du bien</div>
-                                                            <div class="text-start">Libéllé du bien</div>
-                                                            <button type="submit" class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1">Confirmer <i class="bx bx-check"></i></button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <a href="{{route('impot.modif')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
+                                            <a href="{{route('impot.voir',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
+                                            <a href="{{route('impot.payer',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Payer<i class="bx bx-money"></i></a>
+                                            <a href="{{route('impot.modif',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
                                         </td>
                                     </tr>
                                 </tbody>

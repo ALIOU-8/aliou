@@ -15,16 +15,16 @@ class ImpotsController extends Controller
         return view('Admin::Impots.Imposition');
     }
 
-    public function modif () {
+    public function modif (string $id) {
         return view('Admin::Impots.Modif');
     }
 
-    public function voir () {
+    public function voir (string $id) {
         return view('Admin::Impots.Voir');
     }
 
-    public function corbeille () {
-        return view('Admin::Impots.Corbeille');
+    public function payer () {
+        return view('Admin::Impots.Payer');
     }
 
     public function imposition (string $id) {

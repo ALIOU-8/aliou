@@ -61,7 +61,7 @@
                 </a>
             </li>
             <li>
-                <a href="" class="{{ Route::is('parametre.*') ? 'active' : '' }}">
+                <a href="{{route('parametre.index')}}" class="{{ Route::is('parametre.*') ? 'active' : '' }}">
                     <i class="bx bxs-cog icon"></i>Paramètre
                 </a>
             </li>

@@ -32,10 +32,10 @@
                                     <tr class="text-center">
                                         <th>N°</th>
                                         <th>Propriétaire</th>
-                                        <th>Type</th>
-                                        <th>N° boutique</th>
-                                        <th>Libéllé</th>
-                                        <th>Adresse</th>
+                                        <th>Biens</th>
+                                        <th>N° bien</th>
+                                        <th>Date</th>
+                                        <th>Catégorie</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -45,8 +45,8 @@
                                         <td>Sano Ismael</td>
                                         <td>Magasin</td>
                                         <td>5788</td>
-                                        <td>Sano & Frères</td>
-                                        <td>Telico en face de l'institut</td>
+                                        <td>17/02/2025</td>
+                                        <td>A1</td>
                                         <td class="d-flex justify-content-center gap-2">
                                             <a href="{{route('licence.voir')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
                                             <a href="{{route('impot.imposition',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Imposer<i class="bx bx-money"></i></a>
@@ -76,8 +76,8 @@
                                         <td>Sano Ismael</td>
                                         <td>Magasin</td>
                                         <td>5788</td>
-                                        <td>Sano & Frères</td>
-                                        <td>Telico en face de l'institut</td>
+                                        <td>17/02/2025</td>
+                                        <td>A1</td>
                                         <td class="d-flex justify-content-center gap-2">
                                             <a href="{{route('licence.voir')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
                                             <a href="{{route('impot.imposition',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Imposer<i class="bx bx-money"></i></a>
