@@ -4,9 +4,11 @@
     <ul class="breadcrumbs">
         <li><a href="{{route('dashboard')}}">Home</a></li>
         <li class="divider">/</li>
-        <li><a href="{{route('biens.liste')}}">Biens</a></li>
+        <li><a href="{{route('parametre.index')}}">Paramètre</a></li>
         <li class="divider">/</li>
-        <li><a href="" class="active">Types de Biens</a></li>
+        <li><a href="{{route('parametre.configuration')}}">Configuration</a></li>
+        <li class="divider">/</li>
+        <li><a href="" class="active">Type de biens</a></li>
     </ul>
     <div class="container justify-content-center">
         <div class="row d-flex justify-content-center">
@@ -29,10 +31,13 @@
                         <hr>
                         <div class="h5 text-center text-success">La liste des types de biens</div>
                         <div class="row d-flex justify-content-between align-items-center me-1">
-                            <div class="col-4 d-flex gap-4">
+                            <div class="col-md-2">
                                 <a href="" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
                             </div>
-                            <div class="col-4">
+                            <div class="col-md-2">
+                                <a href="{{route('parametre.configuration.type.biens.corbeille')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Corbeille <i class="bx bx-tra"></i></a>
+                            </div>
+                            <div class="col-md-4 ms-auto">
                                 <input type="text" placeholder="Rechercher..." class="form-control border border-success m-3">
                             </div>
                         </div>

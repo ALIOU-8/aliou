@@ -50,7 +50,6 @@ use Illuminate\Support\Facades\Route;
         Route::get('/', [BiensController::class, 'index'])->name('biens.liste');
         Route::get('/ajout', [BiensController::class, 'ajout'])->name('biens.ajout');
         Route::get('/modif', [BiensController::class, 'modif'])->name('biens.modif');
-        Route::get('/type', [BiensController::class, 'type'])->name('biens.type');
         Route::get('/voir', [BiensController::class, 'voir'])->name('biens.voir');
         Route::get('/corbeille', [BiensController::class, 'corbeille'])->name('biens.corbeille');
 
@@ -108,4 +107,23 @@ use Illuminate\Support\Facades\Route;
     //Les routes pour paramètre
     Route::prefix('parametre')->group(function () {
         Route::get('/', [ParametreController::class, 'index'])->name('parametre.index');
+        // Utilisateur
+        Route::get('/utilisateur', [ParametreController::class, 'user'])->name('parametre.user');
+        Route::get('/ajout_utilisateur', [ParametreController::class, 'add_user'])->name('parametre.user.add');
+        Route::get('/modification_utilisateur{id}', [ParametreController::class, 'modif_user'])->name('parametre.user.modif');
+        Route::get('/corbeille_utilisateur', [ParametreController::class, 'corbeille_user'])->name('parametre.user.corbeille');
+        // Configuration 
+        Route::get('/configuration', [ParametreController::class, 'configuration'])->name('parametre.configuration');
+        // Type de bien
+        Route::get('/configuration/type_biens', [ParametreController::class, 'type_bien'])->name('parametre.configuration.type.biens');
+        Route::get('/configuration/type_biens/corbeille', [ParametreController::class, 'corbeille_bien'])->name('parametre.configuration.type.biens.corbeille');
+        // Type impot
+        Route::get('/configuration/type_impot', [ParametreController::class, 'type_impot'])->name('parametre.configuration.type.impot');
+        Route::get('/configuration/type_impot/corbeille', [ParametreController::class, 'corbeille_impot'])->name('parametre.configuration.type.impot.corbeille');
+        // Fonction 
+        Route::get('/configuration/fonction', [ParametreController::class, 'fonction'])->name('parametre.configuration.fonction');
+        Route::get('/configuration/fonction/corbeille', [ParametreController::class, 'corbeille_fonction'])->name('parametre.configuration.fonction.corbeille');
+        // Recensement 
+        Route::get('/configuration/recensement', [ParametreController::class, 'recensement'])->name('parametre.configuration.recensement');
+        Route::get('/configuration/recensement/corbeille', [ParametreController::class, 'corbeille_recensement'])->name('parametre.configuration.recensement.corbeille');
     });

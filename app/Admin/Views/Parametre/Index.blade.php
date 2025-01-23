@@ -27,7 +27,7 @@
                                     <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-user"></i>Gestion des utilisateurs</div>
                                     <hr class="m-0">
                                     <div class="mt-1 mb-1 p-3">
-                                        <a href="" class="btn btn-sm-lg btn-outline-success w-100">Ajouter</a>
+                                        <a href="{{route('parametre.user')}}" class="btn btn-sm-lg btn-outline-success w-100">Ajouter</a>
                                     </div>
                                 </div>
                             </div>   
@@ -36,7 +36,7 @@
                                     <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-cog"></i>Gestion Interne</div>
                                     <hr class="m-0">
                                     <div class="mt-1 mb-1 p-3">
-                                        <a href="" class="btn btn-sm-lg btn-outline-success w-100">Configurer</a>
+                                        <a href="{{route('parametre.configuration')}}" class="btn btn-sm-lg btn-outline-success w-100">Configurer</a>
                                     </div>
                                 </div>
                             </div>

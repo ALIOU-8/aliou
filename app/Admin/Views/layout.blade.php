@@ -124,6 +124,11 @@
                     </a>
                 </div>
             </div>
+            <div class="nav-link">
+                <a href="">
+                    <i id="notifbtn" class="bx bx-help-circle fs-4 icon"></i>
+                </a>
+            </div>
             <span class="divider"></span>
             <div class="profile">
                 <img src="{{asset('Admin/Assets/image1.jpg')}}" alt="">
