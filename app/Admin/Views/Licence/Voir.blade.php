@@ -15,35 +15,20 @@
                     <div class="card-body">
                         <div class="h5 mb-2 text-center text-success"> Recensement Licence </div>
                         <div class="h6 mb-3 text-success">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab mollitia ratione quaerat natus rem iusto asperiores facilis libero est doloremque velit, suscipit repellendus cupiditate illo dolor perspiciatis labore reiciendis vitae?</div>
-                        <form action="" class="form">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="id_cont">Propriétaire du bien</label>
-                                    <select name="id_cont" id="id_cont" class="form-control">
-                                        <option value=""></option>
-                                        <option value="">628013477</option>
-                                        <option value="">628013577</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="id_typeBien">Année de recensement</label>
-                                    <select name="id_typeBien" id="id_typeBien" class="form-control">
-                                        <option value="">Année en cours</option>
-                                        <option value="">Année antérieure</option>
-                                        <option value="">Année antérieure - 1</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="libelle">Catégorie</label>
-                                    <input class="form-control" type="text" name="libelle">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="adresse">Date du Rendez-vous</label>
-                                    <input class="form-control" type="text" name="adresse">
-                                </div>           
-                                
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h4>Propriétaire du bien</h4><span class="text-success h5">Bah Mamadou Saliou</span>
                             </div>
-                        </form>
+                            <div class="col-md-6 mb-3">
+                                <h4>Année de recensement</h4><span class="text-success h5">2025</span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <h4>Catégorie</h4><span class="text-success h5">A1</span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <h4>Date du Rendez-vous</h4><span class="text-success h5">17/022025</span>
+                            </div> 
+                        </div>
                     </div>
                 </div>
             </div>

@@ -4,8 +4,8 @@
     <!-- <h1 class="title">Dashboard</h1> -->
     <ul class="breadcrumbs">
         <li><a href="">Home</a></li>
-        <li class="divider">/</li>
-        <li><a href="" class="active">Dashboard</a></li>
+        {{-- <li class="divider">/</li>
+        <li><a href="" class="active">Dashboard</a></li> --}}
     </ul>
     <div class="container justify-content-center">
         <div class="row d-flex justify-content-center mb-5">
