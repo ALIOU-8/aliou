@@ -2,6 +2,7 @@
 
 use App\Admin\Controllers\Biens\BiensController;
 use App\Admin\Controllers\CFU\CFUController;
+use App\Admin\Controllers\CFU\OccupantController;
 use App\Admin\Controllers\Contribuables\ContribuableController;
 use App\Admin\Controllers\Dashboard\DashboardController;
 use App\Admin\Controllers\Impots\ImpotsController;
@@ -64,6 +65,15 @@ use Illuminate\Support\Facades\Route;
         Route::get('/corbeille', [CFUController::class, 'corbeille'])->name('cfu.corbeille');
         // Route::get('/statistique', [CFUController::class, 'statistique'])->name('cfu.statistique');
 
+    });
+
+    //Les routes pour la gestion CFU/Occupant
+    Route::prefix('cfu')->group(function () {
+        Route::get('/occupant', [OccupantController::class, 'index'])->name('cfu.occupant.liste');
+        Route::get('/occupant/ajout', [OccupantController::class, 'ajout'])->name('cfu.occupant.ajout');
+        Route::get('/occupant/modif', [OccupantController::class, 'modif'])->name('cfu.occupant.modif');
+        Route::get('/occupant/voir', [OccupantController::class, 'voir'])->name('cfu.occupant.voir');
+        Route::get('/occupant/corbeille', [OccupantController::class, 'corbeille'])->name('cfu.occupant.corbeille');
     });
 
     //Les routes pour la gestion TPU

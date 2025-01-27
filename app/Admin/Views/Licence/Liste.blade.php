@@ -11,7 +11,7 @@
             <div class="col-md-12 ">
                 <div class="card border border-light">
                     <div class="card-body">
-                        <div class="h5 text-center text-success">La liste des licences</div>
+                        <div class="h5 text-center text-success">La liste des Recensements licences</div>
                         <div class="row d-flex justify-content-between align-items-center me-1">
                             <div class="col-md-2">
                                 <a href="{{route('licence.ajout')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Nouveau <i class="bx bx-plus"></i></a>
