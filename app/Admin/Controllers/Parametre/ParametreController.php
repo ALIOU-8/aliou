@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers\Parametre;
 
 use App\Http\Controllers\Controller;
+use App\Models\TypeBien;
 use Illuminate\Http\Request;
 
 class ParametreController extends Controller
@@ -36,7 +37,37 @@ class ParametreController extends Controller
   
     // Biens 
     public function type_bien () {
-        return view('Admin::Parametre.Configuration.TypeBien.Type');
+        $liste_type_bien= TypeBien::where('status',0)->get();
+        return view('Admin::Parametre.Configuration.TypeBien.Type',compact('liste_type_bien'));
+    }
+    public function type_bien_store(Request $request)
+    {
+        $request->validate([
+            'libelle'=>'required|unique:type_biens'
+        ]);
+        $type_bien=new TypeBien();
+        $type_bien->libelle=$request->libelle;
+        $type_bien->save();
+        toastr()->success("Type bien enregistrer avec success");
+        return back();
+    }
+
+    public function type_bien_update(Request $request,$id)
+    {
+        $request->validate([
+            'libelle'=>'required'
+        ]);
+        $type_bien=TypeBien::findOrfail($id);
+        $type_bien->libelle=$request->libelle;
+        $type_bien->update();
+        toastr()->success("Type bien modifier avec success");
+        return  back();
+    }
+    public function type_bien_edit($id)
+    {
+        $type_bien=TypeBien::findOrfail($id);
+        $liste_type_bien= TypeBien::where('status',0)->get();
+       return view('Admin::Parametre.Configuration.TypeBien.Type',compact('type_bien','liste_type_bien'));
     }
 
     public function corbeille_bien () {

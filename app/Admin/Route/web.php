@@ -117,6 +117,9 @@ use Illuminate\Support\Facades\Route;
         // Type de bien
         Route::get('/configuration/type_biens', [ParametreController::class, 'type_bien'])->name('parametre.configuration.type.biens');
         Route::get('/configuration/type_biens/corbeille', [ParametreController::class, 'corbeille_bien'])->name('parametre.configuration.type.biens.corbeille');
+        Route::post('/configuration/type_biens/store',[ParametreController::class,'type_bien_store'])->name('parametre.configuration.type.bien.store');
+        Route::put('/configuration/type_biens/update/{id}',[ParametreController::class,'type_bien_update'])->name('parametre.configuration.type.bien.update');
+        Route::get('/configuration/type_biens/edit/{id}',[ParametreController::class,'type_bien_edit'])->name('parametre.configuration.type.bien.edit');
         // Type impot
         Route::get('/configuration/type_impot', [ParametreController::class, 'type_impot'])->name('parametre.configuration.type.impot');
         Route::get('/configuration/type_impot/corbeille', [ParametreController::class, 'corbeille_impot'])->name('parametre.configuration.type.impot.corbeille');
