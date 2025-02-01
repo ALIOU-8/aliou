@@ -15,34 +15,67 @@
                     <div class="card-body">
                         <div class="h5 mb-2 text-center text-success">Modificatioin d'un personnel</div>
                         <div class="h6 mb-3 text-success">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab mollitia ratione quaerat natus rem iusto asperiores facilis libero est doloremque velit, suscipit repellendus cupiditate illo dolor perspiciatis labore reiciendis vitae?</div>
-                        <form action="" class="form">
+                        <form action="{{ route('personnels.update',$personnel->id)}}" method="POST" class="form">
+                            @csrf
+                            @method('put')
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label" for="matricule">Matricule</label>
-                                    <input class="form-control" type="text" name="matricule">
+                                    <input class="form-control" type="text" name="matricule" value="{{$personnel->matricule}}">
+                                    @error('matricule')
+                                    <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label" for="nom">Nom</label>
-                                    <input class="form-control" type="text" name="nom">
+                                    <input class="form-control" type="text" name="nom" value="{{$personnel->nom}}">
+                                    @error('nom')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="nom">Prénom</label>
-                                    <input class="form-control" type="text" name="nom">
+                                    <label class="form-label" for="prenom">Prénom</label>
+                                    <input class="form-control" type="text" name="prenom" value="{{$personnel->prenom}}">
+                                    @error('prenom')
+                                    <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="nom">Téléphone</label>
-                                    <input class="form-control" type="text" name="nom">
+                                    <label class="form-label" for="telephone">Téléphone</label>
+                                    <input class="form-control" type="text" name="telephone" value="{{$personnel->telephone}}">
+                                    @error('telephone')
+                                    <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="nom">Fonction</label>
-                                    <input class="form-control" type="text" name="nom">
+                                    <label class="form-label" for="fonction">Fonction</label>
+                                    <select name="fonction" class="form-control" id="">
+                                        <option selected value="{{$personnel->id}}">{{$personnel->fonction->libelle}}</option>
+                                        @foreach ($fonction as $fonctions )
+                                        @if($personnel->fonction->libelle != $fonctions->libelle )
+                                        <option  value="{{$fonctions->id}}">{{ $fonctions->libelle}}</option>
+                                        @endif
+                                        @endforeach
+                                    </select>
+                                    @error('fonction')
+                                    <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label" for="hierachie">Hiérachie</label>
-                                    <input class="form-control" type="text" name="hierachie">
+                                    <select name="hierachie" class="form-control" id="">
+                                        <option  selected value="{{$personnel->hierachie}}">{{$personnel->hierachie }}</option>
+                                        <option  value="A1">A1</option>
+                                        <option  value="A2">A2</option>
+                                        <option  value="B1">B1</option>
+                                        <option  value="B2">B2</option>
+                                    </select>
+                                    @error('hierachie')
+                                    <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="d-flex justify-content-start">
-                                    <button class="btn btn-outline-success col-6 col-md-3">Valider la modificatioin</button>
+                                    <button class="btn btn-outline-success col-6 col-md-3 d-flex justify-content-center align-items-center gap-1">Modifier <i class="bx bx-save"></i></button>
                                 </div>
                             </div>
                         </form>

@@ -45,11 +45,11 @@
                                 <a href="{{route('parametre.configuration.type.biens.corbeille')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Corbeille <i class="bx bx-tra"></i></a>
                             </div>
                             <div class="col-md-4 ms-auto">
-                                <input type="text" placeholder="Rechercher..." class="form-control border border-success m-3">
+                                <input type="text" placeholder="Rechercher..." class="form-control border border-success m-3" id="searchInput" onkeyup="searchTable()">
                             </div>
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-bordered table-hover table-striped">
+                            <table class="table table-bordered table-hover table-striped" id="myTable">
                                 <thead>
                                     <tr class="text-center">
                                         <th>N°</th>
@@ -58,15 +58,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($liste_type_bien as $key => $liste_type_biens )
+                                    @foreach($liste_type_bien as $key => $liste_type_biens)
                                     <tr>
                                         <td>{{ $key+1 }}</td>
-                                        <td>{{ $liste_type_biens->libelle }}</td>
+                                        <td>{{$liste_type_biens->libelle}}</td>
                                         <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{ Route('parametre.configuration.type.bien.edit',$liste_type_biens->id) }}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
-                                            <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer">Supprimer<i class="bx bx-trash"></i></a>
+                                            <a href="{{Route('parametre.configuration.type.bien.edit',$liste_type_biens->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
+                                            <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer{{$liste_type_biens->id}}">Supprimer<i class="bx bx-trash"></i></a>
                                             {{-- Modal pour confirmer la suppression  --}}
-                                            <div class="modal fade" id="supprimer" aria-labelledby="supprimer" aria-hidden="true">
+                                            <div class="modal fade" id="supprimer{{$liste_type_biens->id}}" aria-labelledby="supprimer" aria-hidden="true">
                                                 <div class="modal-dialog center">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -74,9 +74,12 @@
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <div class="text-start">{{ $liste_type_biens->libelle }}</div>
-                                                            <button type="submit" class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1">Confirmer <i class="bx bx-check"></i></button>
-                                                        </div>
+                                                            <div class="text-start">{{$liste_type_biens->libelle}}</div>
+                                                            <form method="POST" action="{{route('type_bien.supprimer',$liste_type_biens->id)}}">
+                                                                @csrf
+                                                                @method('put')
+                                                                <button type="submit" class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1">Confirmer <i class="bx bx-check"></i></button>
+                                                            </form>
                                                     </div>
                                                 </div>
                                             </div>
@@ -93,4 +96,30 @@
         </div>
     </div>
 </main>
+<script>
+    function searchTable() {
+        // Récupère la valeur de la recherche
+        let searchQuery = document.getElementById("searchInput").value.toLowerCase();
+        let table = document.getElementById("myTable");
+        let rows = table.getElementsByTagName("tr");
+        
+        // Parcours chaque ligne du tableau (sauf l'en-tête)
+        for (let i = 1; i < rows.length; i++) {
+            let cells = rows[i].getElementsByTagName("td");
+            let rowText = "";
+            
+            // Concatène le texte des cellules à rechercher
+            for (let j = 0; j < cells.length - 1; j++) {  // Ne pas inclure la dernière colonne "Actions"
+                rowText += cells[j].textContent.toLowerCase();
+            }
+            
+            // Si le texte de la ligne correspond à la recherche, l'afficher, sinon la masquer
+            if (rowText.includes(searchQuery)) {
+                rows[i].style.display = "";
+            } else {
+                rows[i].style.display = "none";
+            }
+        }
+    }
+</script>
 @endsection

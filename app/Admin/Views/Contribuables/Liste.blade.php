@@ -23,11 +23,11 @@
                                 <a href="{{route('contribuables.restaurer')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Corbeille <i class="bx bx-trash"></i></a>
                             </div>
                             <div class="col-md-4 ms-auto">
-                                <input type="text" placeholder="Rechercher..." class="form-control border border-success m-3">
+                                <input type="text" placeholder="Rechercher..." id="search" onkeyup="fetchData()" class="form-control border border-success m-3">
                             </div>
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-bordered table-hover table-striped">
+                            <table class="table table-bordered table-hover table-striped" id="myTable">
                                 <thead>
                                     <tr class="text-center">
                                         <th>N°</th>
@@ -47,7 +47,7 @@
                                         <td>{{ $contribuable->telephone }}</td>
                                         <td>{{ $contribuable->profession }}</td>
                                         <td class="d-flex justify-content-center gap-2">
-                                            <a class="btn btn-outline-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#voir{{$contribuable->id}}">Voir<i class="bx bx-show"></i></a>
+                                            <a class="btn btn-outline-success btn-sm d-flex align-items-center gap-1" href="" data-bs-toggle="modal" data-bs-target="#voir{{$contribuable->id}}">Voir<i class="bx bx-show"></i></a>
                                             {{-- Modal pour voir  --}}
                                             <div class="modal fade" id="voir{{$contribuable->id}}" aria-labelledby="voir" aria-hidden="true">
                                                 <div class="modal-dialog center">
@@ -108,4 +108,43 @@
         </div>
     </div>
 </main>
+ {{-- Fonction de recherche avec filtre cote Serveur dans le tableau --}}
+<script>
+    function fetchData()
+     {
+    let query = document.getElementById("search").value;
+    fetch("{{ route('contribuables.search') }}?query=" + query)
+        .then(response => response.json())
+        .then(data => {
+            let tbody = document.querySelector("#myTable tbody");
+            tbody.innerHTML = "";
+
+            if (data.length > 0) {
+                data.forEach((contribuable, index) => {
+                    let row = `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${contribuable.nom}</td>
+                            <td>${contribuable.prenom}</td>
+                            <td>${contribuable.telephone}</td>
+                            <td>${contribuable.profession}</td>
+                            <td class="d-flex justify-content-center gap-2">
+                                <a class="btn btn-outline-success btn-sm d-flex align-items-center gap-1" href="#" data-bs-toggle="modal" data-bs-target="#voir${contribuable.id}">Voir<i class="bx bx-show"></i></a>
+
+                                <a href="/contribuables/modif/${contribuable.id}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
+
+                                <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer${contribuable.id}">Supprimer<i class="bx bx-trash"></i></a>
+                            </td>
+                        </tr>
+                    `;
+
+                    tbody.innerHTML += row;
+                });
+            } else {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center">Aucun résultat trouvé</td></tr>`;
+            }
+        })
+        .catch(error => console.error('Erreur:', error));
+}
+</script>
 @endsection

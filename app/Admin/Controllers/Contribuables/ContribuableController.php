@@ -5,6 +5,7 @@ namespace App\Admin\Controllers\Contribuables;
 use App\Http\Controllers\Controller;
 use App\Models\Contribuable;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ContribuableController extends Controller
 {
@@ -12,7 +13,21 @@ class ContribuableController extends Controller
         $contribuables = Contribuable::where('delete',0)->Orderby('id','Desc')->get();
         return view('Admin::Contribuables.Liste',compact('contribuables'));
     }
-
+    public function search(Request $request)
+    {
+        $query=$request->get('query');
+        $contribuables=Contribuable::where('delete',0)->where(
+            function($q) use ($query)
+            {
+                $q->where('nom','like',"%$query%")
+                ->orWhere('prenom','like',"%$query%")
+                ->orWhere('telephone','like',"%$query%")
+                ->orWhere('profession','like',"%$query%");
+                
+            }
+        )->get();
+        return response()->json($contribuables);
+    }
     public function ajout () {
         return view('Admin::Contribuables.Ajout');
     }
@@ -40,23 +55,30 @@ class ContribuableController extends Controller
         toastr()->success('Contribuable Ajoutez avec Succes');
         return to_route('contribuables.liste');
     }
-    public function update(Request $request,string $id)
+    public function update(Request $request, string $id)
     {
         $request->validate([
-            'nom'=>'required',
-            'prenom'=>'required',
-            'telephone'=>'required|numeric',
-            'profession'=>'required'
+            'nom' => 'required',
+            'prenom' => 'required',
+            'telephone' => [
+                'required',
+                'numeric',
+                Rule::unique('contribuables')->ignore($id), // Exclure l'ID actuel
+            ],
+            'profession' => 'required',
         ]);
-        $contribuable=Contribuable::findOrFail($id);
-        $contribuable->nom=$request->nom;
-        $contribuable->prenom=$request->prenom;
-        $contribuable->telephone=$request->telephone;
-        $contribuable->profession=$request->profession;
-        $contribuable->update();
-        toastr()->success('Contribuable Modifiez avec Succes');
-        return to_route('contribuables.liste');
-    }
+
+            $contribuable = Contribuable::findOrFail($id);
+            $contribuable->nom = $request->nom;
+            $contribuable->prenom = $request->prenom;
+            $contribuable->telephone = $request->telephone;
+            $contribuable->profession = $request->profession;
+            $contribuable->update();
+
+            toastr()->success('Contribuable modifié avec succès');
+            return to_route('contribuables.liste');
+     }
+
     public function delete(string $id)
     {
         $contribuable=Contribuable::findOrFail($id);

@@ -43,13 +43,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach ($bien as $key=> $biens )
                                     <tr>
-                                        <td>1</td>
-                                        <td>Sano Ismael</td>
-                                        <td>Magasin</td>
-                                        <td>5788</td>
-                                        <td>Sano & Frères</td>
-                                        <td>Telico en face de l'institut</td>
+                                        <td>{{ $key+1}}</td>
+                                        <td>{{ $biens->contribuable->nom.' '.$biens->contribuable->prenom }}</td>
+                                        <td>{{ $biens->typebien->libelle}}</td>
+                                        <td>{{ $biens->numero_bien }}</td>
+                                        <td>{{ $biens->libelle}}</td>
+                                        <td>{{ $biens->adresse }}</td>
                                         <td class="d-flex justify-content-center gap-2">
                                             <a href="{{route('biens.voir')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
                                             <a href="{{route('biens.modif')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
@@ -73,96 +74,12 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Sano Ismael</td>
-                                        <td>Magasin</td>
-                                        <td>5788</td>
-                                        <td>Sano & Frères</td>
-                                        <td>Telico en face de l'institut</td>
-                                        <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('biens.voir')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
-                                            <a href="{{route('biens.modif')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
-                                            <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer">Supprimer<i class="bx bx-trash"></i></a>
-                                            {{-- Modal pour confirmer la suppression  --}}
-                                            <div class="modal fade" id="supprimer" aria-labelledby="supprimer" aria-hidden="true">
-                                                <div class="modal-dialog center">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h6 class="modal-title" id="supprimer">Voulez-vous supprimez ce bien ?</h6>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="text-start">Propriétaire du bien</div>
-                                                            <div class="text-start">Type du bien</div>
-                                                            <div class="text-start">Libéllé du bien</div>
-                                                            <button type="submit" class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1">Confirmer <i class="bx bx-check"></i></button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Sano Ismael</td>
-                                        <td>Magasin</td>
-                                        <td>5788</td>
-                                        <td>Sano & Frères</td>
-                                        <td>Telico en face de l'institut</td>
-                                        <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('biens.voir')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
-                                            <a href="{{route('biens.modif')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
-                                            <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer">Supprimer<i class="bx bx-trash"></i></a>
-                                            {{-- Modal pour confirmer la suppression  --}}
-                                            <div class="modal fade" id="supprimer" aria-labelledby="supprimer" aria-hidden="true">
-                                                <div class="modal-dialog center">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h6 class="modal-title" id="supprimer">Voulez-vous supprimez ce bien ?</h6>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="text-start">Propriétaire du bien</div>
-                                                            <div class="text-start">Type du bien</div>
-                                                            <div class="text-start">Libéllé du bien</div>
-                                                            <button type="submit" class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1">Confirmer <i class="bx bx-check"></i></button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Sano Ismael</td>
-                                        <td>Magasin</td>
-                                        <td>5788</td>
-                                        <td>Sano & Frères</td>
-                                        <td>Telico en face de l'institut</td>
-                                        <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('biens.voir')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
-                                            <a href="{{route('biens.modif')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
-                                            <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer">Supprimer<i class="bx bx-trash"></i></a>
-                                            {{-- Modal pour confirmer la suppression  --}}
-                                            <div class="modal fade" id="supprimer" aria-labelledby="supprimer" aria-hidden="true">
-                                                <div class="modal-dialog center">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h6 class="modal-title" id="supprimer">Voulez-vous supprimez ce bien ?</h6>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="text-start">Propriétaire du bien</div>
-                                                            <div class="text-start">Type du bien</div>
-                                                            <div class="text-start">Libéllé du bien</div>
-                                                            <button type="submit" class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1">Confirmer <i class="bx bx-check"></i></button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    @endforeach
+                                    @if (count($bien) == 0)
+                                        <tr>
+                                            <th colspan="6" class="text-center">Aucun enregistrement trouvé pour le moment</th>
+                                        </tr> 
+                                    @endif
                                 </tbody>
                             </table>
                         </div>

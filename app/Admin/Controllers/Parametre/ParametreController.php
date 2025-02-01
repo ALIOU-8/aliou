@@ -3,8 +3,11 @@
 namespace App\Admin\Controllers\Parametre;
 
 use App\Http\Controllers\Controller;
+use App\Models\Fonction;
 use App\Models\TypeBien;
+use App\Models\TypeImpot;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ParametreController extends Controller
 {
@@ -35,9 +38,9 @@ class ParametreController extends Controller
         return view('Admin::Parametre.Configuration.Index');
     }
   
-    // Biens 
-    public function type_bien () {
-        $liste_type_bien= TypeBien::where('status',0)->get();
+    // typeBiens 
+    public function type_bien() {
+        $liste_type_bien= TypeBien::where('status',0)->Orderby('id','Desc')->get();
         return view('Admin::Parametre.Configuration.TypeBien.Type',compact('liste_type_bien'));
     }
     public function type_bien_store(Request $request)
@@ -55,13 +58,16 @@ class ParametreController extends Controller
     public function type_bien_update(Request $request,$id)
     {
         $request->validate([
-            'libelle'=>'required'
+            'libelle' => [
+                'required',
+                Rule::unique('type_biens')->ignore($id), // Exclure l'ID actuel
+            ],
         ]);
         $type_bien=TypeBien::findOrfail($id);
         $type_bien->libelle=$request->libelle;
         $type_bien->update();
         toastr()->success("Type bien modifier avec success");
-        return  back();
+        return  to_route('parametre.configuration.type.biens');
     }
     public function type_bien_edit($id)
     {
@@ -70,27 +76,168 @@ class ParametreController extends Controller
        return view('Admin::Parametre.Configuration.TypeBien.Type',compact('type_bien','liste_type_bien'));
     }
 
-    public function corbeille_bien () {
-        return view('Admin::Parametre.Configuration.TypeBien.Corbeille');
+    public function corbeille_bien() {
+    $type_bien= TypeBien::where('status',1)->Orderby('id','Desc')->get();;
+        return view('Admin::Parametre.Configuration.typebien.Corbeille',compact('type_bien'));
     }
+
+    public function delete_type_bien($id)
+    {
+        $type_bien=TypeBien::findOrFail($id);
+        $type_bien->status=1;
+        $type_bien->update();
+        toastr()->success('Type bien Supprimez avec Succes');
+        return to_route('parametre.configuration.type.biens');
+    }
+    public function restaure_type_bien($id)
+    {
+        $type_bien=TypeBien::findOrFail($id);
+        $type_bien->status=0;
+        $type_bien->update();
+        toastr()->success('Type bien restaurez avec Succes');
+        return to_route('parametre.configuration.type.biens');
+    }
+
   
     // Fonction 
     public function fonction () {
-        return view('Admin::Parametre.Configuration.Fonction.Index');
+        $liste_fonction=Fonction::where('delete',0)->Orderby('id','Desc')->get();
+        return view('Admin::Parametre.Configuration.Fonction.Index',compact('liste_fonction'));
+    }
+
+    public function fonction_store(Request $request)
+    {
+        $request->validate(
+            [
+                "libelle" =>"required|unique:fonctions"
+            ]
+        );
+        $fonction=new Fonction();
+        $fonction->libelle=$request->libelle;
+        $fonction->save();
+        toastr()->success("Fonction Ajoutée avec succes");
+        return back();
+    }
+    public function fonction_update(Request $request,$id)
+    {
+        $request->validate(
+            [
+                'libelle' => [
+                'required',
+                Rule::unique('fonctions')->ignore($id), // Exclure l'ID actuel
+            ],
+            ]
+        );
+        $fonction=Fonction::findOrFail($id);
+        $fonction->libelle=$request->libelle;
+        $fonction->update();
+        toastr()->success("Fonction modifiée avec succes");
+        return to_route('parametre.configuration.fonction');
+    }
+    public function fonction_edit($id)
+    {
+        $fonction=Fonction::findOrfail($id);
+        $liste_fonction= Fonction::where('delete',0)->get();
+       return view('Admin::Parametre.Configuration.Fonction.Index',compact('fonction','liste_fonction'));
     }
 
     public function corbeille_fonction () {
-        return view('Admin::Parametre.Configuration.Fonction.Corbeille');
+        $fonction= Fonction::where('delete',1)->get();
+        return view('Admin::Parametre.Configuration.Fonction.Corbeille',compact('fonction'));
     }
+
+    public function delete(string $id)
+    {
+        $contribuable=Fonction::findOrFail($id);
+        $contribuable->delete=1;
+        $contribuable->update();
+        toastr()->success('Fonction Supprimez avec Succes');
+        return to_route('parametre.configuration.fonction');
+    }
+    public function restaure (string $id)
+    {
+        $contribuable=Fonction::findOrFail($id);
+        $contribuable->delete=0;
+        $contribuable->update();
+        toastr()->success('Fonction restaurez avec Succes');
+        return back();
+    }
+
+    public function restaurer () {
+        $contribuables = Fonction::where('delete',1)->Orderby('id','Desc')->get();
+        return view('Admin::Parametre.Configuration.Fonction.Corbeille',compact('contribuables'));
+    }
+
     
     // Impot 
     public function type_impot () {
-        return view('Admin::Parametre.Configuration.TypeImpot.Index');
+        $liste_type_impot= TypeImpot::where('delete',0)->Orderby('id','Desc')->get();
+        return view('Admin::Parametre.Configuration.TypeImpot.Index', compact('liste_type_impot'));
     }
 
-    public function corbeille_impot () {
-        return view('Admin::Parametre.Configuration.TypeImpot.Corbeille');
+
+    public function type_impot_store(Request $request)
+    {
+        $request->validate(
+            [
+                "libelle" =>"required|unique:type_impots"
+            ]
+        );
+        $type_impot=new TypeImpot();
+        $type_impot->libelle=$request->libelle;
+        $type_impot->save();
+        toastr()->success("Type Impot enregistrer avec succes");
+        return back();
     }
+
+    public function type_impot_update(Request $request,$id)
+    {
+        $request->validate(
+            [
+                'libelle' => [
+                'required',
+                Rule::unique('type_impots')->ignore($id), // Exclure l'ID actuel
+            ],
+            ]
+        );
+        $type_impot=TypeImpot::findOrFail($id);
+        $type_impot->libelle=$request->libelle;
+        $type_impot->update();
+        toastr()->success("Type impot modifié avec succes");
+        return to_route('parametre.configuration.type.impot');
+    }
+
+    public function type_impot_edit($id)
+    {
+        $type_impot=TypeImpot::findOrfail($id);
+        $liste_type_impot= TypeImpot::where('delete',0)->get();
+       return view('Admin::Parametre.Configuration.TypeImpot.Index',compact('type_impot','liste_type_impot'));
+    }
+
+    public function delete_type_impot(string $id)
+    {
+        $type_impot=TypeImpot::findOrFail($id);
+        $type_impot->delete=1;
+        $type_impot->update();
+        toastr()->success('Type Impot Supprimez avec Succes');
+        return to_route('parametre.configuration.type.impot');
+    }
+
+    public function restaure_type_impot(string $id)
+    {
+        $type_impot=TypeImpot::findOrFail($id);
+        $type_impot->delete=0;
+        $type_impot->update();
+        toastr()->success('Type impot restaurez avec Succes');
+        return to_route('parametre.configuration.type.impot');
+    }
+
+    public function corbeille_impot() {
+        $type_impot= TypeImpot::where('delete',1)->Orderby('id','Desc')->get();;
+            return view('Admin::Parametre.Configuration.typeimpot.Corbeille',compact('type_impot'));
+        }
+
+
   
     // Recensement 
     public function recensement () {

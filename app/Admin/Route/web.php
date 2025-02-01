@@ -35,15 +35,21 @@ use Illuminate\Support\Facades\Route;
         Route::put('/supprime/{id}', [ContribuableController::class, 'delete'])->name('contribuables.supprime');
         Route::get('/restaurer', [ContribuableController::class, 'restaurer'])->name('contribuables.restaurer');
         Route::put('/restaurer/{id}', [ContribuableController::class, 'restaure'])->name('contribuables.resto');
+        Route::get('/recherche',[ContribuableController::class,'search'])->name('contribuables.search');
+        Route::get('/voir/{id}',[ContribuableController::class,'voir'])->name('contribuables.voir');
     });
 
     //Les routes pour les personnels
     Route::prefix('personnels')->group(function () {
         Route::get('/', [PersonnelsController::class, 'index'])->name('personnels.liste');
         Route::get('/ajout', [PersonnelsController::class, 'ajout'])->name('personnels.ajout');
-        Route::get('/modif', [PersonnelsController::class, 'modif'])->name('personnels.modif');
+        Route::get('/modif/{id}', [PersonnelsController::class, 'modif'])->name('personnels.modif');
         Route::get('/voir', [PersonnelsController::class, 'voir'])->name('personnels.voir');
         Route::get('/corbeille', [PersonnelsController::class, 'corbeille'])->name('personnels.corbeille');
+        Route::post('/store',[PersonnelsController::class,'store'])->name('personnels.store');
+        Route::put('/update/{id}',[PersonnelsController::class,'update'])->name('personnels.update');
+        Route::put('/supprime{id}', [PersonnelsController::class,'delete'])->name('personnel.supprimer');
+        Route::put('/restaurer/{id}', [PersonnelsController::class, 'restaure'])->name('personnel.restor');
     });
 
     //Les routes pour les biens
@@ -53,6 +59,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/modif', [BiensController::class, 'modif'])->name('biens.modif');
         Route::get('/voir', [BiensController::class, 'voir'])->name('biens.voir');
         Route::get('/corbeille', [BiensController::class, 'corbeille'])->name('biens.corbeille');
+        Route::post('/store', [BiensController::class, 'store'])->name('biens.store');
 
     });
 
@@ -117,25 +124,50 @@ use Illuminate\Support\Facades\Route;
     //Les routes pour paramètre
     Route::prefix('parametre')->group(function () {
         Route::get('/', [ParametreController::class, 'index'])->name('parametre.index');
+        
         // Utilisateur
         Route::get('/utilisateur', [ParametreController::class, 'user'])->name('parametre.user');
         Route::get('/ajout_utilisateur', [ParametreController::class, 'add_user'])->name('parametre.user.add');
         Route::get('/modification_utilisateur{id}', [ParametreController::class, 'modif_user'])->name('parametre.user.modif');
         Route::get('/corbeille_utilisateur', [ParametreController::class, 'corbeille_user'])->name('parametre.user.corbeille');
+        
+        
         // Configuration 
         Route::get('/configuration', [ParametreController::class, 'configuration'])->name('parametre.configuration');
+        
+        
         // Type de bien
         Route::get('/configuration/type_biens', [ParametreController::class, 'type_bien'])->name('parametre.configuration.type.biens');
         Route::get('/configuration/type_biens/corbeille', [ParametreController::class, 'corbeille_bien'])->name('parametre.configuration.type.biens.corbeille');
         Route::post('/configuration/type_biens/store',[ParametreController::class,'type_bien_store'])->name('parametre.configuration.type.bien.store');
         Route::put('/configuration/type_biens/update/{id}',[ParametreController::class,'type_bien_update'])->name('parametre.configuration.type.bien.update');
         Route::get('/configuration/type_biens/edit/{id}',[ParametreController::class,'type_bien_edit'])->name('parametre.configuration.type.bien.edit');
+        Route::put('/supprime-type-bien/{id}', [ParametreController::class,'delete_type_bien'])->name('type_bien.supprimer');
+        Route::put('/restaurer-type-bien/{id}', [ParametreController::class, 'restaure_type_bien'])->name('type_bien.resto');
+        
+        
+        
         // Type impot
         Route::get('/configuration/type_impot', [ParametreController::class, 'type_impot'])->name('parametre.configuration.type.impot');
         Route::get('/configuration/type_impot/corbeille', [ParametreController::class, 'corbeille_impot'])->name('parametre.configuration.type.impot.corbeille');
+
+        Route::post('/configuration/type_impot/store',[ParametreController::class,'type_impot_store'])->name('parametre.configuration.type.impot.store');
+        Route::put('/configuration/type_impot/update/{id}',[ParametreController::class,'type_impot_update'])->name('parametre.configuration.type.impot.update');
+        Route::get('/configuration/type_impot/edit/{id}',[ParametreController::class,'type_impot_edit'])->name('parametre.configuration.type.impot.edit');
+        Route::put('/supprime-type-impot/{id}', [ParametreController::class,'delete_type_impot'])->name('type_impot.supprimer');
+        Route::put('/restaurer-type-impot/{id}', [ParametreController::class, 'restaure_type_impot'])->name('type.impot.resto');
+        
+        
         // Fonction 
         Route::get('/configuration/fonction', [ParametreController::class, 'fonction'])->name('parametre.configuration.fonction');
         Route::get('/configuration/fonction/corbeille', [ParametreController::class, 'corbeille_fonction'])->name('parametre.configuration.fonction.corbeille');
+        Route::post('/configuration/fonction/store',[ParametreController::class,'fonction_store'])->name('parametre.configuration.fonction.store');
+        Route::put('/configuration/fonction/update/{id}',[ParametreController::class,'fonction_update'])->name('parametre.configuration.fonction.update');
+        Route::get('/configuration/fonction/edit/{id}',[ParametreController::class,'fonction_edit'])->name('parametre.configuration.fonction.edit');
+        Route::put('/supprime/{id}', [ParametreController::class, 'delete'])->name('fonction.supprime');
+        Route::get('/restaurer', [ParametreController::class, 'restaurer'])->name('fonction.restaurer');
+        Route::put('/restaurer/{id}', [ParametreController::class, 'restaure'])->name('fonction.resto');
+        
         // Recensement 
         Route::get('/configuration/recensement', [ParametreController::class, 'recensement'])->name('parametre.configuration.recensement');
         Route::get('/configuration/recensement/corbeille', [ParametreController::class, 'corbeille_recensement'])->name('parametre.configuration.recensement.corbeille');
