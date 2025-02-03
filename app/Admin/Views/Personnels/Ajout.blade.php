@@ -62,10 +62,9 @@
                                     <label class="form-label" for="hierachie">Hiérachie</label>
                                     <select name="hierachie" class="form-control" id="">
                                         <option  value=""></option>
-                                        <option  value="A1">A1</option>
-                                        <option  value="A2">A2</option>
-                                        <option  value="B1">B1</option>
-                                        <option  value="B2">B2</option>
+                                        @foreach ($hierachie as $hierachies)
+                                        <option  value="{{ $hierachies }}">{{  $hierachies }}</option>
+                                        @endforeach
                                     </select>
                                     @error('hierachie')
                                     <p class="text-danger">{{ $message }}</p>

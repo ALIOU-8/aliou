@@ -33,24 +33,28 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach ($bien as $key=> $biens )
                                     <tr>
-                                        <td>1</td>
-                                        <td>Sano Ismael</td>
-                                        <td>Magasin</td>
-                                        <td>5788</td>
-                                        <td>Sano & Frères</td>
-                                        <td>Telico en face de l'institut</td>
+                                        <td>{{ $key+1}}</td>
+                                        <td>{{ $biens->contribuable->nom.' '.$biens->contribuable->prenom }}</td>
+                                        <td>{{ $biens->typebien->libelle}}</td>
+                                        <td>{{ $biens->numero_bien }}</td>
+                                        <td>{{ $biens->libelle}}</td>
+                                        <td>{{ $biens->adresse }}</td>
                                         <td class="d-flex justify-content-center gap-2">
-                                            <form method="POST" action="">
+                                            <form method="POST" action="{{route('biens.restor',$biens->id)}}">
                                                 @csrf
                                                 @method('put')
                                                 <button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">Restaurer <i class="bx bx-check"></i></button>
                                             </form>
                                         </td>
-                                    </tr>   
-                                    <tr>
-                                        <th colspan="7" class="text-center">Aucun enregistrement trouvé pour le moment</th>
-                                    </tr>                                 
+                                    </tr>  
+                                    @endforeach 
+                                    @if (count($bien) == 0)
+                                        <tr>
+                                            <th colspan="6" class="text-center">Aucun enregistrement trouvé pour le moment</th>
+                                        </tr> 
+                                    @endif                                 
                                 </tbody>
                             </table>
                         </div>

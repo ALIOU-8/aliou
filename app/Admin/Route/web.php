@@ -56,11 +56,16 @@ use Illuminate\Support\Facades\Route;
     Route::prefix('biens')->group(function () {
         Route::get('/', [BiensController::class, 'index'])->name('biens.liste');
         Route::get('/ajout', [BiensController::class, 'ajout'])->name('biens.ajout');
-        Route::get('/modif', [BiensController::class, 'modif'])->name('biens.modif');
+        Route::get('/modif/{id}', [BiensController::class, 'modif'])->name('biens.modif');
         Route::get('/voir', [BiensController::class, 'voir'])->name('biens.voir');
         Route::get('/corbeille', [BiensController::class, 'corbeille'])->name('biens.corbeille');
         Route::post('/store', [BiensController::class, 'store'])->name('biens.store');
-
+        Route::put('/update/{id}', [BiensController::class, 'update'])->name('biens.update');
+        Route::put('/supprime{id}', [BiensController::class,'delete'])->name('biens.supprimer');
+        Route::put('/restaurer/{id}', [BiensController::class, 'restaure'])->name('biens.restor');
+        Route::get('/recherche',[BiensController::class,'search'])->name('biens.search');
+        ///
+        Route::get('/get-contribuable', [BiensController::class, 'getContribuable'])->name('get.contribuable');
     });
 
     //Les routes pour la gestion CFU

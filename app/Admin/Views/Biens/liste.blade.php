@@ -22,15 +22,12 @@
                             <div class="col-md-2">
                                 <a href="{{route('biens.corbeille')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Corbeille <i class="bx bx-tra"></i></a>
                             </div>
-                            {{-- <div class="col-md-3">
-                                <a href="{{route('biens.type')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Type de biens <i class="bx bx-printer"></i></a>
-                            </div> --}}
                             <div class="col-md-4 ms-auto">
-                                <input type="text" placeholder="Rechercher..." class="form-control border border-success m-3">
+                                <input type="text" placeholder="Rechercher..." id="search" onkeyup="fetchBiens()" class="form-control border border-success m-3">
                             </div>
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-bordered table-hover table-striped">
+                            <table id="biensTable" class="table table-bordered table-hover table-striped">
                                 <thead>
                                     <tr class="text-center">
                                         <th>N°</th>
@@ -47,16 +44,16 @@
                                     <tr>
                                         <td>{{ $key+1}}</td>
                                         <td>{{ $biens->contribuable->nom.' '.$biens->contribuable->prenom }}</td>
-                                        <td>{{ $biens->typebien->libelle}}</td>
+                                        <td>{{ $biens->typeBien->libelle}}</td>
                                         <td>{{ $biens->numero_bien }}</td>
                                         <td>{{ $biens->libelle}}</td>
                                         <td>{{ $biens->adresse }}</td>
                                         <td class="d-flex justify-content-center gap-2">
                                             <a href="{{route('biens.voir')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
-                                            <a href="{{route('biens.modif')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
-                                            <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer">Supprimer<i class="bx bx-trash"></i></a>
+                                            <a href="{{route('biens.modif',$biens->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
+                                            <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer{{$biens->id}}">Supprimer<i class="bx bx-trash"></i></a>
                                             {{-- Modal pour confirmer la suppression  --}}
-                                            <div class="modal fade" id="supprimer" aria-labelledby="supprimer" aria-hidden="true">
+                                            <div class="modal fade" id="supprimer{{$biens->id}}" aria-labelledby="supprimer" aria-hidden="true">
                                                 <div class="modal-dialog center">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -64,10 +61,14 @@
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <div class="text-start">Propriétaire du bien</div>
-                                                            <div class="text-start">Type du bien</div>
-                                                            <div class="text-start">Libéllé du bien</div>
-                                                            <button type="submit" class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1">Confirmer <i class="bx bx-check"></i></button>
+                                                            <div class="text-start">{{ $biens->contribuable->nom.' '.$biens->contribuable->prenom }}</div>
+                                                            <div class="text-start">{{ $biens->typeBien->libelle }}</div>
+                                                            <div class="text-start">{{ $biens->libelle }}</div>
+                                                            <form action="{{route('biens.supprimer',$biens->id) }}" method="post">
+                                                                @method('put')
+                                                                @csrf
+                                                                <button type="submit" class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1">Confirmer <i class="bx bx-check"></i></button>
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -90,4 +91,41 @@
         </div>
     </div>
 </main>
+<script>
+function fetchBiens() {
+    let query = document.getElementById("search").value;
+    fetch("{{ route('biens.search') }}?query=" + query)
+        .then(response => response.json())
+        .then(data => {
+            let tbody = document.querySelector("#biensTable tbody");
+            tbody.innerHTML = "";
+
+            if (data.length > 0) {
+                data.forEach((bien, index) => {
+                    let row = `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${bien.contribuable ? bien.contribuable.nom + ' ' + bien.contribuable.prenom : 'N/A'}</td>
+                            <td>${bien.type_bien ? bien.type_bien.libelle : 'N/A'}</td>
+                            <td>${bien.numero_bien}</td>
+                            <td>${bien.libelle}</td>
+                            <td>${bien.adresse}</td>
+                            <td class="d-flex justify-content-center gap-2">
+                                <a class="btn btn-outline-success btn-sm d-flex align-items-center gap-1" href="#" data-bs-toggle="modal" data-bs-target="#voir${bien.id}">Voir<i class="bx bx-show"></i></a>
+
+                                <a href="/biens/modif/${bien.id}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
+
+                                <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer${bien.id}">Supprimer<i class="bx bx-trash"></i></a>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+            } else {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center">Aucun bien trouvé</td></tr>`;
+            }
+        })
+        .catch(error => console.error('Erreur:', error));
+}
+</script>
 @endsection

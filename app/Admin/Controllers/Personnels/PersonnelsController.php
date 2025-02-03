@@ -17,7 +17,8 @@ class PersonnelsController extends Controller
 
     public function ajout () {
         $fonction=Fonction::where('delete',0)->get();
-        return view('Admin::Personnels.Ajout',compact('fonction'));
+        $hierachie=['A1','A2','B1','B2'];
+        return view('Admin::Personnels.Ajout',compact('fonction','hierachie'));
     }
     public function store(Request $request)
     {
@@ -75,7 +76,8 @@ class PersonnelsController extends Controller
     public function modif ($id) {
     $fonction=Fonction::where('delete',0)->get();
     $personnel=Personnel::findOrFail($id);
-        return view('Admin::Personnels.Modif',compact("personnel","fonction"));
+    $hierachie=['A1','A2','B1','B2'];
+        return view('Admin::Personnels.Modif',compact("personnel","fonction","hierachie"));
     }
 
     public function voir () {
