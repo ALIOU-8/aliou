@@ -57,7 +57,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/', [BiensController::class, 'index'])->name('biens.liste');
         Route::get('/ajout', [BiensController::class, 'ajout'])->name('biens.ajout');
         Route::get('/modif/{id}', [BiensController::class, 'modif'])->name('biens.modif');
-        Route::get('/voir', [BiensController::class, 'voir'])->name('biens.voir');
+        Route::get('/voir/{id}', [BiensController::class, 'voir'])->name('biens.voir');
         Route::get('/corbeille', [BiensController::class, 'corbeille'])->name('biens.corbeille');
         Route::post('/store', [BiensController::class, 'store'])->name('biens.store');
         Route::put('/update/{id}', [BiensController::class, 'update'])->name('biens.update');
@@ -173,7 +173,11 @@ use Illuminate\Support\Facades\Route;
         Route::get('/restaurer', [ParametreController::class, 'restaurer'])->name('fonction.restaurer');
         Route::put('/restaurer/{id}', [ParametreController::class, 'restaure'])->name('fonction.resto');
         
-        // Recensement 
-        Route::get('/configuration/recensement', [ParametreController::class, 'recensement'])->name('parametre.configuration.recensement');
-        Route::get('/configuration/recensement/corbeille', [ParametreController::class, 'corbeille_recensement'])->name('parametre.configuration.recensement.corbeille');
+        // Annee 
+        Route::get('/configuration/annee', [ParametreController::class, 'annee'])->name('parametre.configuration.annee');
+        Route::post('/configuration/annee/store',[ParametreController::class,'annee_store'])->name('parametre.configuration.annee.store');
+        Route::put('/configuration/annee/update/{id}',[ParametreController::class,'annee_update'])->name('parametre.configuration.annee.update');
+        Route::get('/configuration/annee/edit/{id}',[ParametreController::class,'annee_edit'])->name('parametre.configuration.annee.edit');
+        Route::post('/annees//activer/{id}', [ParametreController::class, 'activer'])->name('annees.activer');
+
     });

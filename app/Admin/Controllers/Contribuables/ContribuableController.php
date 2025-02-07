@@ -10,7 +10,10 @@ use Illuminate\Validation\Rule;
 class ContribuableController extends Controller
 {
     public function index () {
-        $contribuables = Contribuable::where('delete',0)->Orderby('id','Desc')->get();
+        $contribuables = Contribuable::where('delete', 0)
+        ->with('bien') // Charge les biens associés
+        ->orderBy('id', 'desc')
+        ->get();    
         return view('Admin::Contribuables.Liste',compact('contribuables'));
     }
     public function search(Request $request)

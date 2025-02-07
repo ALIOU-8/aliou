@@ -44,10 +44,10 @@
                             </div>
                             <div class="col-md-3 mb-4">
                                 <div class="card border shadow p-1">
-                                    <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-cog"></i>Recensement</div>
+                                    <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-cog"></i>Année</div>
                                     <hr class="m-0">
                                     <div class="mt-1 mb-1 p-3">
-                                        <a href="{{route('parametre.configuration.recensement')}}" class="btn btn-sm-lg btn-outline-success w-100">Configurer</a>
+                                        <a href="{{route('parametre.configuration.annee')}}" class="btn btn-sm-lg btn-outline-success w-100">Configurer</a>
                                     </div>
                                 </div>
                             </div>

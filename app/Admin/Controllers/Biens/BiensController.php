@@ -143,8 +143,9 @@ class BiensController extends Controller
         return view('Admin::Biens.Modif',compact('bien','contribuable','typeBien'));
     }
 
-    public function voir () {
-        return view('Admin::Biens.Voir');
+    public function voir ($id) {
+        $biens=Bien::findOrFail($id);
+        return view('Admin::Biens.Voir',compact('biens'));
     }
 
     public function corbeille() {

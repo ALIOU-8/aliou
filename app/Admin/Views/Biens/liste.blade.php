@@ -49,7 +49,7 @@
                                         <td>{{ $biens->libelle}}</td>
                                         <td>{{ $biens->adresse }}</td>
                                         <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('biens.voir')}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
+                                            <a href="{{route('biens.voir',$biens->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
                                             <a href="{{route('biens.modif',$biens->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
                                             <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer{{$biens->id}}">Supprimer<i class="bx bx-trash"></i></a>
                                             {{-- Modal pour confirmer la suppression  --}}
@@ -111,7 +111,7 @@ function fetchBiens() {
                             <td>${bien.libelle}</td>
                             <td>${bien.adresse}</td>
                             <td class="d-flex justify-content-center gap-2">
-                                <a class="btn btn-outline-success btn-sm d-flex align-items-center gap-1" href="#" data-bs-toggle="modal" data-bs-target="#voir${bien.id}">Voir<i class="bx bx-show"></i></a>
+                                <a class="btn btn-outline-success btn-sm d-flex align-items-center gap-1" href="/biens/voir/${bien.id}" data-bs-toggle="modal" data-bs-target="#voir${bien.id}">Voir<i class="bx bx-show"></i></a>
 
                                 <a href="/biens/modif/${bien.id}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
 

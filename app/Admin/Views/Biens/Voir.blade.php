@@ -18,17 +18,17 @@
                                 <a href="" class="btn btn-outline-success">Imprimer</a>
                             </div>
                             <div class="h4 text-center">Informations du Propriétaire </div>
-                            <div class="h5">Nom : <small> Sano</small> </div>
-                            <div class="h5">Prénom : <small> Ismael</small> </div>
-                            <div class="h5">Téléphone : <small> 628013477</small> </div>
-                            <div class="h5">Profession : <small> Etudiant</small> </div>
+                            <div class="h5">Nom : <small> {{ $biens->contribuable->nom}}</small> </div>
+                            <div class="h5">Prénom : <small> {{ $biens->contribuable->prenom }}</small> </div>
+                            <div class="h5">Téléphone : <small> {{ $biens->contribuable->telephone }}</small> </div>
+                            <div class="h5">Profession : <small> {{ $biens->contribuable->profession}}</small> </div>
                         </div>
                         <div class="">
                             <div class="h4 text-center">Informations du bien </div>
-                            <div class="h5">Type de bien : <small> Magasin</small> </div>
-                            <div class="h5">N° de la bien : <small> 5766</small> </div>
-                            <div class="h5">Nom de la bien : <small> Sano & Frères</small> </div>
-                            <div class="h5">Adresse de la bien : <small> Telico en face de l'institut</small> </div>
+                            <div class="h5">Type de bien : <small>{{ $biens->typeBien->libelle }}</small> </div>
+                            <div class="h5">N° {{ $biens->typeBien->libelle  }} : <small>{{ $biens->numero_bien }}</small> </div>
+                            <div class="h5">Nom {{ $biens->typeBien->libelle  }} : <small>{{ $biens->libelle }}</small> </div>
+                            <div class="h5">Adresse {{ $biens->typeBien->libelle  }} : <small>{{ $biens->adresse }}</small> </div>
                         </div>
                         <div class="row d-flex justify-content-center align-items-center">
                             <div class="col-md-2 border border-6 border-dark mt-3 bg-dark" style="height: 130px"></div>

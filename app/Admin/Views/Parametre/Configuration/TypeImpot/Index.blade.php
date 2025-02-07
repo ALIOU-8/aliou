@@ -30,7 +30,7 @@
                                         @enderror
                                     </div>                               
                                     <div class="col-md-6">
-                                        <button class="btn btn-outline-success col-6 col-md-3 d-flex justify-content-center align-items-center gap-1">Enregistrer <i class="bx bx-save"></i></button>
+                                        <button class="btn btn-outline-success col-6 col-md-3 d-flex justify-content-center align-items-center gap-1">{{ isset($type_impot) ? 'Modifier' : 'Enregistrer' }} <i class="bx bx-save"></i></button>
                                     </div>
                                 </div>
                             </form>

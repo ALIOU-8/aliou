@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers\Parametre;
 
 use App\Http\Controllers\Controller;
+use App\Models\Annee;
 use App\Models\Fonction;
 use App\Models\TypeBien;
 use App\Models\TypeImpot;
@@ -239,13 +240,67 @@ class ParametreController extends Controller
 
 
   
-    // Recensement 
-    public function recensement () {
-        return view('Admin::Parametre.Configuration.Recensement.Index');
+    // Annee 
+    
+    public function annee () {
+        $annees = Annee::orderBy('libelle', 'desc')->get();
+        return view('Admin::Parametre.Configuration.Annee.Index',compact('annees'));
     }
 
-    public function corbeille_recensement () {
-        return view('Admin::Parametre.Configuration.Recensement.Corbeille');
+    public function annee_store(Request $request)
+    {
+
+        $request->validate(
+            [
+                "annee" =>"required|unique:annees|max:4"
+            ]
+        );
+         // Désactiver toutes les autres années
+        Annee::query()->update(['active' => 0]);
+        
+        $annee=new Annee();
+        $annee->annee=$request->annee;
+        $annee->active=1;
+        $annee->save();
+        toastr()->success("L'année $request->annee enregistrer avec succes");
+        return back();
     }
+
+
+    public function annee_update(Request $request,$id)
+    {
+        $request->validate(
+            [
+                'annee' => ['max:4',
+                'required',
+                Rule::unique('annees')->ignore($id), // Exclure l'ID actuel
+            ],
+            ]
+        );
+        $annee=Annee::findOrFail($id);
+        $annee->annee=$request->annee;
+        $annee->update();
+        toastr()->success("L'année Modifer avec succes");
+        return to_route('parametre.configuration.annee');
+    }
+
+    public function annee_edit($id)
+    {
+        $annee=Annee::findOrfail($id);
+        $annees = Annee::orderBy('libelle', 'desc')->get();
+       return view('Admin::Parametre.Configuration.Annee.Index',compact('annee','annees'));
+    }
+
+    public function activer($id)
+    {
+        // Désactiver toutes les autres années
+        Annee::query()->update(['active' => 0]);
+        // Activer l'année sélectionnée
+        Annee::where('id', $id)->update(['active' => 1]);
+        $annee=Annee::findOrFail($id);
+        toastr()->success("Année $annee->annee activée avec succes");
+        return back();
+    }
+
     
 }
