@@ -51,6 +51,7 @@
                                         <td class="d-flex justify-content-center gap-2">
                                             <a href="{{route('biens.voir',$biens->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
                                             <a href="{{route('biens.modif',$biens->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
+                                            <a class="btn btn-outline-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#recencer{{$biens->id}}">Recencer<i class="bx bx-trash"></i></a>
                                             <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer{{$biens->id}}">Supprimer<i class="bx bx-trash"></i></a>
                                             {{-- Modal pour confirmer la suppression  --}}
                                             <div class="modal fade" id="supprimer{{$biens->id}}" aria-labelledby="supprimer" aria-hidden="true">
@@ -64,11 +65,27 @@
                                                             <div class="text-start">{{ $biens->contribuable->nom.' '.$biens->contribuable->prenom }}</div>
                                                             <div class="text-start">{{ $biens->typeBien->libelle }}</div>
                                                             <div class="text-start">{{ $biens->libelle }}</div>
-                                                            <form action="{{route('biens.supprimer',$biens->id) }}" method="post">
-                                                                @method('put')
-                                                                @csrf
-                                                                <button type="submit" class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1">Confirmer <i class="bx bx-check"></i></button>
-                                                            </form>
+                                                            <a href="{{ route('biens.supprimer',$biens->id) }}" class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1">Confirmer <i class="bx bx-check"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {{-- Modal pour recencer un bien  --}}
+                                            <div class="modal fade" id="recencer{{$biens->id}}" aria-labelledby="recencer" aria-hidden="true">
+                                                <div class="modal-dialog center">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h6 class="modal-title" id="recencer">Voulez-vous Recencé ce bien ? {{ $biens->numero_bien }}</h6>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="text-start">{{ $biens->contribuable->nom.' '.$biens->contribuable->prenom }}</div>
+                                                            <div class="text-start">{{ $biens->typeBien->libelle }}</div>
+                                                            <div class="text-start">{{ $biens->libelle }}</div>
+                                                            <a class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1" href="{{route('tpu.ajout',$biens->id)}}">TPU</a>
+                                                            <a class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1" href="">CFU</a>
+                                                            <a class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1" href="">PATENTE</a>
+                                                            <a class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1" href="">LICENCE</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -90,7 +107,9 @@
             </div>
         </div>
     </div>
+   
 </main>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 function fetchBiens() {
     let query = document.getElementById("search").value;
@@ -102,6 +121,47 @@ function fetchBiens() {
 
             if (data.length > 0) {
                 data.forEach((bien, index) => {
+                    let modalSupprimer = `
+                        <div class="modal fade" id="supprimer${bien.id}" aria-labelledby="supprimer" aria-hidden="true">
+                            <div class="modal-dialog center">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h6 class="modal-title" id="supprimer">Voulez-vous supprimer ce bien ?</h6>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="text-start">${bien.contribuable ? bien.contribuable.nom + ' ' + bien.contribuable.prenom : 'N/A'}</div>
+                                        <div class="text-start">${bien.type_bien ? bien.type_bien.libelle : 'N/A'}</div>
+                                        <div class="text-start">${bien.libelle}</div>
+                                        <a href="/biens/supprime/${bien.id}" class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1">Confirmer <i class="bx bx-check"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    let modalRecenser = `
+                        <div class="modal fade" id="recencer${bien.id}" aria-labelledby="recencer" aria-hidden="true">
+                            <div class="modal-dialog center">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h6 class="modal-title" id="recencer">Voulez-vous recenser ce bien ? ${bien.numero_bien}</h6>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="text-start">${bien.contribuable ? bien.contribuable.nom + ' ' + bien.contribuable.prenom : 'N/A'}</div>
+                                        <div class="text-start">${bien.type_bien ? bien.type_bien.libelle : 'N/A'}</div>
+                                        <div class="text-start">${bien.libelle}</div>
+                                        <a class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1" href="/tpu/ajout/${bien.id}">TPU</a>
+                                        <a class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1" href="">CFU</a>
+                                        <a class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1" href="">PATENTE</a>
+                                        <a class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1" href="">LICENCE</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
                     let row = `
                         <tr>
                             <td>${index + 1}</td>
@@ -111,14 +171,16 @@ function fetchBiens() {
                             <td>${bien.libelle}</td>
                             <td>${bien.adresse}</td>
                             <td class="d-flex justify-content-center gap-2">
-                                <a class="btn btn-outline-success btn-sm d-flex align-items-center gap-1" href="/biens/voir/${bien.id}" data-bs-toggle="modal" data-bs-target="#voir${bien.id}">Voir<i class="bx bx-show"></i></a>
-
+                                <a class="btn btn-outline-success btn-sm d-flex align-items-center gap-1" href="/biens/voir/${bien.id}">Voir<i class="bx bx-show"></i></a>
                                 <a href="/biens/modif/${bien.id}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
-
                                 <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer${bien.id}">Supprimer<i class="bx bx-trash"></i></a>
+                                <a class="btn btn-outline-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#recencer${bien.id}">Recenser<i class="bx bx-plus"></i></a>
                             </td>
                         </tr>
+                        ${modalSupprimer}
+                        ${modalRecenser}
                     `;
+
                     tbody.innerHTML += row;
                 });
             } else {
@@ -127,5 +189,6 @@ function fetchBiens() {
         })
         .catch(error => console.error('Erreur:', error));
 }
+
 </script>
 @endsection

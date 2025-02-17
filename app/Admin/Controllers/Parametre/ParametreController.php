@@ -252,18 +252,28 @@ class ParametreController extends Controller
 
         $request->validate(
             [
-                "annee" =>"required|unique:annees|max:4"
+                "annee" =>"required|unique:annees|max:4",
+                'date_debut'=>'required',
+                'date_fin'=>'required',
             ]
         );
          // Désactiver toutes les autres années
         Annee::query()->update(['active' => 0]);
+        if($request->date_debut > $request->date_fin )
+        {
+            toastr()->error('La date debut doit être inférieur a la date de fin');
+            return back();
+        }else{
+            $annee=new Annee();
+            $annee->annee=$request->annee;
+            $annee->Date_debut=$request->date_debut;
+            $annee->Date_fin=$request->date_fin;
+            $annee->active=1;
+            $annee->save();
+            toastr()->success("L'année $request->annee enregistrer avec succes");
+            return back();
+        }
         
-        $annee=new Annee();
-        $annee->annee=$request->annee;
-        $annee->active=1;
-        $annee->save();
-        toastr()->success("L'année $request->annee enregistrer avec succes");
-        return back();
     }
 
 
@@ -273,15 +283,28 @@ class ParametreController extends Controller
             [
                 'annee' => ['max:4',
                 'required',
-                Rule::unique('annees')->ignore($id), // Exclure l'ID actuel
+                Rule::unique('annees')->ignore($id),
+                 // Exclure l'ID actuel
+                 'date_debut'=>'required',
+                'date_fin'=>'required',
+                 
             ],
             ]
         );
-        $annee=Annee::findOrFail($id);
-        $annee->annee=$request->annee;
-        $annee->update();
-        toastr()->success("L'année Modifer avec succes");
-        return to_route('parametre.configuration.annee');
+        if($request->date_debut > $request->date_fin )
+        {
+            toastr()->error('La date debut doit être inférieur a la date de fin');
+            return back();
+        }else{
+            $annee=Annee::findOrFail($id);
+            $annee->annee=$request->annee;
+            $annee->Date_debut=$request->date_debut;
+            $annee->Date_fin=$request->date_fin;
+            $annee->update();
+            toastr()->success("L'année Modifer avec succes");
+            return to_route('parametre.configuration.annee');
+        }
+        
     }
 
     public function annee_edit($id)

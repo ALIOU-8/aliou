@@ -12,4 +12,7 @@ class Contribuable extends Model
     public function bien(){
         return $this->hasMany(Bien::class)->where('delete', 0);
     }
+    
+
+
 }

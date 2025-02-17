@@ -16,11 +16,11 @@
                         <div class="h5 text-center text-success">Corbeille des biens</div>
                         <div class="row d-flex justify-content-between align-items-center me-1">
                             <div class="col-md-4 ms-auto">
-                                <input type="text" placeholder="Rechercher..." class="form-control border border-success m-3">
+                                <input type="text" placeholder="Rechercher..." class="form-control border border-success m-3" id="searchInput" onkeyup="searchTable()">
                             </div>
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-bordered table-hover table-striped">
+                            <table class="table table-bordered table-hover table-striped" id="myTable">
                                 <thead>
                                     <tr class="text-center">
                                         <th>N°</th>
@@ -65,4 +65,30 @@
         </div>
     </div>
 </main>
+<script>
+    function searchTable() {
+        // Récupère la valeur de la recherche
+        let searchQuery = document.getElementById("searchInput").value.toLowerCase();
+        let table = document.getElementById("myTable");
+        let rows = table.getElementsByTagName("tr");
+        
+        // Parcours chaque ligne du tableau (sauf l'en-tête)
+        for (let i = 1; i < rows.length; i++) {
+            let cells = rows[i].getElementsByTagName("td");
+            let rowText = "";
+            
+            // Concatène le texte des cellules à rechercher
+            for (let j = 0; j < cells.length - 1; j++) {  // Ne pas inclure la dernière colonne "Actions"
+                rowText += cells[j].textContent.toLowerCase();
+            }
+            
+            // Si le texte de la ligne correspond à la recherche, l'afficher, sinon la masquer
+            if (rowText.includes(searchQuery)) {
+                rows[i].style.display = "";
+            } else {
+                rows[i].style.display = "none";
+            }
+        }
+    }
+</script>
 @endsection

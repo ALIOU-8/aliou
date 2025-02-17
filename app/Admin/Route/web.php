@@ -32,7 +32,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/modif/{id}', [ContribuableController::class, 'modif'])->name('contribuables.modif');
         Route::post('/store', [ContribuableController::class, 'store'])->name('contribuables.store');
         Route::put('/update/{id}', [ContribuableController::class, 'update'])->name('contribuables.update');
-        Route::put('/supprime/{id}', [ContribuableController::class, 'delete'])->name('contribuables.supprime');
+        Route::get('/supprime/{id}', [ContribuableController::class, 'delete'])->name('contribuables.supprime');
         Route::get('/restaurer', [ContribuableController::class, 'restaurer'])->name('contribuables.restaurer');
         Route::put('/restaurer/{id}', [ContribuableController::class, 'restaure'])->name('contribuables.resto');
         Route::get('/recherche',[ContribuableController::class,'search'])->name('contribuables.search');
@@ -61,7 +61,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/corbeille', [BiensController::class, 'corbeille'])->name('biens.corbeille');
         Route::post('/store', [BiensController::class, 'store'])->name('biens.store');
         Route::put('/update/{id}', [BiensController::class, 'update'])->name('biens.update');
-        Route::put('/supprime{id}', [BiensController::class,'delete'])->name('biens.supprimer');
+        Route::get('/supprime/{id}', [BiensController::class,'delete'])->name('biens.supprimer');
         Route::put('/restaurer/{id}', [BiensController::class, 'restaure'])->name('biens.restor');
         Route::get('/recherche',[BiensController::class,'search'])->name('biens.search');
         ///
@@ -91,10 +91,20 @@ use Illuminate\Support\Facades\Route;
     //Les routes pour la gestion TPU
     Route::prefix('tpu')->group(function () {
         Route::get('/', [TPUController::class, 'index'])->name('tpu.liste');
-        Route::get('/ajout', [TPUController::class, 'ajout'])->name('tpu.ajout');
-        Route::get('/modif', [TPUController::class, 'modif'])->name('tpu.modif');
-        Route::get('/voir', [TPUController::class, 'voir'])->name('tpu.voir');
+        Route::get('/ajout/{id}', [TPUController::class, 'ajout'])->name('tpu.ajout');
+        Route::get('/affiche/{id}', [TPUController::class, 'affiche'])->name('tpu.affiche');
+        Route::get('/modif/{id}', [TPUController::class, 'modif'])->name('tpu.modif');
+        Route::get('/voir/{id}', [TPUController::class, 'voir'])->name('tpu.voir');
+        Route::post('/store', [TPUController::class, 'store'])->name('tpu.store');
         Route::get('/corbeille', [TPUController::class, 'corbeille'])->name('tpu.corbeille');
+        Route::get('/verifier-numero-bien',[TPUController::class,'verifier'])->name('verifie.numero');
+        Route::post('/recense',[TPUController::class,'recense'])->name('tpu.recense');
+        Route::put('/update/{id}',[TPUcontroller::class,'update'])->name('tpu.update');
+        Route::get('/recensements/search', [TPUController::class, 'search'])->name('recensements.search');
+        Route::get('/contribuable-get/{id}', [TPUController::class, 'getContribuable'])->name('get.contribuable.details');
+
+
+
     });
 
     //Les routes pour la gestion Patente

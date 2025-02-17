@@ -17,7 +17,7 @@
                         <div class="h6 mb-3 text-success">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab mollitia ratione quaerat natus rem iusto asperiores facilis libero est doloremque velit, suscipit repellendus cupiditate illo dolor perspiciatis labore reiciendis vitae?</div>
                         <form action="{{route('biens.store')}}" method="post" class="form">
                             @csrf
-                            <di class="row">
+                            <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label" for="contribuable_id">Propriétaire du bien</label>
                                     <select name="contribuable_id" id="contribuable_id" class="form-control">
@@ -30,9 +30,9 @@
                                         <p class="text-danger">{{$message}}</p>
                                     @enderror
                                 </div>
-                                    <div id="client-info" class="col-md-6 d-block" style="display: none;">
-                                        <div class="h6 mt-2">Informations du client</div>
-                                        <div class="h5 fw-bolder">Nom et Prénom : <span id="client-name" class="fw-normal"></span></div>
+                                    <div id="contribuable-info" class="col-md-6 d-block" style="display: none;">
+                                        <div class="h6 mt-2">Informations du contribuable</div>
+                                        <div class="h5 fw-bolder">Nom et Prénom : <span id="contribuable-name" class="fw-normal"></span></div>
                                     </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label" for="type_bien_id">Type de bien</label>
@@ -73,29 +73,7 @@
 </main>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $('#contribuable_id').on('change', function () {
-            var contribuableId = $(this).val();
-            
-            if (contribuableId) {
-                $.ajax({
-                    url: "{{ route('get.contribuable') }}", // Route à créer
-                    type: "GET",
-                    data: { id: contribuableId },
-                    success: function (data) {
-                        if (data.success) {
-                            $('#client-name').text(data.contribuable.nom + ' ' + data.contribuable.prenom);
-                            $('#client-info').show();
-                        } else {
-                            $('#client-info').hide();
-                        }
-                    }
-                });
-            } else {
-                $('#client-info').hide();
-            }
-        });
-    });
+    
 </script>
 
 @endsection

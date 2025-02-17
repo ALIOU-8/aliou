@@ -11,7 +11,7 @@ class ContribuableController extends Controller
 {
     public function index () {
         $contribuables = Contribuable::where('delete', 0)
-        ->with('bien') // Charge les biens associés
+        ->with('bien')// Charge les biens associés
         ->orderBy('id', 'desc')
         ->get();    
         return view('Admin::Contribuables.Liste',compact('contribuables'));
@@ -28,9 +28,12 @@ class ContribuableController extends Controller
                 ->orWhere('profession','like',"%$query%");
                 
             }
-        )->get();
+        )
+        ->with('bien.typeBien') // Charge les biens et leur type
+        ->get();
         return response()->json($contribuables);
     }
+    
     public function ajout () {
         return view('Admin::Contribuables.Ajout');
     }

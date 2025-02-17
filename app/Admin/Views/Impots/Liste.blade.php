@@ -15,7 +15,7 @@
                         <div class="row d-flex justify-content-between align-items-center me-1">
                             <div class="col-md-2">
                                 <a class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1" data-bs-toggle="modal" data-bs-target="#nouveau">Nouveau<i class="bx bx-plus"></i></a>
-                                {{-- Modal pour confirmer la suppression  --}}
+                                {{-- Modal pour confirmer le numero du bien  --}}
                                 <div class="modal fade" id="nouveau" aria-labelledby="nouveau" aria-hidden="true">
                                     <div class="modal-dialog center">
                                         <div class="modal-content">
