@@ -30,10 +30,12 @@
                                         <p class="text-danger">{{$message}}</p>
                                     @enderror
                                 </div>
-                                    <div id="contribuable-info" class="col-md-6 d-block" style="display: none;">
-                                        <div class="h6 mt-2">Informations du contribuable</div>
-                                        <div class="h5 fw-bolder">Nom et Prénom : <span id="contribuable-name" class="fw-normal"></span></div>
+                                <div class="col-md-6 d-block">
+                                    <div id="client-info" class="col-md-6 d-block" style="display: none;">
+                                        <div class="h6 mt-2">Informations du client</div>
+                                        <div class="h5 fw-bolder">Nom et Prénom : <span id="client-name" class="fw-normal"></span></div>
                                     </div>
+                                </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label" for="type_bien_id">Type de bien</label>
                                     <select name="type_bien_id" id="type_bien_id" class="form-control">
@@ -73,7 +75,36 @@
 </main>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    
+    $(document).ready(function () {
+        function loadContribuableData(contribuableId) {
+            if (contribuableId) {
+                $.ajax({
+                    url: "{{ route('get.contribuable') }}",
+                    type: "GET",
+                    data: { id: contribuableId },
+                    success: function (data) {
+                        if (data.success) {
+                            $('#client-name').text(data.contribuable.nom + ' ' + data.contribuable.prenom);
+                            $('#client-info').show();
+                        } else {
+                            $('#client-info').hide();
+                        }
+                    }
+                });
+            } else {
+                $('#client-info').hide();
+            }
+        }
+
+        // Quand on change la sélection
+        $('#contribuable_id').on('change', function () {
+            loadContribuableData($(this).val());
+        });
+
+        // Charger les données automatiquement si une valeur est déjà sélectionnée
+        var selectedContribuable = $('#contribuable_id').val();
+        loadContribuableData(selectedContribuable);
+    });
 </script>
 
 @endsection

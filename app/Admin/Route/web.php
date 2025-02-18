@@ -101,7 +101,7 @@ use Illuminate\Support\Facades\Route;
         Route::post('/recense',[TPUController::class,'recense'])->name('tpu.recense');
         Route::put('/update/{id}',[TPUcontroller::class,'update'])->name('tpu.update');
         Route::get('/recensements/search', [TPUController::class, 'search'])->name('recensements.search');
-        Route::get('/contribuable-get/{id}', [TPUController::class, 'getContribuable'])->name('get.contribuable.details');
+        Route::get('/contribuable-get', [TPUController::class, 'getContribuable'])->name('get.contribuable.details');
 
 
 
@@ -119,10 +119,15 @@ use Illuminate\Support\Facades\Route;
     //Les routes pour la gestion Licence
     Route::prefix('licence')->group(function () {
         Route::get('/', [LicenceController::class, 'index'])->name('licence.liste');
-        Route::get('/ajout', [LicenceController::class, 'ajout'])->name('licence.ajout');
-        Route::get('/modif', [LicenceController::class, 'modif'])->name('licence.modif');
-        Route::get('/voir', [LicenceController::class, 'voir'])->name('licence.voir');
+        Route::get('/ajout/{id}', [LicenceController::class, 'ajout'])->name('licence.ajout');
+        Route::get('/modif/{id}', [LicenceController::class, 'modif'])->name('licence.modif');
+        Route::get('/voir/{id}', [LicenceController::class, 'voir'])->name('licence.voir');
+        Route::put('/update/{id}',[LicenceController::class,'update'])->name('licence.update');
         Route::get('/corbeille', [LicenceController::class, 'corbeille'])->name('licence.corbeille');
+        Route::post('/store', [LicenceController::class, 'store'])->name('licence.store');
+        Route::get('/contribuable-get', [LicenceController::class, 'getContribuable'])->name('contribuable.details');
+        Route::get('/recensements/search', [LicenceController::class, 'search'])->name('recensements.licence.search');
+        Route::post('/recense',[LicenceController::class,'recense'])->name('licence.recense');
     });
 
     //Les routes pour la gestion impot

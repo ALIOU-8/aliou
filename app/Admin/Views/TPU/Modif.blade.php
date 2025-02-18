@@ -75,31 +75,35 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Assure-toi que jQuery est inclus -->
 
 <script>
-    $('#bien_id').change(function () {
-    var bienId = $(this).val();  // Récupère l'ID du bien sélectionné
-    if (bienId) {
-        $.ajax({
-            url: "{{ route('get.contribuable.details', '') }}/" + bienId,
-            type: 'GET',
-            success: function (response) {
-                $('#contribuable-info').show();  // Affiche la section contenant les infos du propriétaire
-                $('#contribuable-name').text(response.nom + ' ' + response.prenom);  // Affiche le nom et prénom
-            },
-            error: function () {
-                $('#contribuable-info').hide();  // Cache la section en cas d'erreur
-                $('#contribuable-name').text('');  // Réinitialise le texte
+    $(document).ready(function () {
+        function loadContribuableData(bienId) {
+            if (bienId) {
+                $.ajax({
+                    url: "{{ route('get.contribuable.details')}}",
+                    type: "GET",
+                    data: { id: bienId },
+                    success: function (data) {
+                        if (data.success) {
+                            $('#contribuable-name').text(data.contribuable.nom + ' ' + data.contribuable.prenom);
+                            $('#contribuable-info').show();
+                        } else {
+                            $('#contribuable-info').hide();
+                        }
+                    }
+                });
+            } else {
+                $('#client-info').hide();
             }
+        }
+
+        // Quand on change la sélection
+        $('#bien_id').on('change', function () {
+            loadContribuableData($(this).val());
         });
-    } else {
-        $('#contribuable-info').hide();  // Cache la section si aucun bien n'est sélectionné
-        $('#contribuable-name').text('');  // Réinitialise le texte
-    }
-});
 
+        // Charger les données automatiquement si une valeur est déjà sélectionnée
+        var selectedContribuable = $('#bien_id').val();
+        loadContribuableData(selectedContribuable);
+    });
 </script>
-
-
-
-
-
 @endsection

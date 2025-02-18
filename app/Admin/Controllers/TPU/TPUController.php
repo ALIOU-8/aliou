@@ -142,19 +142,22 @@ class TPUController extends Controller
         }
         
     }
-    public function getContribuable($id)
-{
-    $bien = Bien::with('contribuable')->find($id);
+    public function getContribuable(Request $request)
+    {
+    $bien = Bien::with('contribuable')->find($request->id);
 
     if (!$bien || !$bien->contribuable) {
         return response()->json(['error' => 'Propriétaire non trouvé'], 404);
     }
 
     return response()->json([
-        'nom' => $bien->contribuable->nom,
-        'prenom' => $bien->contribuable->prenom
-    ]);
-}
+        'success' => true,
+            'contribuable' => [
+                'nom' => $bien->contribuable->nom,
+                'prenom' => $bien->contribuable->prenom
+                ]
+        ]);
+    }
 
     
 
@@ -166,7 +169,10 @@ class TPUController extends Controller
             'Date_rdv' =>'required',
             'Date_recensement' =>'required'
         ]);
-        $doublonRecencement=Recensement_tpu::where('bien_id',$request->bien_id)->where('annee_id',$request->annee_id)->first();
+        $doublonRecencement = Recensement_tpu::where('bien_id', $request->bien_id)
+        ->where('annee_id', $request->annee_id)
+        ->where('id', '!=', $request->id) // Ignorer l'enregistrement en cours de modification
+        ->first();
         $verifDateRecensement=Annee::findOrFail($request->annee_id);
         $dateLocal=Carbon::now('UTC');
         if($dateLocal->greaterThan($verifDateRecensement->Date_fin))
