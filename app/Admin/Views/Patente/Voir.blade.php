@@ -17,17 +17,20 @@
                         <div class="h6 mb-3 text-success">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab mollitia ratione quaerat natus rem iusto asperiores facilis libero est doloremque velit, suscipit repellendus cupiditate illo dolor perspiciatis labore reiciendis vitae?</div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <h4>Propriétaire du bien</h4><span class="text-success h5">Bah Mamadou Saliou</span>
+                                <h4>Propriétaire du bien</h4><span class="text-success h5">{{ $recensement_patente->bien->contribuable->prenom.' '.$recensement_patente->bien->contribuable->prenom  }}</span>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <h4>Année de recensement</h4><span class="text-success h5">2025</span>
+                                <h4>Année de recensement</h4><span class="text-success h5">{{ $recensement_patente->annee->annee }}</span>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <h4>Catégorie</h4><span class="text-success h5">A1</span>
+                                <h4>Catégorie</h4><span class="text-success h5">{{ $recensement_patente->categorie }}</span>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <h4>Date du Rendez-vous</h4><span class="text-success h5">17/022025</span>
-                            </div> 
+                                <h4>Date du Rendez-vous</h4><span class="text-success h5">{{ $recensement_patente->Date_rdv }}</span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <h4>Date de Recensement</h4><span class="text-success h5">{{ $recensement_patente->Date_recensement }}</span>
+                            </div>  
                         </div>
                     </div>
                 </div>

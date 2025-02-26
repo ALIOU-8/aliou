@@ -42,14 +42,14 @@ class LicenceController extends Controller
                 toastr()->error('ce bien est déja recenser en Licence pour cette année');
                 return back();
             }else{
-                $recencement_tpu=new Recensement_licence();
-                $recencement_tpu->user_id=1;
-                $recencement_tpu->bien_id=$request->bien_id;
-                $recencement_tpu->annee_id=$request->annee_id;
-                $recencement_tpu->Date_rdv=$request->Date_rdv;
-                $recencement_tpu->Date_recensement=$request->Date_recensement;
-                $recencement_tpu->categorie=$request->categorie;
-                $recencement_tpu->save();
+                $recensement_licence=new Recensement_licence();
+                $recensement_licence->user_id=1;
+                $recensement_licence->bien_id=$request->bien_id;
+                $recensement_licence->annee_id=$request->annee_id;
+                $recensement_licence->Date_rdv=$request->Date_rdv;
+                $recensement_licence->Date_recensement=$request->Date_recensement;
+                $recensement_licence->categorie=$request->categorie;
+                $recensement_licence->save();
                 toastr()->success("Recensement effectué avec succes");
                 return to_route("licence.liste");
             }

@@ -110,9 +110,15 @@ use Illuminate\Support\Facades\Route;
     //Les routes pour la gestion Patente
     Route::prefix('patente')->group(function () {
         Route::get('/', [PatenteController::class, 'index'])->name('patente.liste');
-        Route::get('/ajout', [PatenteController::class, 'ajout'])->name('patente.ajout');
-        Route::get('/modif', [PatenteController::class, 'modif'])->name('patente.modif');
-        Route::get('/voir', [PatenteController::class, 'voir'])->name('patente.voir');
+        Route::get('/ajout/{id}', [PatenteController::class, 'ajout'])->name('patente.ajout');
+        Route::get('/modif/{id}', [PatenteController::class, 'modif'])->name('patente.modif');
+        Route::get('/voir/{id}', [PatenteController::class, 'voir'])->name('patente.voir');
+        Route::put('/update/{id}',[PatenteController::class,'update'])->name('patente.update');
+        Route::get('/corbeille', [PatenteController::class, 'corbeille'])->name('patente.corbeille');
+        Route::post('/store', [PatenteController::class, 'store'])->name('patente.store');
+        Route::get('/contribuable-get', [PatenteController::class, 'getContribuable'])->name('patente.contribuable.details');
+        Route::get('/recensements/search', [PatenteController::class, 'search'])->name('recensements.patente.search');
+        Route::post('/recense',[PatenteController::class,'recense'])->name('patente.recense');
         Route::get('/corbeille', [PatenteController::class, 'corbeille'])->name('patente.corbeille');
     });
 
