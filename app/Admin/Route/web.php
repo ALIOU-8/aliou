@@ -71,10 +71,15 @@ use Illuminate\Support\Facades\Route;
     //Les routes pour la gestion CFU
     Route::prefix('cfu')->group(function () {
         Route::get('/', [CFUController::class, 'index'])->name('cfu.liste');
-        Route::get('/ajout', [CFUController::class, 'ajout'])->name('cfu.ajout');
-        Route::get('/modif', [CFUController::class, 'modif'])->name('cfu.modif');
-        Route::get('/voir', [CFUController::class, 'voir'])->name('cfu.voir');
+        Route::get('/ajout/{id}', [CFUController::class, 'ajout'])->name('cfu.ajout');
+        Route::post('/store', [CFUController::class, 'store'])->name('cfu.store');
+        Route::get('/modif/{id}', [CFUController::class, 'modif'])->name('cfu.modif');
+        Route::put('/update/{id}',[CFUController::class,'update'])->name('cfu.update');
+        Route::get('/contribuable-get', [CFUController::class, 'getContribuable'])->name('cfu.contribuable.details');
+        Route::get('/voir/{id}', [CFUController::class, 'voir'])->name('cfu.voir');
         Route::get('/corbeille', [CFUController::class, 'corbeille'])->name('cfu.corbeille');
+        Route::post('/recense',[CFUController::class,'recense'])->name('cfu.recense');
+        Route::get('/search', [CFUController::class, 'search'])->name('cfu.search');
         // Route::get('/statistique', [CFUController::class, 'statistique'])->name('cfu.statistique');
 
     });

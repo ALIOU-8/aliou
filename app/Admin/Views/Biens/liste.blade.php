@@ -83,8 +83,8 @@
                                                             <div class="text-start">{{ $biens->typeBien->libelle }}</div>
                                                             <div class="text-start">{{ $biens->libelle }}</div>
                                                             <a class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1" href="{{route('tpu.ajout',$biens->id)}}">TPU</a>
-                                                            <a class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1" href="">CFU</a>
-                                                            <a class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1" href="">PATENTE</a>
+                                                            <a class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1" href="{{ route('cfu.ajout',$biens->id) }}">CFU</a>
+                                                            <a class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1" href="{{ route('patente.ajout',$biens->id) }}">PATENTE</a>
                                                             <a class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1" href="{{ route('licence.ajout',$biens->id) }}">LICENCE</a>
                                                         </div>
                                                     </div>
