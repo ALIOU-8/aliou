@@ -28,7 +28,6 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\LazyLoadingViolationException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Collection as BaseCollection;
 use Illuminate\Support\Exceptions\MathException;
 use Illuminate\Support\Facades\Crypt;
@@ -42,8 +41,6 @@ use ReflectionMethod;
 use ReflectionNamedType;
 use RuntimeException;
 use ValueError;
-
-use function Illuminate\Support\enum_value;
 
 trait HasAttributes
 {
@@ -126,7 +123,7 @@ trait HasAttributes
     /**
      * The storage format of the model's date columns.
      *
-     * @var string|null
+     * @var string
      */
     protected $dateFormat;
 
@@ -675,17 +672,6 @@ trait HasAttributes
         }
 
         return static::$getAttributeMutatorCache[get_class($this)][$key] = is_callable($this->{Str::camel($key)}()->get);
-    }
-
-    /**
-     * Determine if any get mutator exists for an attribute.
-     *
-     * @param  string  $key
-     * @return bool
-     */
-    public function hasAnyGetMutator($key)
-    {
-        return $this->hasGetMutator($key) || $this->hasAttributeGetMutator($key);
     }
 
     /**
@@ -1267,7 +1253,9 @@ trait HasAttributes
             throw new ValueError(sprintf('Value [%s] is not of the expected enum type [%s].', var_export($value, true), $expectedEnum));
         }
 
-        return enum_value($value);
+        return $value instanceof BackedEnum
+                ? $value->value
+                : $value->name;
     }
 
     /**
@@ -1344,11 +1332,7 @@ trait HasAttributes
      */
     public function fromJson($value, $asObject = false)
     {
-        if ($value === null || $value === '') {
-            return null;
-        }
-
-        return Json::decode($value, ! $asObject);
+        return Json::decode($value ?? '', ! $asObject);
     }
 
     /**
@@ -1412,7 +1396,7 @@ trait HasAttributes
             return Hash::make($value);
         }
 
-        /** @phpstan-ignore staticMethod.notFound */
+        /** @phpstan-ignore-next-line */
         if (! Hash::verifyConfiguration($value)) {
             throw new RuntimeException("Could not verify the hashed value's configuration.");
         }
@@ -1632,7 +1616,7 @@ trait HasAttributes
     /**
      * Get the attributes that should be cast.
      *
-     * @return array<string, string>
+     * @return array
      */
     protected function casts()
     {
@@ -1953,9 +1937,9 @@ trait HasAttributes
             );
         }
 
-        return (new Collection($this->original))
-            ->mapWithKeys(fn ($value, $key) => [$key => $this->transformModelValue($key, $value)])
-            ->all();
+        return collect($this->original)->mapWithKeys(function ($value, $key) {
+            return [$key => $this->transformModelValue($key, $value)];
+        })->all();
     }
 
     /**
@@ -2326,14 +2310,17 @@ trait HasAttributes
 
         $class = $reflection->getName();
 
-        static::$getAttributeMutatorCache[$class] = (new Collection($attributeMutatorMethods = static::getAttributeMarkedMutatorMethods($classOrInstance)))
-            ->mapWithKeys(fn ($match) => [lcfirst(static::$snakeAttributes ? Str::snake($match) : $match) => true])
-            ->all();
+        static::$getAttributeMutatorCache[$class] =
+            collect($attributeMutatorMethods = static::getAttributeMarkedMutatorMethods($classOrInstance))
+                    ->mapWithKeys(function ($match) {
+                        return [lcfirst(static::$snakeAttributes ? Str::snake($match) : $match) => true];
+                    })->all();
 
-        static::$mutatorCache[$class] = (new Collection(static::getMutatorMethods($class)))
-            ->merge($attributeMutatorMethods)
-            ->map(fn ($match) => lcfirst(static::$snakeAttributes ? Str::snake($match) : $match))
-            ->all();
+        static::$mutatorCache[$class] = collect(static::getMutatorMethods($class))
+                ->merge($attributeMutatorMethods)
+                ->map(function ($match) {
+                    return lcfirst(static::$snakeAttributes ? Str::snake($match) : $match);
+                })->all();
     }
 
     /**
@@ -2359,7 +2346,7 @@ trait HasAttributes
     {
         $instance = is_object($class) ? $class : new $class;
 
-        return (new Collection((new ReflectionClass($instance))->getMethods()))->filter(function ($method) use ($instance) {
+        return collect((new ReflectionClass($instance))->getMethods())->filter(function ($method) use ($instance) {
             $returnType = $method->getReturnType();
 
             if ($returnType instanceof ReflectionNamedType &&

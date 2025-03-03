@@ -5,11 +5,8 @@ namespace Illuminate\Bus;
 use Closure;
 use Illuminate\Queue\CallQueuedClosure;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use PHPUnit\Framework\Assert as PHPUnit;
 use RuntimeException;
-
-use function Illuminate\Support\enum_value;
 
 trait Queueable
 {
@@ -79,12 +76,12 @@ trait Queueable
     /**
      * Set the desired connection for the job.
      *
-     * @param  \BackedEnum|string|null  $connection
+     * @param  string|null  $connection
      * @return $this
      */
     public function onConnection($connection)
     {
-        $this->connection = enum_value($connection);
+        $this->connection = $connection;
 
         return $this;
     }
@@ -92,12 +89,12 @@ trait Queueable
     /**
      * Set the desired queue for the job.
      *
-     * @param  \BackedEnum|string|null  $queue
+     * @param  string|null  $queue
      * @return $this
      */
     public function onQueue($queue)
     {
-        $this->queue = enum_value($queue);
+        $this->queue = $queue;
 
         return $this;
     }
@@ -105,15 +102,13 @@ trait Queueable
     /**
      * Set the desired connection for the chain.
      *
-     * @param  \BackedEnum|string|null  $connection
+     * @param  string|null  $connection
      * @return $this
      */
     public function allOnConnection($connection)
     {
-        $resolvedConnection = enum_value($connection);
-
-        $this->chainConnection = $resolvedConnection;
-        $this->connection = $resolvedConnection;
+        $this->chainConnection = $connection;
+        $this->connection = $connection;
 
         return $this;
     }
@@ -121,15 +116,13 @@ trait Queueable
     /**
      * Set the desired queue for the chain.
      *
-     * @param  \BackedEnum|string|null  $queue
+     * @param  string|null  $queue
      * @return $this
      */
     public function allOnQueue($queue)
     {
-        $resolvedQueue = enum_value($queue);
-
-        $this->chainQueue = $resolvedQueue;
-        $this->queue = $resolvedQueue;
+        $this->chainQueue = $queue;
+        $this->queue = $queue;
 
         return $this;
     }
@@ -204,9 +197,7 @@ trait Queueable
      */
     public function chain($chain)
     {
-        $jobs = ChainedBatch::prepareNestedBatches(new Collection($chain));
-
-        $this->chained = $jobs->map(function ($job) {
+        $this->chained = collect($chain)->map(function ($job) {
             return $this->serializeJob($job);
         })->all();
 
@@ -221,9 +212,7 @@ trait Queueable
      */
     public function prependToChain($job)
     {
-        $jobs = ChainedBatch::prepareNestedBatches(new Collection([$job]));
-
-        $this->chained = Arr::prepend($this->chained, $this->serializeJob($jobs->first()));
+        $this->chained = Arr::prepend($this->chained, $this->serializeJob($job));
 
         return $this;
     }
@@ -236,9 +225,7 @@ trait Queueable
      */
     public function appendToChain($job)
     {
-        $jobs = ChainedBatch::prepareNestedBatches(new Collection([$job]));
-
-        $this->chained = array_merge($this->chained, [$this->serializeJob($jobs->first())]);
+        $this->chained = array_merge($this->chained, [$this->serializeJob($job)]);
 
         return $this;
     }
@@ -295,7 +282,7 @@ trait Queueable
      */
     public function invokeChainCatchCallbacks($e)
     {
-        (new Collection($this->chainCatchCallbacks))->each(function ($callback) use ($e) {
+        collect($this->chainCatchCallbacks)->each(function ($callback) use ($e) {
             $callback($e);
         });
     }
@@ -309,14 +296,14 @@ trait Queueable
     public function assertHasChain($expectedChain)
     {
         PHPUnit::assertTrue(
-            (new Collection($expectedChain))->isNotEmpty(),
+            collect($expectedChain)->isNotEmpty(),
             'The expected chain can not be empty.'
         );
 
-        if ((new Collection($expectedChain))->contains(fn ($job) => is_object($job))) {
-            $expectedChain = (new Collection($expectedChain))->map(fn ($job) => serialize($job))->all();
+        if (collect($expectedChain)->contains(fn ($job) => is_object($job))) {
+            $expectedChain = collect($expectedChain)->map(fn ($job) => serialize($job))->all();
         } else {
-            $chain = (new Collection($this->chained))->map(fn ($job) => get_class(unserialize($job)))->all();
+            $chain = collect($this->chained)->map(fn ($job) => get_class(unserialize($job)))->all();
         }
 
         PHPUnit::assertTrue(

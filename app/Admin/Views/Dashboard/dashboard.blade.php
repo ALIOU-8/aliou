@@ -18,7 +18,7 @@
                                     <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-user"></i>Nombre de Personnels</div>
                                     <hr class="m-0">
                                     <div class="h4 text-center mt-1 mb-1 p-1">
-                                        10                                      
+                                        {{$personnel}}                                    
                                     </div>
                                 </div>
                             </div>
@@ -27,7 +27,7 @@
                                     <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-user"></i>Nombre de Contribluables</div>
                                     <hr class="m-0">
                                     <div class="h4 text-center mt-1 mb-1 p-1">
-                                        10                                      
+                                        {{$contribuable}}                                      
                                     </div>
                                 </div>
                             </div>
@@ -36,7 +36,7 @@
                                     <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-user"></i>Nombre de Biens</div>
                                     <hr class="m-0">
                                     <div class="h4 text-center mt-1 mb-1 p-1">
-                                        10                                      
+                                        {{$bien}}                                      
                                     </div>
                                 </div>
                             </div>
@@ -47,9 +47,9 @@
                                     <div class="card-body shadow">
                                         <div class="h6 text-success text-center">Choix de l'année</div>
                                         <select class="form-control" name="" id="">
-                                            <option value="">2022</option>
-                                            <option value="">2023</option>
-                                            <option value="">2024</option>
+                                            @foreach ($annees as $item)
+                                                <option value="{{$item->annee}}">{{$item->annee}}</option>
+                                            @endforeach
                                         </select> 
                                         <hr>
                                         <button class="btn btn-outline-success d-flex align-items-center gap-1">Afficher <i class="fa fa-eye"></i></button>
@@ -59,7 +59,7 @@
                             <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-body border shadow">
-                                        <div class="h6 text-danger text-center">Statistiques du recensement pour l'année 2024 </div>
+                                        <div class="h6 text-success text-center">Statistiques du recensement pour l'année 2024 </div>
                                         <canvas id="myChart"></canvas>
                                     </div>
                                 </div>

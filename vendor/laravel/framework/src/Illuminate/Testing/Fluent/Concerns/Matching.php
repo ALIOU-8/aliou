@@ -2,12 +2,11 @@
 
 namespace Illuminate\Testing\Fluent\Concerns;
 
+use BackedEnum;
 use Closure;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Assert as PHPUnit;
-
-use function Illuminate\Support\enum_value;
 
 trait Matching
 {
@@ -26,16 +25,20 @@ trait Matching
 
         if ($expected instanceof Closure) {
             PHPUnit::assertTrue(
-                $expected(is_array($actual) ? new Collection($actual) : $actual),
+                $expected(is_array($actual) ? Collection::make($actual) : $actual),
                 sprintf('Property [%s] was marked as invalid using a closure.', $this->dotPath($key))
             );
 
             return $this;
         }
 
-        $expected = $expected instanceof Arrayable
-            ? $expected->toArray()
-            : enum_value($expected);
+        if ($expected instanceof Arrayable) {
+            $expected = $expected->toArray();
+        }
+
+        if ($expected instanceof BackedEnum) {
+            $expected = $expected->value;
+        }
 
         $this->ensureSorted($expected);
         $this->ensureSorted($actual);
@@ -64,16 +67,20 @@ trait Matching
 
         if ($expected instanceof Closure) {
             PHPUnit::assertFalse(
-                $expected(is_array($actual) ? new Collection($actual) : $actual),
+                $expected(is_array($actual) ? Collection::make($actual) : $actual),
                 sprintf('Property [%s] was marked as invalid using a closure.', $this->dotPath($key))
             );
 
             return $this;
         }
 
-        $expected = $expected instanceof Arrayable
-            ? $expected->toArray()
-            : enum_value($expected);
+        if ($expected instanceof Arrayable) {
+            $expected = $expected->toArray();
+        }
+
+        if ($expected instanceof BackedEnum) {
+            $expected = $expected->value;
+        }
 
         $this->ensureSorted($expected);
         $this->ensureSorted($actual);
@@ -157,12 +164,12 @@ trait Matching
      */
     public function whereContains(string $key, $expected)
     {
-        $actual = new Collection(
+        $actual = Collection::make(
             $this->prop($key) ?? $this->prop()
         );
 
-        $missing = (new Collection($expected))
-            ->map(fn ($search) => enum_value($search))
+        $missing = Collection::make($expected)
+            ->map(fn ($search) => $search instanceof BackedEnum ? $search->value : $search)
             ->reject(function ($search) use ($key, $actual) {
                 if ($actual->containsStrict($key, $search)) {
                     return true;

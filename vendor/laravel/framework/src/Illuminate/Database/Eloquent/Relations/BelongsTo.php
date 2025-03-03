@@ -2,14 +2,13 @@
 
 namespace Illuminate\Database\Eloquent\Relations;
 
+use BackedEnum;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Concerns\ComparesRelatedModels;
 use Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
 use Illuminate\Database\Eloquent\Relations\Concerns\SupportsDefaultModels;
-
-use function Illuminate\Support\enum_value;
 
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
@@ -96,9 +95,9 @@ class BelongsTo extends Relation
             // For belongs to relationships, which are essentially the inverse of has one
             // or has many relationships, we need to actually query on the primary key
             // of the related models matching on the foreign key that's on a parent.
-            $key = $this->getQualifiedOwnerKeyName();
+            $table = $this->related->getTable();
 
-            $this->query->where($key, '=', $this->getForeignKeyFrom($this->child));
+            $this->query->where($table.'.'.$this->ownerKey, '=', $this->getForeignKeyFrom($this->child));
         }
     }
 
@@ -108,7 +107,7 @@ class BelongsTo extends Relation
         // We'll grab the primary key name of the related models since it could be set to
         // a non-standard name and not "id". We will then construct the constraint for
         // our eagerly loading query so it returns the proper models from execution.
-        $key = $this->getQualifiedOwnerKeyName();
+        $key = $this->related->getTable().'.'.$this->ownerKey;
 
         $whereIn = $this->whereInMethod($this->related, $this->ownerKey);
 
@@ -150,7 +149,7 @@ class BelongsTo extends Relation
     }
 
     /** @inheritDoc */
-    public function match(array $models, EloquentCollection $results, $relation)
+    public function match(array $models, Collection $results, $relation)
     {
         // First we will get to build a dictionary of the child models by their primary
         // key of the relationship, then we can easily match the children back onto
@@ -218,18 +217,6 @@ class BelongsTo extends Relation
     public function disassociate()
     {
         return $this->dissociate();
-    }
-
-    /**
-     * Touch all of the related models for the relationship.
-     *
-     * @return void
-     */
-    public function touch()
-    {
-        if (! is_null($this->getParentKey())) {
-            parent::touch();
-        }
     }
 
     /** @inheritDoc */
@@ -368,7 +355,7 @@ class BelongsTo extends Relation
     {
         $foreignKey = $model->{$this->foreignKey};
 
-        return enum_value($foreignKey);
+        return $foreignKey instanceof BackedEnum ? $foreignKey->value : $foreignKey;
     }
 
     /**

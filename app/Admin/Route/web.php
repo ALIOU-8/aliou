@@ -86,11 +86,14 @@ use Illuminate\Support\Facades\Route;
 
     //Les routes pour la gestion CFU/Occupant
     Route::prefix('cfu')->group(function () {
-        Route::get('/occupant', [OccupantController::class, 'index'])->name('cfu.occupant.liste');
-        Route::get('/occupant/ajout', [OccupantController::class, 'ajout'])->name('cfu.occupant.ajout');
-        Route::get('/occupant/modif', [OccupantController::class, 'modif'])->name('cfu.occupant.modif');
-        Route::get('/occupant/voir', [OccupantController::class, 'voir'])->name('cfu.occupant.voir');
-        Route::get('/occupant/corbeille', [OccupantController::class, 'corbeille'])->name('cfu.occupant.corbeille');
+        Route::get('/occupant{id}', [OccupantController::class, 'index'])->name('cfu.occupant.liste');
+        Route::get('/occupant/ajout{id}', [OccupantController::class, 'ajout'])->name('cfu.occupant.ajout');
+        Route::get('/occupant/store{id}', [OccupantController::class, 'store'])->name('cfu.occupant.store');
+        Route::get('/occupant/delete{id}', [OccupantController::class, 'delete'])->name('cfu.occupant.delete');
+        Route::get('/occupant/modif{id}', [OccupantController::class, 'modif'])->name('cfu.occupant.modif');
+        Route::get('/occupant/update{id}', [OccupantController::class, 'update'])->name('cfu.occupant.update');
+        Route::get('/occupant/corbeille{id}', [OccupantController::class, 'corbeille'])->name('cfu.occupant.corbeille');
+        Route::put('/occupant/restaure{id}', [OccupantController::class, 'restaure'])->name('cfu.occupant.restaure');
     });
 
     //Les routes pour la gestion TPU

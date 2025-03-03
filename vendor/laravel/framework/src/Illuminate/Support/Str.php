@@ -119,7 +119,7 @@ class Str
      */
     public static function ascii($value, $language = 'en')
     {
-        return ASCII::to_ascii((string) $value, $language, replace_single_chars_only: false);
+        return ASCII::to_ascii((string) $value, $language);
     }
 
     /**
@@ -329,19 +329,6 @@ class Str
     }
 
     /**
-     * Determine if a given string doesn't contain a given substring.
-     *
-     * @param  string  $haystack
-     * @param  string|iterable<string>  $needles
-     * @param  bool  $ignoreCase
-     * @return bool
-     */
-    public static function doesntContain($haystack, $needles, $ignoreCase = false)
-    {
-        return ! static::contains($haystack, $needles, $ignoreCase);
-    }
-
-    /**
      * Convert the case of a string.
      *
      * @param  string  $string
@@ -409,14 +396,14 @@ class Str
 
         $start = ltrim($matches[1]);
 
-        $start = Str::of(mb_substr($start, max(mb_strlen($start, 'UTF-8') - $radius, 0), $radius, 'UTF-8'))->ltrim()->unless(
+        $start = str(mb_substr($start, max(mb_strlen($start, 'UTF-8') - $radius, 0), $radius, 'UTF-8'))->ltrim()->unless(
             fn ($startWithRadius) => $startWithRadius->exactly($start),
             fn ($startWithRadius) => $startWithRadius->prepend($omission),
         );
 
         $end = rtrim($matches[3]);
 
-        $end = Str::of(mb_substr($end, 0, $radius, 'UTF-8'))->rtrim()->unless(
+        $end = str(mb_substr($end, 0, $radius, 'UTF-8'))->rtrim()->unless(
             fn ($endWithRadius) => $endWithRadius->exactly($end),
             fn ($endWithRadius) => $endWithRadius->append($omission),
         );
@@ -477,10 +464,9 @@ class Str
      *
      * @param  string|iterable<string>  $pattern
      * @param  string  $value
-     * @param  bool  $ignoreCase
      * @return bool
      */
-    public static function is($pattern, $value, $ignoreCase = false)
+    public static function is($pattern, $value)
     {
         $value = (string) $value;
 
@@ -498,10 +484,6 @@ class Str
                 return true;
             }
 
-            if ($ignoreCase && mb_strtolower($pattern) === mb_strtolower($value)) {
-                return true;
-            }
-
             $pattern = preg_quote($pattern, '#');
 
             // Asterisks are translated into zero-or-more regular expression wildcards
@@ -509,7 +491,7 @@ class Str
             // pattern such as "library/*", making any string check convenient.
             $pattern = str_replace('\*', '.*', $pattern);
 
-            if (preg_match('#^'.$pattern.'\z#'.($ignoreCase ? 'iu' : 'u'), $value) === 1) {
+            if (preg_match('#^'.$pattern.'\z#u', $value) === 1) {
                 return true;
             }
         }
@@ -735,19 +717,14 @@ class Str
      *
      * @param  string  $string
      * @param  array  $options
-     * @param  array  $extensions
      * @return string
      */
-    public static function inlineMarkdown($string, array $options = [], array $extensions = [])
+    public static function inlineMarkdown($string, array $options = [])
     {
         $environment = new Environment($options);
 
         $environment->addExtension(new GithubFlavoredMarkdownExtension());
         $environment->addExtension(new InlinesOnlyExtension());
-
-        foreach ($extensions as $extension) {
-            $environment->addExtension($extension);
-        }
 
         $converter = new MarkdownConverter($environment);
 
@@ -846,10 +823,10 @@ class Str
         preg_match_all($pattern, $subject, $matches);
 
         if (empty($matches[0])) {
-            return new Collection;
+            return collect();
         }
 
-        return new Collection($matches[1] ?? $matches[0]);
+        return collect($matches[1] ?? $matches[0]);
     }
 
     /**
@@ -1133,7 +1110,7 @@ class Str
     public static function replaceArray($search, $replace, $subject)
     {
         if ($replace instanceof Traversable) {
-            $replace = (new Collection($replace))->all();
+            $replace = collect($replace)->all();
         }
 
         $segments = explode($search, $subject);
@@ -1175,15 +1152,15 @@ class Str
     public static function replace($search, $replace, $subject, $caseSensitive = true)
     {
         if ($search instanceof Traversable) {
-            $search = (new Collection($search))->all();
+            $search = collect($search)->all();
         }
 
         if ($replace instanceof Traversable) {
-            $replace = (new Collection($replace))->all();
+            $replace = collect($replace)->all();
         }
 
         if ($subject instanceof Traversable) {
-            $subject = (new Collection($subject))->all();
+            $subject = collect($subject)->all();
         }
 
         return $caseSensitive
@@ -1316,7 +1293,7 @@ class Str
     public static function remove($search, $subject, $caseSensitive = true)
     {
         if ($search instanceof Traversable) {
-            $search = (new Collection($search))->all();
+            $search = collect($search)->all();
         }
 
         return $caseSensitive
@@ -1520,9 +1497,7 @@ class Str
     public static function trim($value, $charlist = null)
     {
         if ($charlist === null) {
-            $trimDefaultCharacters = " \n\r\t\v\0";
-
-            return preg_replace('~^[\s\x{FEFF}\x{200B}\x{200E}'.$trimDefaultCharacters.']+|[\s\x{FEFF}\x{200B}\x{200E}'.$trimDefaultCharacters.']+$~u', '', $value) ?? trim($value);
+            return preg_replace('~^[\s\x{FEFF}\x{200B}\x{200E}]+|[\s\x{FEFF}\x{200B}\x{200E}]+$~u', '', $value) ?? trim($value);
         }
 
         return trim($value, $charlist);
@@ -1538,9 +1513,7 @@ class Str
     public static function ltrim($value, $charlist = null)
     {
         if ($charlist === null) {
-            $ltrimDefaultCharacters = " \n\r\t\v\0";
-
-            return preg_replace('~^[\s\x{FEFF}\x{200B}\x{200E}'.$ltrimDefaultCharacters.']+~u', '', $value) ?? ltrim($value);
+            return preg_replace('~^[\s\x{FEFF}\x{200B}\x{200E}]+~u', '', $value) ?? ltrim($value);
         }
 
         return ltrim($value, $charlist);
@@ -1556,9 +1529,7 @@ class Str
     public static function rtrim($value, $charlist = null)
     {
         if ($charlist === null) {
-            $rtrimDefaultCharacters = " \n\r\t\v\0";
-
-            return preg_replace('~[\s\x{FEFF}\x{200B}\x{200E}'.$rtrimDefaultCharacters.']+$~u', '', $value) ?? rtrim($value);
+            return preg_replace('~[\s\x{FEFF}\x{200B}\x{200E}]+$~u', '', $value) ?? rtrim($value);
         }
 
         return rtrim($value, $charlist);

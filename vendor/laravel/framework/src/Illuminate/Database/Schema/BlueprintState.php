@@ -5,9 +5,7 @@ namespace Illuminate\Database\Schema;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Schema\Grammars\Grammar;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Fluent;
-use Illuminate\Support\Str;
 
 class BlueprintState
 {
@@ -77,12 +75,12 @@ class BlueprintState
         $schema = $connection->getSchemaBuilder();
         $table = $blueprint->getTable();
 
-        $this->columns = (new Collection($schema->getColumns($table)))->map(fn ($column) => new ColumnDefinition([
+        $this->columns = collect($schema->getColumns($table))->map(fn ($column) => new ColumnDefinition([
             'name' => $column['name'],
             'type' => $column['type_name'],
             'full_type_definition' => $column['type'],
             'nullable' => $column['nullable'],
-            'default' => is_null($column['default']) ? null : new Expression(Str::wrap($column['default'], '(', ')')),
+            'default' => is_null($column['default']) ? null : new Expression($column['default']),
             'autoIncrement' => $column['auto_increment'],
             'collation' => $column['collation'],
             'comment' => $column['comment'],
@@ -92,7 +90,7 @@ class BlueprintState
                 ? $column['generation']['expression'] : null,
         ]))->all();
 
-        [$primary, $indexes] = (new Collection($schema->getIndexes($table)))->map(fn ($index) => new IndexDefinition([
+        [$primary, $indexes] = collect($schema->getIndexes($table))->map(fn ($index) => new IndexDefinition([
             'name' => match (true) {
                 $index['primary'] => 'primary',
                 $index['unique'] => 'unique',
@@ -105,9 +103,9 @@ class BlueprintState
         $this->indexes = $indexes->all();
         $this->primaryKey = $primary->first();
 
-        $this->foreignKeys = (new Collection($schema->getForeignKeys($table)))->map(fn ($foreignKey) => new ForeignKeyDefinition([
+        $this->foreignKeys = collect($schema->getForeignKeys($table))->map(fn ($foreignKey) => new ForeignKeyDefinition([
             'columns' => $foreignKey['columns'],
-            'on' => new Expression($foreignKey['foreign_table']),
+            'on' => $foreignKey['foreign_table'],
             'references' => $foreignKey['foreign_columns'],
             'onUpdate' => $foreignKey['on_update'],
             'onDelete' => $foreignKey['on_delete'],

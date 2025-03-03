@@ -9,9 +9,6 @@
  */
 namespace PHPUnit\Framework\Constraint;
 
-use Closure;
-use ReflectionFunction;
-
 /**
  * @template CallbackInput of mixed
  *
@@ -40,17 +37,6 @@ final class Callback extends Constraint
         return 'is accepted by specified callback';
     }
 
-    public function isVariadic(): bool
-    {
-        foreach ((new ReflectionFunction(Closure::fromCallable($this->callback)))->getParameters() as $parameter) {
-            if ($parameter->isVariadic()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     /**
      * Evaluates the constraint for parameter $value. Returns true if the
      * constraint is met, false otherwise.
@@ -59,10 +45,6 @@ final class Callback extends Constraint
      */
     protected function matches(mixed $other): bool
     {
-        if ($this->isVariadic()) {
-            return ($this->callback)(...$other);
-        }
-
         return ($this->callback)($other);
     }
 }

@@ -2,9 +2,8 @@
 
 namespace Illuminate\Routing;
 
-use Illuminate\Support\Collection;
-
-use function Illuminate\Support\enum_value;
+use BackedEnum;
+use Illuminate\Support\Arr;
 
 trait CreatesRegularExpressionRouteConstraints
 {
@@ -74,8 +73,8 @@ trait CreatesRegularExpressionRouteConstraints
     {
         return $this->assignExpressionToParameters(
             $parameters,
-            (new Collection($values))
-                ->map(fn ($value) => enum_value($value))
+            collect($values)
+                ->map(fn ($value) => $value instanceof BackedEnum ? $value->value : $value)
                 ->implode('|')
         );
     }
@@ -89,8 +88,8 @@ trait CreatesRegularExpressionRouteConstraints
      */
     protected function assignExpressionToParameters($parameters, $expression)
     {
-        return $this->where(Collection::wrap($parameters)
-            ->mapWithKeys(fn ($parameter) => [$parameter => $expression])
-            ->all());
+        return $this->where(collect(Arr::wrap($parameters))
+                    ->mapWithKeys(fn ($parameter) => [$parameter => $expression])
+                    ->all());
     }
 }

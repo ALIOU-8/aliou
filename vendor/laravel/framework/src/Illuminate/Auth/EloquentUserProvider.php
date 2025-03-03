@@ -55,8 +55,8 @@ class EloquentUserProvider implements UserProvider
         $model = $this->createModel();
 
         return $this->newModelQuery($model)
-            ->where($model->getAuthIdentifierName(), $identifier)
-            ->first();
+                    ->where($model->getAuthIdentifierName(), $identifier)
+                    ->first();
     }
 
     /**
@@ -152,11 +152,7 @@ class EloquentUserProvider implements UserProvider
             return false;
         }
 
-        if (is_null($hashed = $user->getAuthPassword())) {
-            return false;
-        }
-
-        return $this->hasher->check($plain, $hashed);
+        return $this->hasher->check($plain, $user->getAuthPassword());
     }
 
     /**

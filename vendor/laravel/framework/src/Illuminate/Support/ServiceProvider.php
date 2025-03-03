@@ -59,20 +59,6 @@ abstract class ServiceProvider
     protected static $publishableMigrationPaths = [];
 
     /**
-     * Commands that should be run during the "optimize" command.
-     *
-     * @var array<string, string>
-     */
-    public static array $optimizeCommands = [];
-
-    /**
-     * Commands that should be run during the "optimize:clear" command.
-     *
-     * @var array<string, string>
-     */
-    public static array $optimizeClearCommands = [];
-
-    /**
      * Create a new service provider instance.
      *
      * @param  \Illuminate\Contracts\Foundation\Application  $app
@@ -388,7 +374,7 @@ abstract class ServiceProvider
             return $paths;
         }
 
-        return (new Collection(static::$publishes))->reduce(function ($paths, $p) {
+        return collect(static::$publishes)->reduce(function ($paths, $p) {
             return array_merge($paths, $p);
         }, []);
     }
@@ -475,36 +461,6 @@ abstract class ServiceProvider
     }
 
     /**
-     * Register commands that should run on "optimize" or "optimize:clear".
-     *
-     * @param  string|null  $optimize
-     * @param  string|null  $clear
-     * @param  string|null  $key
-     * @return void
-     */
-    protected function optimizes(?string $optimize = null, ?string $clear = null, ?string $key = null)
-    {
-        $key ??= (string) Str::of(get_class($this))
-            ->classBasename()
-            ->before('ServiceProvider')
-            ->kebab()
-            ->lower()
-            ->trim();
-
-        if (empty($key)) {
-            $key = class_basename(get_class($this));
-        }
-
-        if ($optimize) {
-            static::$optimizeCommands[$key] = $optimize;
-        }
-
-        if ($clear) {
-            static::$optimizeClearCommands[$key] = $clear;
-        }
-    }
-
-    /**
      * Get the services provided by the provider.
      *
      * @return array
@@ -563,7 +519,7 @@ abstract class ServiceProvider
             opcache_invalidate($path, true);
         }
 
-        $providers = (new Collection(require $path))
+        $providers = collect(require $path)
             ->merge([$provider])
             ->unique()
             ->sort()

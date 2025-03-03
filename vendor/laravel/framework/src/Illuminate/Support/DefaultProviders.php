@@ -24,7 +24,6 @@ class DefaultProviders
             \Illuminate\Bus\BusServiceProvider::class,
             \Illuminate\Cache\CacheServiceProvider::class,
             \Illuminate\Foundation\Providers\ConsoleSupportServiceProvider::class,
-            \Illuminate\Concurrency\ConcurrencyServiceProvider::class,
             \Illuminate\Cookie\CookieServiceProvider::class,
             \Illuminate\Database\DatabaseServiceProvider::class,
             \Illuminate\Encryption\EncryptionServiceProvider::class,
@@ -66,7 +65,7 @@ class DefaultProviders
      */
     public function replace(array $replacements)
     {
-        $current = new Collection($this->providers);
+        $current = collect($this->providers);
 
         foreach ($replacements as $from => $to) {
             $key = $current->search($from);
@@ -85,10 +84,10 @@ class DefaultProviders
      */
     public function except(array $providers)
     {
-        return new static((new Collection($this->providers))
-            ->reject(fn ($p) => in_array($p, $providers))
-            ->values()
-            ->toArray());
+        return new static(collect($this->providers)
+                ->reject(fn ($p) => in_array($p, $providers))
+                ->values()
+                ->toArray());
     }
 
     /**

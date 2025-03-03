@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
 use Illuminate\Queue\Events\JobQueued;
 use Illuminate\Queue\Events\JobQueueing;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Arr;
 use Illuminate\Support\InteractsWithTime;
 use Illuminate\Support\Str;
 
@@ -143,7 +143,7 @@ abstract class Queue
             'uuid' => (string) Str::uuid(),
             'displayName' => $this->getDisplayName($job),
             'job' => 'Illuminate\Queue\CallQueuedHandler@call',
-            'maxTries' => $this->getJobTries($job),
+            'maxTries' => $this->getJobTries($job) ?? null,
             'maxExceptions' => $job->maxExceptions ?? null,
             'failOnTimeout' => $job->failOnTimeout ?? false,
             'backoff' => $this->getJobBackoff($job),
@@ -191,11 +191,13 @@ abstract class Queue
             return;
         }
 
-        if (is_null($tries = $job->tries ?? $job->tries())) {
-            return;
+        if (isset($job->tries)) {
+            return $job->tries;
         }
 
-        return $tries;
+        if (method_exists($job, 'tries') && ! is_null($job->tries())) {
+            return $job->tries();
+        }
     }
 
     /**
@@ -214,9 +216,11 @@ abstract class Queue
             return;
         }
 
-        return Collection::wrap($backoff)
-            ->map(fn ($backoff) => $backoff instanceof DateTimeInterface ? $this->secondsUntil($backoff) : $backoff)
-            ->implode(',');
+        return collect(Arr::wrap($backoff))
+            ->map(function ($backoff) {
+                return $backoff instanceof DateTimeInterface
+                                ? $this->secondsUntil($backoff) : $backoff;
+            })->implode(',');
     }
 
     /**

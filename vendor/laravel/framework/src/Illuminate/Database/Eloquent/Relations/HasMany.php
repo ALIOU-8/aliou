@@ -2,7 +2,7 @@
 
 namespace Illuminate\Database\Eloquent\Relations;
 
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
@@ -19,18 +19,11 @@ class HasMany extends HasOneOrMany
      */
     public function one()
     {
-        return HasOne::noConstraints(fn () => tap(
-            new HasOne(
-                $this->getQuery(),
-                $this->parent,
-                $this->foreignKey,
-                $this->localKey
-            ),
-            function ($hasOne) {
-                if ($inverse = $this->getInverseRelationship()) {
-                    $hasOne->inverse($inverse);
-                }
-            }
+        return HasOne::noConstraints(fn () => new HasOne(
+            $this->getQuery(),
+            $this->parent,
+            $this->foreignKey,
+            $this->localKey
         ));
     }
 
@@ -53,7 +46,7 @@ class HasMany extends HasOneOrMany
     }
 
     /** @inheritDoc */
-    public function match(array $models, EloquentCollection $results, $relation)
+    public function match(array $models, Collection $results, $relation)
     {
         return $this->matchMany($models, $results, $relation);
     }

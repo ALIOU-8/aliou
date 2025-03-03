@@ -8,7 +8,7 @@
     </ul>
     <div class="container justify-content-center">
         <div class="row d-flex justify-content-center">
-            <div class="col-md-12 ">
+            <div class="col-md-12 mb-5">
                 <div class="card border border-light">
                     <div class="card-body">
                         <div class="h5 text-center text-success">La liste des biens</div>

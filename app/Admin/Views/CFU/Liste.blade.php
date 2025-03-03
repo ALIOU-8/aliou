@@ -8,7 +8,7 @@
     </ul>
     <div class="container justify-content-center">
         <div class="row d-flex justify-content-center">
-            <div class="col-md-12 ">
+            <div class="col-md-12 mb-5 ">
                 <div class="card border border-light">
                     <div class="card-body">
                         <div class="h5 text-center text-success">La liste des Recensements CFU</div>
@@ -43,9 +43,6 @@
                             <div class="col-md-2">
                                 <a href="" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
                             </div>
-                            <div class="col-md-2">
-                                <a href="{{route('cfu.corbeille')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Corbeille <i class="bx bx-trash"></i></a>
-                            </div>
                             <div class="col-md-4 ms-auto">
                                 <input type="text" placeholder="Rechercher..." id="searchRecensements" onkeyup="fetchRecensements()"  class="form-control border border-success m-3">
                             </div>
@@ -73,7 +70,8 @@
                                         <td>{{ $recencement_cfus->annee->annee }}</td>
                                         <td>{{ $recencement_cfus->date_recensement }}</td>
                                         <td class="d-flex justify-content-center gap-2">
-                                            {{-- <a href="{{route('cfu.voir',$recencement_cfus->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a> --}}
+                                            <a href="{{route('cfu.voir',$recencement_cfus->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
+                                            <a href="{{route('cfu.occupant.liste',$recencement_cfus->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Occupant<i class="bx bx-plus"></i></a>
                                             <a href="{{route('impot.imposition',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Imposer<i class="bx bx-money"></i></a>
                                             <a href="{{route('cfu.modif',$recencement_cfus->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
                                         </td>

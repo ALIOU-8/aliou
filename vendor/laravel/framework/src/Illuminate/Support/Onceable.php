@@ -17,8 +17,8 @@ class Onceable
      */
     public function __construct(
         public string $hash,
-        public ?object $object,
-        public $callable,
+        public object|null $object,
+        public $callable
     ) {
         //
     }

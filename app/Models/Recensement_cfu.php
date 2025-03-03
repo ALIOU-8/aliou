@@ -12,7 +12,7 @@ class Recensement_cfu extends Model
     }
     public function bien()
     {
-        return $this->belongsTo(Bien::class);
+        return $this->belongsTo(Bien::class, 'bien_id');
     }
     public function annee()
     {

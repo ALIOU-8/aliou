@@ -16,9 +16,7 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\BufferedOutput;
-
-use function Illuminate\Support\artisan_binary;
-use function Illuminate\Support\php_binary;
+use Symfony\Component\Process\PhpExecutableFinder;
 
 class Application extends SymfonyApplication implements ApplicationContract
 {
@@ -46,7 +44,7 @@ class Application extends SymfonyApplication implements ApplicationContract
     /**
      * The console application bootstrappers.
      *
-     * @var array<array-key, \Closure($this): void>
+     * @var array
      */
     protected static $bootstrappers = [];
 
@@ -86,7 +84,7 @@ class Application extends SymfonyApplication implements ApplicationContract
      */
     public static function phpBinary()
     {
-        return ProcessUtils::escapeArgument(php_binary());
+        return ProcessUtils::escapeArgument((new PhpExecutableFinder)->find(false));
     }
 
     /**
@@ -96,7 +94,7 @@ class Application extends SymfonyApplication implements ApplicationContract
      */
     public static function artisanBinary()
     {
-        return ProcessUtils::escapeArgument(artisan_binary());
+        return ProcessUtils::escapeArgument(defined('ARTISAN_BINARY') ? ARTISAN_BINARY : 'artisan');
     }
 
     /**
@@ -113,7 +111,7 @@ class Application extends SymfonyApplication implements ApplicationContract
     /**
      * Register a console "starting" bootstrapper.
      *
-     * @param  \Closure($this): void  $callback
+     * @param  \Closure  $callback
      * @return void
      */
     public static function starting(Closure $callback)

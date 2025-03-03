@@ -194,7 +194,7 @@ final class NamePrettifier
                     array_keys($providedData),
                 );
 
-                $result = preg_replace($variables, $providedData, $annotation);
+                $result = trim(preg_replace($variables, $providedData, $annotation));
 
                 $annotationWithPlaceholders = true;
             }
@@ -246,7 +246,21 @@ final class NamePrettifier
             $value = $providedDataValues[$i++] ?? null;
 
             if (is_object($value)) {
-                $value = $this->objectToString($value);
+                $reflector = new ReflectionObject($value);
+
+                if ($reflector->isEnum()) {
+                    $enumReflector = new ReflectionEnum($value);
+
+                    if ($enumReflector->isBacked()) {
+                        $value = $value->value;
+                    } else {
+                        $value = $value->name;
+                    }
+                } elseif ($reflector->hasMethod('__toString')) {
+                    $value = (string) $value;
+                } else {
+                    $value = $value::class;
+                }
             }
 
             if (!is_scalar($value)) {
@@ -269,7 +283,7 @@ final class NamePrettifier
                 }
             }
 
-            $providedData['$' . $parameter->getName()] = str_replace('$', '\\$', $value);
+            $providedData['$' . $parameter->getName()] = $value;
         }
 
         if ($colorize) {
@@ -280,29 +294,5 @@ final class NamePrettifier
         }
 
         return $providedData;
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    private function objectToString(object $value): string
-    {
-        $reflector = new ReflectionObject($value);
-
-        if ($reflector->isEnum()) {
-            $enumReflector = new ReflectionEnum($value);
-
-            if ($enumReflector->isBacked()) {
-                return $value->value;
-            }
-
-            return $value->name;
-        }
-
-        if ($reflector->hasMethod('__toString')) {
-            return $value->__toString();
-        }
-
-        return $value::class;
     }
 }

@@ -21,7 +21,6 @@ use PHPUnit\Metadata\CoversClass;
 use PHPUnit\Metadata\CoversFunction;
 use PHPUnit\Metadata\Group;
 use PHPUnit\Metadata\Parser\Registry;
-use PHPUnit\Metadata\RequiresPhpExtension;
 use PHPUnit\Metadata\Uses;
 use PHPUnit\Metadata\UsesClass;
 use PHPUnit\Metadata\UsesFunction;
@@ -34,7 +33,7 @@ use PHPUnit\Metadata\UsesFunction;
 final class Groups
 {
     /**
-     * @var array<string, list<non-empty-string>>
+     * @var array<string, array<int, string>>
      */
     private static array $groupCache = [];
 
@@ -42,7 +41,7 @@ final class Groups
      * @param class-string     $className
      * @param non-empty-string $methodName
      *
-     * @return list<non-empty-string>
+     * @return array<int, string>
      */
     public function groups(string $className, string $methodName, bool $includeVirtual = true): array
     {
@@ -58,6 +57,10 @@ final class Groups
             assert($group instanceof Group);
 
             $groups[] = $group->groupName();
+        }
+
+        if ($groups === []) {
+            $groups[] = 'default';
         }
 
         if (!$includeVirtual) {
@@ -95,12 +98,6 @@ final class Groups
                 assert($metadata instanceof Uses);
 
                 $groups[] = '__phpunit_uses_' . $this->canonicalizeName($metadata->target());
-            }
-
-            if ($metadata->isRequiresPhpExtension()) {
-                assert($metadata instanceof RequiresPhpExtension);
-
-                $groups[] = '__phpunit_requires_php_extension' . $this->canonicalizeName($metadata->extension());
             }
         }
 

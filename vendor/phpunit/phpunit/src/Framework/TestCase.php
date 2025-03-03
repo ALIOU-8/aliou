@@ -76,7 +76,6 @@ use PHPUnit\Framework\MockObject\Rule\AnyInvokedCount as AnyInvokedCountMatcher;
 use PHPUnit\Framework\MockObject\Rule\InvokedAtLeastCount as InvokedAtLeastCountMatcher;
 use PHPUnit\Framework\MockObject\Rule\InvokedAtLeastOnce as InvokedAtLeastOnceMatcher;
 use PHPUnit\Framework\MockObject\Rule\InvokedAtMostCount as InvokedAtMostCountMatcher;
-use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatcher;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\MockObject\Stub\ConsecutiveCalls as ConsecutiveCallsStub;
@@ -101,6 +100,7 @@ use PHPUnit\Util\Test as TestUtil;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionObject;
+use SebastianBergmann\CodeCoverage\StaticAnalysisCacheNotConfiguredException;
 use SebastianBergmann\CodeCoverage\UnintentionallyCoveredCodeException;
 use SebastianBergmann\Comparator\Comparator;
 use SebastianBergmann\Comparator\Factory as ComparatorFactory;
@@ -347,6 +347,7 @@ abstract class TestCase extends Assert implements Reorderable, SelfDescribing, T
      * @throws Exception
      * @throws NoPreviousThrowableException
      * @throws ProcessIsolationException
+     * @throws StaticAnalysisCacheNotConfiguredException
      * @throws UnintentionallyCoveredCodeException
      *
      * @internal This method is not covered by the backward compatibility promise for PHPUnit
@@ -357,7 +358,7 @@ abstract class TestCase extends Assert implements Reorderable, SelfDescribing, T
             return;
         }
 
-        if (!$this->shouldRunInSeparateProcess() || $this->requirementsNotSatisfied()) {
+        if (!$this->shouldRunInSeparateProcess()) {
             (new TestRunner)->run($this);
 
             return;
@@ -533,8 +534,6 @@ abstract class TestCase extends Assert implements Reorderable, SelfDescribing, T
                 $e->getMessage(),
             );
         } catch (AssertionError|AssertionFailedError $e) {
-            $this->handleExceptionFromInvokedCountMockObjectRule($e);
-
             if (!$this->wasPrepared) {
                 $this->wasPrepared = true;
 
@@ -1975,47 +1974,25 @@ abstract class TestCase extends Assert implements Reorderable, SelfDescribing, T
      */
     private function getActiveErrorHandlers(): array
     {
-        $activeErrorHandlers = [];
+        $res = [];
 
         while (true) {
             $previousHandler = set_error_handler(static fn () => false);
-
             restore_error_handler();
 
             if ($previousHandler === null) {
                 break;
             }
-
-            $activeErrorHandlers[] = $previousHandler;
-
+            $res[] = $previousHandler;
             restore_error_handler();
         }
+        $res = array_reverse($res);
 
-        $activeErrorHandlers      = array_reverse($activeErrorHandlers);
-        $invalidErrorHandlerStack = false;
-
-        foreach ($activeErrorHandlers as $handler) {
-            if (!is_callable($handler)) {
-                $invalidErrorHandlerStack = true;
-
-                continue;
-            }
-
+        foreach ($res as $handler) {
             set_error_handler($handler);
         }
 
-        if ($invalidErrorHandlerStack) {
-            $message = 'At least one error handler is not callable outside the scope it was registered in';
-
-            Event\Facade::emitter()->testConsideredRisky(
-                $this->valueObjectForEvents(),
-                $message,
-            );
-
-            $this->status = TestStatus::risky($message);
-        }
-
-        return $activeErrorHandlers;
+        return $res;
     }
 
     /**
@@ -2330,7 +2307,6 @@ abstract class TestCase extends Assert implements Reorderable, SelfDescribing, T
             $hookMethods['beforeClass'],
             $emitter,
             'testBeforeFirstTestMethodCalled',
-            'testBeforeFirstTestMethodErrored',
             'testBeforeFirstTestMethodFinished',
         );
     }
@@ -2346,7 +2322,6 @@ abstract class TestCase extends Assert implements Reorderable, SelfDescribing, T
             $hookMethods['before'],
             $emitter,
             'testBeforeTestMethodCalled',
-            'testBeforeTestMethodErrored',
             'testBeforeTestMethodFinished',
         );
     }
@@ -2362,7 +2337,6 @@ abstract class TestCase extends Assert implements Reorderable, SelfDescribing, T
             $hookMethods['preCondition'],
             $emitter,
             'testPreConditionCalled',
-            'testPreConditionErrored',
             'testPreConditionFinished',
         );
     }
@@ -2378,7 +2352,6 @@ abstract class TestCase extends Assert implements Reorderable, SelfDescribing, T
             $hookMethods['postCondition'],
             $emitter,
             'testPostConditionCalled',
-            'testPostConditionErrored',
             'testPostConditionFinished',
         );
     }
@@ -2394,7 +2367,6 @@ abstract class TestCase extends Assert implements Reorderable, SelfDescribing, T
             $hookMethods['after'],
             $emitter,
             'testAfterTestMethodCalled',
-            'testAfterTestMethodErrored',
             'testAfterTestMethodFinished',
         );
     }
@@ -2412,19 +2384,17 @@ abstract class TestCase extends Assert implements Reorderable, SelfDescribing, T
             $hookMethods['afterClass'],
             $emitter,
             'testAfterLastTestMethodCalled',
-            'testAfterLastTestMethodErrored',
             'testAfterLastTestMethodFinished',
         );
     }
 
     /**
      * @param 'testAfterLastTestMethodCalled'|'testAfterTestMethodCalled'|'testBeforeFirstTestMethodCalled'|'testBeforeTestMethodCalled'|'testPostConditionCalled'|'testPreConditionCalled'             $calledMethod
-     * @param 'testAfterLastTestMethodErrored'|'testAfterTestMethodErrored'|'testBeforeFirstTestMethodErrored'|'testBeforeTestMethodErrored'|'testPostConditionErrored'|'testPreConditionErrored'       $erroredMethod
      * @param 'testAfterLastTestMethodFinished'|'testAfterTestMethodFinished'|'testBeforeFirstTestMethodFinished'|'testBeforeTestMethodFinished'|'testPostConditionFinished'|'testPreConditionFinished' $finishedMethod
      *
      * @throws Throwable
      */
-    private function invokeHookMethods(HookMethodCollection $hookMethods, Event\Emitter $emitter, string $calledMethod, string $erroredMethod, string $finishedMethod): void
+    private function invokeHookMethods(HookMethodCollection $hookMethods, Event\Emitter $emitter, string $calledMethod, string $finishedMethod): void
     {
         $methodsInvoked = [];
 
@@ -2433,15 +2403,15 @@ abstract class TestCase extends Assert implements Reorderable, SelfDescribing, T
                 continue;
             }
 
-            $methodInvoked = new Event\Code\ClassMethod(
-                static::class,
-                $methodName,
-            );
-
             try {
                 $this->{$methodName}();
             } catch (Throwable $t) {
             }
+
+            $methodInvoked = new Event\Code\ClassMethod(
+                static::class,
+                $methodName,
+            );
 
             $emitter->{$calledMethod}(
                 static::class,
@@ -2451,12 +2421,6 @@ abstract class TestCase extends Assert implements Reorderable, SelfDescribing, T
             $methodsInvoked[] = $methodInvoked;
 
             if (isset($t)) {
-                $emitter->{$erroredMethod}(
-                    static::class,
-                    $methodInvoked,
-                    Event\Code\ThrowableBuilder::from($t),
-                );
-
                 break;
             }
         }
@@ -2583,27 +2547,6 @@ abstract class TestCase extends Assert implements Reorderable, SelfDescribing, T
     private function hasExpectationOnOutput(): bool
     {
         return is_string($this->outputExpectedString) || is_string($this->outputExpectedRegex);
-    }
-
-    private function requirementsNotSatisfied(): bool
-    {
-        return (new Requirements)->requirementsNotSatisfiedFor(static::class, $this->methodName) !== [];
-    }
-
-    /**
-     * @see https://github.com/sebastianbergmann/phpunit/issues/6095
-     */
-    private function handleExceptionFromInvokedCountMockObjectRule(Throwable $t): void
-    {
-        if (!$t instanceof ExpectationFailedException) {
-            return;
-        }
-
-        $trace = $t->getTrace();
-
-        if (isset($trace[0]['class']) && $trace[0]['class'] === InvokedCount::class) {
-            $this->numberOfAssertionsPerformed++;
-        }
     }
 
     /**

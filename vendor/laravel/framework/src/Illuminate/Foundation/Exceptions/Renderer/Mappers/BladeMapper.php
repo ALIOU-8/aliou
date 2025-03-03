@@ -87,7 +87,7 @@ class BladeMapper
             $exception = $previous;
         }
 
-        $trace = (new Collection($exception->getTrace()))
+        $trace = Collection::make($exception->getTrace())
             ->map(function ($frame) {
                 if ($originalPath = $this->findCompiledView((string) Arr::get($frame, 'file', ''))) {
                     $frame['file'] = $originalPath;
@@ -124,11 +124,14 @@ class BladeMapper
 
         if (! $compilerEngineReflection->hasProperty('lastCompiled') && $compilerEngineReflection->hasProperty('engine')) {
             $compilerEngine = $compilerEngineReflection->getProperty('engine');
+            $compilerEngine->setAccessible(true);
             $compilerEngine = $compilerEngine->getValue($bladeCompilerEngine);
             $lastCompiled = new ReflectionProperty($compilerEngine, 'lastCompiled');
+            $lastCompiled->setAccessible(true);
             $lastCompiled = $lastCompiled->getValue($compilerEngine);
         } else {
             $lastCompiled = $compilerEngineReflection->getProperty('lastCompiled');
+            $lastCompiled->setAccessible(true);
             $lastCompiled = $lastCompiled->getValue($bladeCompilerEngine);
         }
 

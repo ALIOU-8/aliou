@@ -95,17 +95,4 @@ final class TestDoubleState
     {
         return isset(self::$deprecationEmittedForTest[$testId]);
     }
-
-    /**
-     * @return list<ConfigurableMethod>
-     */
-    public function configurableMethods(): array
-    {
-        return $this->configurableMethods;
-    }
-
-    public function generateReturnValues(): bool
-    {
-        return $this->generateReturnValues;
-    }
 }

@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Occupant extends Model
 {
-    public function cfu()
+    public function  recensementCfu()
     {
-        return $this->belongsTo(Recensement_cfu::class);
+        return $this->belongsTo(Recensement_cfu::class,'cfu_id');
     }
+
 }

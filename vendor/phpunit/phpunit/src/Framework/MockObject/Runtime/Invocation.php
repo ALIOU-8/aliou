@@ -129,7 +129,7 @@ final readonly class Invocation implements SelfDescribing
         return (new ReturnValueGenerator)->generate(
             $this->className,
             $this->methodName,
-            $this->object,
+            $this->object::class,
             $this->returnType,
         );
     }
