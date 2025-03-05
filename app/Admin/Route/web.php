@@ -161,6 +161,8 @@ use Illuminate\Support\Facades\Route;
         Route::get('/voir/{type}/{id}', [ImpotsController::class, 'voir'])->name('impot.voir');
         Route::get('/payer{id}', [ImpotsController::class, 'payer'])->name('impot.payer');
         Route::post('/payement{id}', [ImpotsController::class, 'payement'])->name('impot.payement');
+        Route::get('/recu{id}', [ImpotsController::class, 'recu'])->name('impot.recu');
+        Route::put('/modif_payement{id}', [ImpotsController::class, 'modif_payement'])->name('impot.modif.payement');
         Route::get('/imposition/{type}/{id}', [ImpotsController::class, 'imposition'])->name('impot.imposition');
         Route::post('/imposer/{type}/{id}', [ImpotsController::class, 'imposer'])->name('impot.imposer');
 

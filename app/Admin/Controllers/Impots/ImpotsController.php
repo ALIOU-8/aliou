@@ -109,30 +109,56 @@ class ImpotsController extends Controller
             $recensement=Recensement_licence::where('id',$impot->recensement_licence_id)->with('bien')->first();
             $bien = Bien::where('id',$recensement->bien_id)->with('contribuable')->with('typeBien')->first();
         }
-        if ($payement = []) {
-            $montantRestant = $impot->montant_a_payer ;
-        }else {
-            $montantRestant = $impot->montant_a_payer  ;
+        if (empty($paiement)) {
+            $montantRestant = $impot->montant_a_payer;
+        } else {
+            $montantRestant = $impot->montant_a_payer - collect($paiement)->sum('montant_payer');
         }
         return view('Admin::Impots.Payer',compact('impot','recensement','bien','montantRestant','paiement'));
     }
 
-    public function payement (Request $request, string $id) {
+    public function payement(Request $request, string $id) {
+
         $request->validate([
-            'montant'=>'required',
+            'montant' => 'required|numeric|min:4',
         ]);
-        $impot = Impot::where('id',$id)->first();
+
+        // Vérifier si l'impôt existe
+        $impot = Impot::find($id);
+        if (!$impot) {
+            toastr()->error('Impôt introuvable');
+            return back();
+        }
+
+        // Calcul du total des paiements déjà effectués
+        $totalPaye = Paiement::where('impot_id', $id)->sum('montant_payer');
+
+        // Vérifier que le montant payé ne dépasse pas le montant dû
+        if ($request->montant > $impot->montant_a_payer - $totalPaye) {
+            toastr()->error('Le montant payé dépasse le montant dû.');
+            return back();
+        }
+
+        // Création du paiement
         $payement = new Paiement();
         $payement->user_id = 1;
         $payement->impot_id = $id;
         $payement->montant_payer = $request->montant;
-        $payement->montant_restant = $impot->montant_a_payer - $request->montant;
+        $payement->montant_restant = $impot->montant_a_payer - ($totalPaye + $request->montant);
         $payement->save();
-        $impot->statut = "Encours";
+
+        // Mise à jour du statut de l'impôt
+        if ($payement->montant_restant <= 0) {
+            $impot->statut = "Payé";
+        } else {
+            $impot->statut = "Encours";
+        }
         $impot->update();
-        toastr()->success('Payement effectué avec succèss');
+
+        toastr()->success('Paiement effectué avec succès');
         return back();
     }
+
 
     public function imposition (string $type, string $id,) {
         if ($type == "cfu") {
