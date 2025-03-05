@@ -72,7 +72,7 @@
                                         <td class="d-flex justify-content-center gap-2">
                                             <a href="{{route('cfu.voir',$recencement_cfus->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
                                             <a href="{{route('cfu.occupant.liste',$recencement_cfus->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Occupant<i class="bx bx-plus"></i></a>
-                                            <a href="{{route('impot.imposition',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Imposer<i class="bx bx-money"></i></a>
+                                            <a href="{{route('impot.imposition',['type' => 'cfu', 'id' => $recencement_cfus->id])}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Imposer<i class="bx bx-money"></i></a>
                                             <a href="{{route('cfu.modif',$recencement_cfus->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
                                         </td>
                                     </tr>

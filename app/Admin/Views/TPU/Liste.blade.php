@@ -73,7 +73,7 @@
                                         <td>{{ $recencement_tpus->categorie }}</td>
                                         <td class="d-flex justify-content-center gap-2">
                                             <a href="{{route('tpu.voir',$recencement_tpus->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
-                                            <a href="{{route('impot.imposition',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Imposer<i class="bx bx-money"></i></a>
+                                            <a href="{{route('impot.imposition',['type' => 'tpu', 'id' => $recencement_tpus->id])}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Imposer<i class="bx bx-money"></i></a>
                                             <a href="{{route('tpu.modif',$recencement_tpus->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
                                         </td>
                                     </tr>

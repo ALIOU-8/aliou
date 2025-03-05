@@ -73,7 +73,7 @@
                                         <td>{{ $recencement_patentes->categorie }}</td>
                                         <td class="d-flex justify-content-center gap-2">
                                             <a href="{{route('patente.voir',$recencement_patentes->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
-                                            <a href="{{route('impot.imposition',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Imposer<i class="bx bx-money"></i></a>
+                                            <a href="{{route('impot.imposition',['type' => 'patente', 'id' => $recencement_patentes->id])}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Imposer<i class="bx bx-money"></i></a>
                                             <a href="{{route('patente.modif',$recencement_patentes->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
                                         </td>
                                     </tr>

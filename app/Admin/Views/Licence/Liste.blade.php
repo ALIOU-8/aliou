@@ -73,7 +73,7 @@
                                         <td>{{ $recencement_licences->categorie }}</td>
                                         <td class="d-flex justify-content-center gap-2">
                                             <a href="{{route('licence.voir',$recencement_licences->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
-                                            <a href="{{route('impot.imposition',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Imposer<i class="bx bx-money"></i></a>
+                                            <a href="{{route('impot.imposition',['type' => 'licence', 'id' => $recencement_licences->id])}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Imposer<i class="bx bx-money"></i></a>
                                             <a href="{{route('licence.modif',$recencement_licences->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
                                         </td>
                                     </tr>

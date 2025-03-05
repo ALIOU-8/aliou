@@ -24,14 +24,14 @@
                                 <div class="h6 text-uppercase">direction nationale des impots</div>
                                 <div class="h6 text-uppercase">Année <span>2025</span></div>
                                 <div class="h6 text-uppercase">Revenue de  <span>2025</span></div>
-                                <div class="h6">Article : <span class="me-3">40</span> Role : <span>50</span></div>   
+                                <div class="h6">Article : <span class="me-3">{{$impot->article}}</span> Role : <span>{{$impot->role}}</span></div>   
                                 <div class="h6">Trésorerie : <span class="me-3">S.P.I/Mamouu</span> </div>   
                             </div>
                             <div class="col-md-8 border p-3">
-                                <div class="h6 ">Nom & Prénom : <span>Sano Ismael</span></div>
-                                <div class="h6 ">Profession : <span>Etudiant</span></div>
-                                <div class="h6 ">Adresse : <span>Télico </span></div>
-                                <div class="h6 ">Complète : <span> C.U Mamou </span></div>
+                                <div class="h6 ">Nom & Prénom : <span>{{$bien->contribuable->nom . ' ' .$bien->contribuable->prenom}}</span></div>
+                                <div class="h6 ">Profession : <span>{{$bien->contribuable->profession}}</span></div>
+                                <div class="h6 ">Adresse : <span> {{$bien->contribuable->telephone}} </span></div>
+                                <div class="h6 ">Complète : <span> {{$bien->adresse}} </span></div>
                             </div>
                         </div>
                         <div class="row mt-3">    
@@ -59,18 +59,18 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>CFU</td>
-                                                <td></td>
-                                                <td>1.000.000 FG</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td>1.000.000 FG</td>
+                                                <td class="text-uppercase">{{$impot->type_impot}}</td>
+                                                <td>{{$impot->base_imposition}}</td>
+                                                <td>{{$impot->montant_brute}}</td>
+                                                <td>{{$impot->imposition_anterieur}}</td>
+                                                <td>{{$impot->penalite}}</td>
+                                                <td>{{$impot->montant_a_payer}}</td>
                                             </tr>
                                         </tbody>
                                         <tfoot>
                                             <tr>
                                                 <td colspan="5" class="text-end h5">Somme Total</td>
-                                                <td>1.000.000 FG</td>
+                                                <td>{{$impot->montant_a_payer}}</td>
                                             </tr>
                                         </tfoot>
                                     </table>

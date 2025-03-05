@@ -5,6 +5,7 @@ namespace App\Admin\Controllers\CFU;
 use App\Http\Controllers\Controller;
 use App\Models\Annee;
 use App\Models\Bien;
+use App\Models\Occupant;
 use App\Models\Recensement_cfu;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -181,8 +182,9 @@ class CFUController extends Controller
     }
 
     public function voir ($id) {
-        $recensement_cfu=Recensement_cfu::findOrFail($id);
-        return view('Admin::CFU.Voir',compact($recensement_cfu));
+        $recensement_cfu=Recensement_cfu::where('id',$id)->with('occupant')->with('bien')->first();
+        $bien = Bien::where('id',$recensement_cfu->bien_id)->with('contribuable')->first();
+        return view('Admin::CFU.Voir',compact('recensement_cfu', 'bien'));
     }
 
     public function corbeille () {

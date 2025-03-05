@@ -12,10 +12,18 @@ use App\Admin\Controllers\Patente\PatenteController;
 use App\Admin\Controllers\Personnels\PersonnelsController;
 use App\Admin\Controllers\Profil\ProfilController;
 use App\Admin\Controllers\TPU\TPUController;
+use App\Models\Annee;
+use App\Models\Bien;
+use App\Models\Contribuable;
+use App\Models\Personnel;
 use Illuminate\Support\Facades\Route;
 
     Route::get('/', function () {
-        return view('Admin::Dashboard.dashboard');
+        $personnel = Personnel::where('delete', 0)->count();
+        $contribuable = Contribuable::where('delete', 0)->count();
+        $bien = Bien::where('delete', 0)->count();
+        $annees = Annee::get();
+        return view('Admin::Dashboard.dashboard',compact('personnel','contribuable','bien','annees'));
     });
 
     //Les routes pour le dashboard
@@ -149,9 +157,12 @@ use Illuminate\Support\Facades\Route;
         Route::get('/', [ImpotsController::class, 'index'])->name('impot.liste');
         Route::get('/ajout', [ImpotsController::class, 'ajout'])->name('impot.ajout');
         Route::get('/modif{id}', [ImpotsController::class, 'modif'])->name('impot.modif');
-        Route::get('/voir{id}', [ImpotsController::class, 'voir'])->name('impot.voir');
+        Route::put('/update{id}', [ImpotsController::class, 'update'])->name('impot.update');
+        Route::get('/voir/{type}/{id}', [ImpotsController::class, 'voir'])->name('impot.voir');
         Route::get('/payer{id}', [ImpotsController::class, 'payer'])->name('impot.payer');
-        Route::get('/imposition{id}', [ImpotsController::class, 'imposition'])->name('impot.imposition');
+        Route::post('/payement{id}', [ImpotsController::class, 'payement'])->name('impot.payement');
+        Route::get('/imposition/{type}/{id}', [ImpotsController::class, 'imposition'])->name('impot.imposition');
+        Route::post('/imposer/{type}/{id}', [ImpotsController::class, 'imposer'])->name('impot.imposer');
 
     });
 

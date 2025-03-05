@@ -12,7 +12,7 @@ class OccupantController extends Controller
 {
     
     public function index ($id) {
-        $occupant = Occupant::where('cfu_id',$id)->orderBy('id', 'desc')->where('delete',0)->get();
+        $occupant = Occupant::where('recensement_cfu_id',$id)->orderBy('id', 'desc')->where('delete',0)->get();
         $batiment = Recensement_cfu::where('id',$id)->first();
         $nombatiment = Bien::where('id',$batiment->bien_id)->first();
         return view('Admin::CFU.Occupant.Liste',compact('occupant','nombatiment', 'batiment'));
@@ -36,7 +36,7 @@ class OccupantController extends Controller
             'type_occupant'=>'required',
         ]);
         $occupant = new Occupant();
-        $occupant->cfu_id = $id;
+        $occupant->recensement_cfu_id = $id;
         $occupant->nom = $request->nom;
         $occupant->prenom = $request->prenom;
         $occupant->niveau = $request->niveau;
@@ -60,7 +60,7 @@ class OccupantController extends Controller
 
     public function modif ($id) {
         $occupant = Occupant::where('id',$id)->first();
-        $cfu = Recensement_cfu::where('id',$occupant->cfu_id)->first();
+        $cfu = Recensement_cfu::where('id',$occupant->recensement_cfu_id)->first();
         return view('Admin::CFU.Occupant.Modif',compact('occupant', 'cfu'));
     }
 
@@ -76,7 +76,7 @@ class OccupantController extends Controller
             'type_occupant'=>'required',
         ]);
         $occupant = Occupant::where('id', $id)->first();
-        $id2 = Recensement_cfu::where('id', $occupant->cfu_id)->first();
+        $id2 = Recensement_cfu::where('id', $occupant->recensement_cfu_id)->first();
         $occupant->nom = $request->nom;
         $occupant->prenom = $request->prenom;
         $occupant->niveau = $request->niveau;
@@ -91,7 +91,7 @@ class OccupantController extends Controller
     }
 
     public function corbeille ($id) {
-        $occupant = Occupant::where('cfu_id',$id)->orderBy('id', 'desc')->where('delete',1)->get();
+        $occupant = Occupant::where('recensement_cfu_id',$id)->orderBy('id', 'desc')->where('delete',1)->get();
         $batiment = Recensement_cfu::where('id',$id)->first();
         $nombatiment = Bien::where('id',$batiment->bien_id)->first();
         return view('Admin::CFU.Occupant.Corbeille',compact('occupant','nombatiment', 'batiment'));

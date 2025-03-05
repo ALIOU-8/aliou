@@ -31,7 +31,7 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <a href="{{route('impot.imposition',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Imposer<i class="bx bx-money"></i></a>
+                                                {{-- <a href="{{route('impot.imposition',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Imposer<i class="bx bx-money"></i></a> --}}
                                             </div>
                                         </div>
                                     </div>
@@ -51,7 +51,7 @@
                                         <th>N°</th>
                                         <th>Type d'impôt</th>
                                         <th>Impôt brute</th>
-                                        <th>Date limite</th>
+                                        <th>Date_limite</th>
                                         <th>Rôle</th>
                                         <th>Article</th>
                                         <th>Base d'imposition</th>
@@ -62,40 +62,26 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach ($impot as $key => $item)
                                     <tr>
-                                        <td>1</td>
-                                        <td>Patente</td>
-                                        <td>2.000.000</td>
-                                        <td>25/06/2025</td>
-                                        <td>30</td>
-                                        <td>10</td>
-                                        <td>Néant</td>
-                                        <td>Néant</td>
-                                        <td>Néant</td>
-                                        <td class="text-success">Payé</td>
+                                        <td>{{$key+1}}</td>
+                                        <td class="text-uppercase"> {{$item->type_impot}} </td>
+                                        <td> {{$item->montant_brute}} </td>
+                                        <td> {{$item->date_limite}} </td>
+                                        <td> {{$item->role}} </td>
+                                        <td> {{$item->article}} </td>
+                                        <td> {{$item->base_imposition}} </td>
+                                        <td> {{$item->imposition_anterieur}} </td>
+                                        <td> {{$item->penalite}} </td>
+                                        <td class="@if($item->statut == "nonPayé") text-danger @endif @if($item->statut == "Payé") text-success @endif @if($item->statut == "Encours") text-warning @endif"> {{$item->statut}} </td>
                                         <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('impot.voir',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
-                                            <a href="{{route('impot.payer',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Payer<i class="bx bx-money"></i></a>
-                                            <a href="{{route('impot.modif',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
+                                            <a href="{{route('impot.voir',['type' => $item->type_impot, 'id' => $item->id])}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
+                                            <a href="{{route('impot.payer',$item->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Payer<i class="bx bx-money"></i></a>
+                                            <a href="{{route('impot.modif',$item->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Licence</td>
-                                        <td>2.000.000</td>
-                                        <td>25/06/2025</td>
-                                        <td>30</td>
-                                        <td>10</td>
-                                        <td>Néant</td>
-                                        <td>Néant</td>
-                                        <td>Néant</td>
-                                        <td class="text-warning">Encours</td>
-                                        <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('impot.voir',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
-                                            <a href="{{route('impot.payer',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Payer<i class="bx bx-money"></i></a>
-                                            <a href="{{route('impot.modif',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
-                                        </td>
-                                    </tr>
+                                    @endforeach
+                                    
                                 </tbody>
                             </table>
                         </div>
