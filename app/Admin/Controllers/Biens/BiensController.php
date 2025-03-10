@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class BiensController extends Controller
 {
     public function index () {
-        $bien=Bien::where('delete',0)->orderBy('id','desc')->get();
+        $bien=Bien::where('delete',0)->orderBy('id','desc')->paginate(10);
         return view('Admin::Biens.Liste',compact('bien'));
     }
 

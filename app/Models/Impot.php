@@ -12,4 +12,20 @@ class Impot extends Model
     {
         return $this->belongsTo(Recensement_cfu::class);
     }
+    public function recensement_tpu()
+    {
+        return $this->belongsTo(Recensement_tpu::class);
+    }
+    public function recensement_licence()
+    {
+        return $this->belongsTo(Recensement_licence::class);
+    }
+    public function recensement_patente()
+    {
+        return $this->belongsTo(Recensement_patente::class);
+    }
+    public function annee()
+    {
+        return $this->belongsTo(Annee::class);
+    }
 }

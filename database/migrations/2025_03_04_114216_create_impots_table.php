@@ -14,19 +14,11 @@ return new class extends Migration
         Schema::create('impots', function (Blueprint $table) {
             $table->id();
             $table->string('type_impot');
-
-            $table->unsignedBigInteger('recensement_cfu_id')->nullable();
-            $table->foreign('recensement_cfu_id')->references('id')->on('recensement_cfus')->onDelete('cascade');
-
-            $table->unsignedBigInteger('recensement_tpu_id')->nullable();
-            $table->foreign('recensement_tpu_id')->references('id')->on('recensement_tpus')->onDelete('cascade');
-
-            $table->unsignedBigInteger('recensement_patente_id')->nullable();
-            $table->foreign('recensement_patente_id')->references('id')->on('recensement_patentes')->onDelete('cascade');
-
-            $table->unsignedBigInteger('recensement_licence_id')->nullable();
-            $table->foreign('recensement_licence_id')->references('id')->on('recensement_licences')->onDelete('cascade');
-
+            $table->foreignId('annee_id')->constrained()->onUpdate('cascade');
+            $table->foreignId('recensement_cfu_id')->nullable()->on('recensement_cfus')->onDelete('cascade');
+            $table->foreignId('recensement_tpu_id')->nullable()->on('recensement_tpus')->onDelete('cascade');
+            $table->foreignId('recensement_patente_id')->nullable()->on('recensement_patentes')->onDelete('cascade');
+            $table->foreignId('recensement_licence_id')->nullable()->on('recensement_licences')->onDelete('cascade');
             $table->string('statut');
             $table->integer('montant_brute');
             $table->integer('montant_a_payer');

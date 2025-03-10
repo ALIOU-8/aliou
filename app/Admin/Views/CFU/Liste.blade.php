@@ -116,7 +116,8 @@ function fetchRecensements() {
                             <td>${recensement.date_recensement ? recensement.date_recensement : 'N/A'}</td>
                             <td class="d-flex justify-content-center gap-2">
                                 <a href="/cfu/voir/${recensement.id}" class="btn btn-outline-success btn-sm">Voir<i class="bx bx-show"></i></a>
-                                <a href="/impot/imposition/${recensement.id}" class="btn btn-outline-success btn-sm">Imposer<i class="bx bx-money"></i></a>
+                                 <a href="/cfu/occupant/${recensement.id}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Occupant<i class="bx bx-plus"></i></a>
+                                <a href="/impot/imposition/cfu/${recensement.id}" class="btn btn-outline-success btn-sm">Imposer<i class="bx bx-money"></i></a>
                                 <a href="/cfu/modif/${recensement.id}" class="btn btn-outline-success btn-sm">Modifier<i class="bx bx-edit"></i></a>
                             </td>
                         </tr>

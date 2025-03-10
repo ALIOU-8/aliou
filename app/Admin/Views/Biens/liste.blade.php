@@ -100,8 +100,10 @@
                                     @endif
                                 </tbody>
                             </table>
+                            <div class="d-flex justify-content-center mt-3">
+                                {{ $bien->links('pagination::bootstrap-4') }}
+                            </div>
                         </div>
-                        
                     </div>
                 </div>
             </div>
@@ -189,6 +191,5 @@ function fetchBiens() {
         })
         .catch(error => console.error('Erreur:', error));
 }
-
 </script>
 @endsection

@@ -13,7 +13,7 @@ class ContribuableController extends Controller
         $contribuables = Contribuable::where('delete', 0)
         ->with('bien')// Charge les biens associés
         ->orderBy('id', 'desc')
-        ->get();    
+        ->paginate(10);    
         return view('Admin::Contribuables.Liste',compact('contribuables'));
     }
     public function search(Request $request)

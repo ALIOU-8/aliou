@@ -41,22 +41,22 @@
                                 <a href="" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
                             </div>
                             <div class="col-md-4 ms-auto">
-                                <input type="text" placeholder="Rechercher..." class="form-control border border-success m-3">
+                                <input type="text" placeholder="Rechercher..." class="form-control border border-success m-3" id="searchImpots" onkeyup="fetchImpots()">
                             </div>
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-bordered table-hover table-striped">
+                            <table class="table table-bordered table-hover table-striped" id="impotTable">
                                 <thead>
                                     <tr class="text-center">
                                         <th>N°</th>
-                                        <th>Type d'impôt</th>
-                                        <th>Impôt brute</th>
-                                        <th>Date_limite</th>
                                         <th>Rôle</th>
                                         <th>Article</th>
-                                        <th>Base d'imposition</th>
-                                        <th>Imposition antérieure</th>
-                                        <th>Pénalité</th>
+                                        <th>Type d'impôt</th>
+                                        <th>Nom et prenom</th>
+                                        <th>Téléphone</th>
+                                        <th>Montant à payer</th>
+                                        <th>Année</th>
+                                        <th>Date limite</th>
                                         <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
@@ -65,14 +65,28 @@
                                     @foreach ($impot as $key => $item)
                                     <tr>
                                         <td>{{$key+1}}</td>
-                                        <td class="text-uppercase"> {{$item->type_impot}} </td>
-                                        <td> {{$item->montant_brute}} </td>
-                                        <td> {{$item->date_limite}} </td>
                                         <td> {{$item->role}} </td>
                                         <td> {{$item->article}} </td>
-                                        <td> {{$item->base_imposition}} </td>
-                                        <td> {{$item->imposition_anterieur}} </td>
-                                        <td> {{$item->penalite}} </td>
+                                        <td class="text-uppercase"> {{$item->type_impot}} </td>
+                                        @if($item->type_impot=='patente')
+                                        <td>{{$item->recensement_patente->bien->contribuable->nom.' '.$item->recensement_patente->bien->contribuable->prenom}}</td>
+                                        <td>{{$item->recensement_patente->bien->contribuable->telephone}}</td>
+                                        @endif
+                                        @if($item->type_impot=='licence')
+                                        <td>{{$item->recensement_licence->bien->contribuable->nom.' '.$item->recensement_licence->bien->contribuable->prenom}}</td>
+                                        <td>{{$item->recensement_licence->bien->contribuable->telephone}}</td>
+                                        @endif
+                                        @if($item->type_impot=='cfu')
+                                        <td>{{$item->recensement_cfu->bien->contribuable->nom.' '.$item->recensement_cfu->bien->contribuable->prenom}}</td>
+                                        <td>{{$item->recensement_cfu->bien->contribuable->telephone}}</td>
+                                        @endif
+                                        @if($item->type_impot=='tpu')
+                                        <td>{{$item->recensement_tpu->bien->contribuable->nom.' '.$item->recensement_tpu->bien->contribuable->prenom}}</td>
+                                        <td>{{$item->recensement_tpu->bien->contribuable->telephone}}</td>
+                                        @endif
+                                        <td> {{$item->montant_a_payer}} </td>
+                                        <td>{{$item->annee->annee}} </td>
+                                        <td> {{$item->date_limite}} </td>
                                         <td class="@if($item->statut == "nonPayé") text-danger @endif @if($item->statut == "Payé") text-success @endif @if($item->statut == "Encours") text-warning @endif"> {{$item->statut}} </td>
                                         <td class="d-flex justify-content-center gap-2">
                                             <a href="{{route('impot.voir',['type' => $item->type_impot, 'id' => $item->id])}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
@@ -84,6 +98,9 @@
                                     
                                 </tbody>
                             </table>
+                            <div class="d-flex justify-content-center mt-3">
+                                {{ $impot->links('pagination::bootstrap-4') }}
+                            </div>
                         </div>
                         
                     </div>
@@ -92,4 +109,62 @@
         </div>
     </div>
 </main>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function fetchImpots() {
+    let query = document.getElementById("searchImpots").value;
+
+    fetch("{{ route('impots.search') }}?query=" + query)
+        .then(response => response.json())
+        .then(data => {
+            let tbody = document.querySelector("#impotTable tbody");
+            tbody.innerHTML = "";
+
+            if (data.length > 0) {
+                data.forEach((impot, index) => {
+                    let row = `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${impot.role}</td>
+                <td>${impot.article}</td>
+                <td class="text-uppercase">${impot.type_impot}</td>
+                <td>
+                    ${
+                        impot.type_impot === 'patente' ? (impot.recensement_patente ? impot.recensement_patente.bien.contribuable.nom + ' ' + impot.recensement_patente.bien.contribuable.prenom : 'N/A') :
+                        impot.type_impot === 'licence' ? (impot.recensement_licence ? impot.recensement_licence.bien.contribuable.nom + ' ' + impot.recensement_licence.bien.contribuable.prenom : 'N/A') :
+                        impot.type_impot === 'cfu' ? (impot.recensement_cfu ? impot.recensement_cfu.bien.contribuable.nom + ' ' + impot.recensement_cfu.bien.contribuable.prenom : 'N/A') :
+                        impot.type_impot === 'tpu' ? (impot.recensement_tpu ? impot.recensement_tpu.bien.contribuable.nom + ' ' + impot.recensement_tpu.bien.contribuable.prenom : 'N/A') :
+                        'N/A'
+                    }
+                </td>
+                <td>
+                    ${
+                        impot.type_impot === 'patente' ? (impot.recensement_patente ? impot.recensement_patente.bien.contribuable.telephone : 'N/A') :
+                        impot.type_impot === 'licence' ? (impot.recensement_licence ? impot.recensement_licence.bien.contribuable.telephone : 'N/A') :
+                        impot.type_impot === 'cfu' ? (impot.recensement_cfu ? impot.recensement_cfu.bien.contribuable.telephone : 'N/A') :
+                        impot.type_impot === 'tpu' ? (impot.recensement_tpu ? impot.recensement_tpu.bien.contribuable.telephone : 'N/A') :
+                        'N/A'
+                    }
+                </td>
+                <td>${impot.montant_a_payer}</td>
+                <td>${impot.annee.annee}</td>
+                <td>${impot.date_limite}</td>
+                <td class="${impot.statut === 'nonPayé' ? 'text-danger' : impot.statut === 'Payé' ? 'text-success' : 'text-warning'}">${impot.statut}</td>
+                <td class="d-flex justify-content-center gap-2">
+                    <a href="/impot/voir/${impot.id}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
+                    <a href="/impot/payer/${impot.id}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Payer<i class="bx bx-money"></i></a>
+                    <a href="/impot/modif/${impot.id}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
+                </td>
+            </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+            } else {
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center">Aucun impôt trouvé</td></tr>`;
+            }
+        })
+        .catch(error => console.error('Erreur:', error));
+}
+
+</script>
 @endsection

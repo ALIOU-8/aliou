@@ -72,6 +72,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/supprime/{id}', [BiensController::class,'delete'])->name('biens.supprimer');
         Route::put('/restaurer/{id}', [BiensController::class, 'restaure'])->name('biens.restor');
         Route::get('/recherche',[BiensController::class,'search'])->name('biens.search');
+
         ///
         Route::get('/get-contribuable', [BiensController::class, 'getContribuable'])->name('get.contribuable');
     });
@@ -94,13 +95,13 @@ use Illuminate\Support\Facades\Route;
 
     //Les routes pour la gestion CFU/Occupant
     Route::prefix('cfu')->group(function () {
-        Route::get('/occupant{id}', [OccupantController::class, 'index'])->name('cfu.occupant.liste');
-        Route::get('/occupant/ajout{id}', [OccupantController::class, 'ajout'])->name('cfu.occupant.ajout');
-        Route::get('/occupant/store{id}', [OccupantController::class, 'store'])->name('cfu.occupant.store');
-        Route::get('/occupant/delete{id}', [OccupantController::class, 'delete'])->name('cfu.occupant.delete');
-        Route::get('/occupant/modif{id}', [OccupantController::class, 'modif'])->name('cfu.occupant.modif');
-        Route::get('/occupant/update{id}', [OccupantController::class, 'update'])->name('cfu.occupant.update');
-        Route::get('/occupant/corbeille{id}', [OccupantController::class, 'corbeille'])->name('cfu.occupant.corbeille');
+        Route::get('/occupant/{id}', [OccupantController::class, 'index'])->name('cfu.occupant.liste');
+        Route::get('/occupant/ajout/{id}', [OccupantController::class, 'ajout'])->name('cfu.occupant.ajout');
+        Route::get('/occupant/store/{id}', [OccupantController::class, 'store'])->name('cfu.occupant.store');
+        Route::get('/occupant/delete/{id}', [OccupantController::class, 'delete'])->name('cfu.occupant.delete');
+        Route::get('/occupant/modif/{id}', [OccupantController::class, 'modif'])->name('cfu.occupant.modif');
+        Route::get('/occupant/update/{id}', [OccupantController::class, 'update'])->name('cfu.occupant.update');
+        Route::get('/occupant/corbeille/{id}', [OccupantController::class, 'corbeille'])->name('cfu.occupant.corbeille');
         Route::put('/occupant/restaure{id}', [OccupantController::class, 'restaure'])->name('cfu.occupant.restaure');
     });
 
@@ -156,15 +157,17 @@ use Illuminate\Support\Facades\Route;
     Route::prefix('impot')->group(function () {
         Route::get('/', [ImpotsController::class, 'index'])->name('impot.liste');
         Route::get('/ajout', [ImpotsController::class, 'ajout'])->name('impot.ajout');
-        Route::get('/modif{id}', [ImpotsController::class, 'modif'])->name('impot.modif');
+        Route::get('/modif/{id}', [ImpotsController::class, 'modif'])->name('impot.modif');
         Route::put('/update{id}', [ImpotsController::class, 'update'])->name('impot.update');
         Route::get('/voir/{type}/{id}', [ImpotsController::class, 'voir'])->name('impot.voir');
-        Route::get('/payer{id}', [ImpotsController::class, 'payer'])->name('impot.payer');
-        Route::post('/payement{id}', [ImpotsController::class, 'payement'])->name('impot.payement');
-        Route::get('/recu{id}', [ImpotsController::class, 'recu'])->name('impot.recu');
-        Route::put('/modif_payement{id}', [ImpotsController::class, 'modif_payement'])->name('impot.modif.payement');
+        Route::get('/payer/{id}', [ImpotsController::class, 'payer'])->name('impot.payer');
+        Route::post('/payement/{id}', [ImpotsController::class, 'payement'])->name('impot.payement');
+        Route::get('/recu/{id}', [ImpotsController::class, 'recu'])->name('impot.recu');
+        Route::put('/modif_payement/{id}', [ImpotsController::class, 'modif_payement'])->name('impot.modif.payement');
         Route::get('/imposition/{type}/{id}', [ImpotsController::class, 'imposition'])->name('impot.imposition');
         Route::post('/imposer/{type}/{id}', [ImpotsController::class, 'imposer'])->name('impot.imposer');
+        Route::get('/impots/search', [ImpotsController::class, 'search'])->name('impots.search');
+
 
     });
 

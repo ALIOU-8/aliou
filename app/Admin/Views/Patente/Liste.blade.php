@@ -118,7 +118,7 @@ function fetchRecensements() {
                             <td>${recensement.categorie ? recensement.categorie : 'N/A'}</td>
                             <td class="d-flex justify-content-center gap-2">
                                 <a href="/patente/voir/${recensement.id}" class="btn btn-outline-success btn-sm">Voir<i class="bx bx-show"></i></a>
-                                <a href="/impot/imposition/${recensement.id}" class="btn btn-outline-success btn-sm">Imposer<i class="bx bx-money"></i></a>
+                                <a href="/impot/imposition/patente/${recensement.id}" class="btn btn-outline-success btn-sm">Imposer<i class="bx bx-money"></i></a>
                                 <a href="/patente/modif/${recensement.id}" class="btn btn-outline-success btn-sm">Modifier<i class="bx bx-edit"></i></a>
                             </td>
                         </tr>
@@ -165,5 +165,5 @@ function fetchRecensements() {
     });
 });
 
-</script
+</script>
 @endsection

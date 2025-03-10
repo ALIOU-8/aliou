@@ -100,6 +100,9 @@
                                     @endif
                                 </tbody>
                             </table>
+                            <div class="d-flex justify-content-center mt-3">
+                                {{ $contribuables->links('pagination::bootstrap-4') }}
+                            </div>
                         </div>
                         
                     </div>
