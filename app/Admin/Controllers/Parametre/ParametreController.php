@@ -4,6 +4,7 @@ namespace App\Admin\Controllers\Parametre;
 
 use App\Http\Controllers\Controller;
 use App\Models\Annee;
+use App\Models\Bien;
 use App\Models\Fonction;
 use App\Models\TypeBien;
 use App\Models\TypeImpot;
@@ -15,23 +16,6 @@ class ParametreController extends Controller
     // Paramètre 
     public function index() {
         return view('Admin::Parametre.Index');
-    }
-
-    // Utilisateur 
-    public function user(){
-        return view('Admin::Parametre.Utilisateur.Liste');
-    }
-
-    public function add_user(){
-        return view('Admin::Parametre.Utilisateur.Ajout');
-    }
-
-    public function modif_user(string $id){
-        return view('Admin::Parametre.Utilisateur.Modif');
-    }
-
-    public function corbeille_user(){
-        return view('Admin::Parametre.Utilisateur.Corbeille');
     }
 
     // Configuration 
@@ -170,76 +154,19 @@ class ParametreController extends Controller
     }
 
     
-    // Impot 
-    public function type_impot () {
-        $liste_type_impot= TypeImpot::where('delete',0)->Orderby('id','Desc')->get();
-        return view('Admin::Parametre.Configuration.TypeImpot.Index', compact('liste_type_impot'));
+    // Invitation 
+    public function invitation () {
+        $bien=Bien::where('delete',0)->orderBy('id','desc')->get();
+        // return $bien;
+        return view('Admin::Parametre.Configuration.Invitation.Index', compact('bien'));
     }
 
+    public function imprimer_invitation (string $id) {
+        $bien=Bien::where('id',$id)->with('contribuable')->first();
 
-    public function type_impot_store(Request $request)
-    {
-        $request->validate(
-            [
-                "libelle" =>"required|unique:type_impots"
-            ]
-        );
-        $type_impot=new TypeImpot();
-        $type_impot->libelle=$request->libelle;
-        $type_impot->save();
-        toastr()->success("Type Impot enregistrer avec succes");
-        return back();
+        return view('Admin::Parametre.Configuration.Invitation.Imprimer', compact('bien'));
     }
 
-    public function type_impot_update(Request $request,$id)
-    {
-        $request->validate(
-            [
-                'libelle' => [
-                'required',
-                Rule::unique('type_impots')->ignore($id), // Exclure l'ID actuel
-            ],
-            ]
-        );
-        $type_impot=TypeImpot::findOrFail($id);
-        $type_impot->libelle=$request->libelle;
-        $type_impot->update();
-        toastr()->success("Type impot modifié avec succes");
-        return to_route('parametre.configuration.type.impot');
-    }
-
-    public function type_impot_edit($id)
-    {
-        $type_impot=TypeImpot::findOrfail($id);
-        $liste_type_impot= TypeImpot::where('delete',0)->get();
-       return view('Admin::Parametre.Configuration.TypeImpot.Index',compact('type_impot','liste_type_impot'));
-    }
-
-    public function delete_type_impot(string $id)
-    {
-        $type_impot=TypeImpot::findOrFail($id);
-        $type_impot->delete=1;
-        $type_impot->update();
-        toastr()->success('Type Impot Supprimez avec Succes');
-        return to_route('parametre.configuration.type.impot');
-    }
-
-    public function restaure_type_impot(string $id)
-    {
-        $type_impot=TypeImpot::findOrFail($id);
-        $type_impot->delete=0;
-        $type_impot->update();
-        toastr()->success('Type impot restaurez avec Succes');
-        return to_route('parametre.configuration.type.impot');
-    }
-
-    public function corbeille_impot() {
-        $type_impot= TypeImpot::where('delete',1)->Orderby('id','Desc')->get();;
-            return view('Admin::Parametre.Configuration.typeimpot.Corbeille',compact('type_impot'));
-        }
-
-
-  
     // Annee 
     
     public function annee () {

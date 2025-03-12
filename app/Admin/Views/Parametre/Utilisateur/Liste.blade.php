@@ -18,9 +18,6 @@
                             <div class="col-md-2">
                                 <a href="{{route('parametre.user.add')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Nouveau <i class="bx bx-plus"></i></a>
                             </div>
-                            <div class="col-md-2">
-                                <a href="{{route('parametre.user.corbeille')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Corbeille <i class="bx bx-trash"></i></a>
-                            </div>
                             <div class="col-md-4 ms-auto">
                                 <input type="text" placeholder="Rechercher..." class="form-control border border-success m-3">
                             </div>
@@ -30,41 +27,30 @@
                                 <thead>
                                     <tr class="text-center">
                                         <th>N°</th>
-                                        <th>Login</th>
+                                        <th>Matricule</th>
                                         <th>Nom</th>
                                         <th>Prénom</th>
-                                        <th>Téléphone</th>
+                                        <th>Droit</th>
+                                        <th>Statut</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach ($Utilisateur as $key => $item)
                                     <tr>
-                                        <td>1</td>
-                                        <td>2204</td>
-                                        <td>Sano</td>
-                                        <td>Ismael</td>
-                                        <td>628013477</td>
+                                        <td> {{$key+1}} </td>
+                                        <td> {{$item->matricule}} </td>
+                                        <td> {{$item->nom}} </td>
+                                        <td> {{$item->prenom}} </td>
+                                        <td> {{$item->droit}} </td>
+                                        <td class="@if($item->statut == 0) text-success @endif @if($item->statut == 1) text-danger @endif"> @if($item->statut == 0) Actif @endif @if($item->statut == 1) Bloqué @endif </td>
                                         <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('parametre.user.modif',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
-                                            <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer">Supprimer<i class="bx bx-trash"></i></a>
-                                            {{-- Modal pour confirmer la suppression  --}}
-                                            <div class="modal fade" id="supprimer" aria-labelledby="supprimer" aria-hidden="true">
-                                                <div class="modal-dialog center">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h6 class="modal-title" id="supprimer">Voulez-vous supprimez cet utilisateur ?</h6>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="text-start">Nom </div>
-                                                            <div class="text-start">Prénom </div>
-                                                            <button type="submit" class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1">Confirmer <i class="bx bx-check"></i></button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <a href="{{route('parametre.user.modif',$item->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
+                                            <a href="{{route('parametre.user.bloquer',$item->id)}}" class="btn @if($item->statut == 0) btn-outline-danger @endif @if($item->statut == 1) btn-outline-success @endif btn-sm d-flex align-items-center gap-1"> @if($item->statut == 0) bloquer @endif @if($item->statut == 1) débloquer @endif <i class="bx bx-trash"></i></a>
                                         </td>
                                     </tr>
+                                    @endforeach
+                                    
                                 </tbody>
                             </table>
                         </div>

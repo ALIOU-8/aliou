@@ -12,6 +12,7 @@ use App\Admin\Controllers\Patente\PatenteController;
 use App\Admin\Controllers\Personnels\PersonnelsController;
 use App\Admin\Controllers\Profil\ProfilController;
 use App\Admin\Controllers\TPU\TPUController;
+use App\Auth\Controllers\AuthController;
 use App\Models\Annee;
 use App\Models\Bien;
 use App\Models\Contribuable;
@@ -53,6 +54,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/ajout', [PersonnelsController::class, 'ajout'])->name('personnels.ajout');
         Route::get('/modif/{id}', [PersonnelsController::class, 'modif'])->name('personnels.modif');
         Route::get('/voir', [PersonnelsController::class, 'voir'])->name('personnels.voir');
+        Route::get('/imprimer', [PersonnelsController::class, 'imprimer'])->name('personnels.imprimer');
         Route::get('/corbeille', [PersonnelsController::class, 'corbeille'])->name('personnels.corbeille');
         Route::post('/store',[PersonnelsController::class,'store'])->name('personnels.store');
         Route::put('/update/{id}',[PersonnelsController::class,'update'])->name('personnels.update');
@@ -176,10 +178,13 @@ use Illuminate\Support\Facades\Route;
         Route::get('/', [ParametreController::class, 'index'])->name('parametre.index');
         
         // Utilisateur
-        Route::get('/utilisateur', [ParametreController::class, 'user'])->name('parametre.user');
-        Route::get('/ajout_utilisateur', [ParametreController::class, 'add_user'])->name('parametre.user.add');
-        Route::get('/modification_utilisateur{id}', [ParametreController::class, 'modif_user'])->name('parametre.user.modif');
-        Route::get('/corbeille_utilisateur', [ParametreController::class, 'corbeille_user'])->name('parametre.user.corbeille');
+        Route::get('/utilisateur', [AuthController::class, 'user'])->name('parametre.user');
+        Route::get('/ajout_utilisateur', [AuthController::class, 'add_user'])->name('parametre.user.add');
+        Route::post('/ajout_utilisateur', [AuthController::class, 'inscription'])->name('parametre.user.inscription');
+        Route::get('/modification_utilisateur/{id}', [AuthController::class, 'modif_user'])->name('parametre.user.modif');
+        Route::put('/modification_utilisateur/{id}', [AuthController::class, 'modification'])->name('parametre.user.modification');
+        Route::get('/bloquer_utilisateur/{id}', [AuthController::class, 'bloquer'])->name('parametre.user.bloquer');
+        Route::get('/corbeille_utilisateur', [AuthController::class, 'corbeille_user'])->name('parametre.user.corbeille');
         
         
         // Configuration 
@@ -197,15 +202,9 @@ use Illuminate\Support\Facades\Route;
         
         
         
-        // Type impot
-        Route::get('/configuration/type_impot', [ParametreController::class, 'type_impot'])->name('parametre.configuration.type.impot');
-        Route::get('/configuration/type_impot/corbeille', [ParametreController::class, 'corbeille_impot'])->name('parametre.configuration.type.impot.corbeille');
-
-        Route::post('/configuration/type_impot/store',[ParametreController::class,'type_impot_store'])->name('parametre.configuration.type.impot.store');
-        Route::put('/configuration/type_impot/update/{id}',[ParametreController::class,'type_impot_update'])->name('parametre.configuration.type.impot.update');
-        Route::get('/configuration/type_impot/edit/{id}',[ParametreController::class,'type_impot_edit'])->name('parametre.configuration.type.impot.edit');
-        Route::put('/supprime-type-impot/{id}', [ParametreController::class,'delete_type_impot'])->name('type_impot.supprimer');
-        Route::put('/restaurer-type-impot/{id}', [ParametreController::class, 'restaure_type_impot'])->name('type.impot.resto');
+        // Invitation
+        Route::get('/configuration/invitation', [ParametreController::class, 'invitation'])->name('parametre.configuration.invitation');
+        Route::get('/configuration/invitation/imprimer/{id}', [ParametreController::class, 'imprimer_invitation'])->name('parametre.configuration.imprimer');
         
         
         // Fonction 

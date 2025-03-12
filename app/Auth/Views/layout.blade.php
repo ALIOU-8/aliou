@@ -21,19 +21,26 @@
                     <img src="{{asset('Admin/Assets/impot.jpg')}}" alt="" class="img img-fluid ">
                 </div>
                 <div class="formulaire">
-                    <form action="">
+                    <form action="{{route('login.store')}}" method="GET">
+                        @csrf
                         <div class="row">
                             <div class="col-12 mb-4">
-                                <input type="text" placeholder="Entrez votre email" class="form-control">
+                                <input type="text" placeholder="Entrez votre matricule" class="form-control" name="matricule">
+                                @error('matricule')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="col-12 mb-3">
-                                <input type="password" placeholder="Entrez votre mot de passe" class="form-control">
+                                <input type="password" placeholder="Entrez votre mot de passe" class="form-control" name="password">
+                                @error('password')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="col-12 mb-3">
                                 <div class="text-end h6"><a href="">Mot de passe oublié ?</a></div>
                             </div>
                             <div class="col-12">
-                                <a href="" class="btn btn-success w-100">Se connecter</a>
+                                <button class="btn btn-success w-100">Se connecter</button>
                             </div>
                         </div>
                     </form>

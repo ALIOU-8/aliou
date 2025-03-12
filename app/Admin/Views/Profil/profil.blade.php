@@ -29,15 +29,15 @@
                             <div class="row mt-4">
                                 <div class="col-6 mb-3">
                                     <label for="nom">Nom</label>
-                                    <input type="text" name="nom" id="nom" class="form-control">
+                                    <input type="text" name="nom" value="{{$user->nom}}" id="nom" class="form-control">
                                 </div>
                                 <div class="col-6 mb-3">
                                     <label for="prenom">Prénom</label>
-                                    <input type="text" name="prenom" id="prenom" class="form-control">
+                                    <input type="text" name="prenom" value="{{$user->prenom}}" id="prenom" class="form-control">
                                 </div>
                                 <div class="col-6 mb-3">
-                                    <label for="telephone">Téléphone</label>
-                                    <input type="text" name="telephone" id="telephone" class="form-control">
+                                    <label for="matricule">Matricule</label>
+                                    <input type="text" name="matricule" value="{{$user->matricule}}" disabled class="form-control">
                                 </div>
                                 <div class="col-6 mb-3 mt-4">
                                     <button class="btn btn-outline-success">Modifier</button>

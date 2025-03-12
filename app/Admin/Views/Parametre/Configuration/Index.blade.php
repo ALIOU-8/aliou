@@ -17,19 +17,19 @@
                         <div class="row">
                             <div class="col-md-3 mb-4">
                                 <div class="card border shadow p-1">
-                                    <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-cog"></i>Type de bien</div>
+                                    <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-cog"></i>Invitation</div>
                                     <hr class="m-0">
                                     <div class="mt-1 mb-1 p-3">
-                                        <a href="{{route('parametre.configuration.type.biens')}}" class="btn btn-sm-lg btn-outline-success w-100">Configurer</a>
+                                        <a href="{{route('parametre.configuration.invitation')}}" class="btn btn-sm-lg btn-outline-success w-100">Inviter</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-3 mb-4">
                                 <div class="card border shadow p-1">
-                                    <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-cog"></i>Type d'impot</div>
+                                    <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-cog"></i>Type de bien</div>
                                     <hr class="m-0">
                                     <div class="mt-1 mb-1 p-3">
-                                        <a href="{{route('parametre.configuration.type.impot')}}" class="btn btn-sm-lg btn-outline-success w-100">Configurer</a>
+                                        <a href="{{route('parametre.configuration.type.biens')}}" class="btn btn-sm-lg btn-outline-success w-100">Configurer</a>
                                     </div>
                                 </div>
                             </div>

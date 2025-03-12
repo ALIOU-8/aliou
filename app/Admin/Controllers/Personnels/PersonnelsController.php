@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers\Personnels;
 
 use App\Http\Controllers\Controller;
+use App\Models\Annee;
 use App\Models\Fonction;
 use App\Models\Personnel;
 use Illuminate\Http\Request;
@@ -82,6 +83,12 @@ class PersonnelsController extends Controller
 
     public function voir () {
         return view('Admin::Personnels.Voir');
+    }
+
+    public function imprimer () {
+        $personnel=Personnel::where('delete',0)->orderBy('id','desc')->get();
+        $annee=Annee::where('active',1)->first();
+        return view('Admin::Personnels.Imprimer',compact('personnel','annee'));
     }
 
     public function corbeille () {

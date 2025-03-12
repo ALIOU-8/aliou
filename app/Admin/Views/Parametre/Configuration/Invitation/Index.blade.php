@@ -8,54 +8,54 @@
         <li class="divider">/</li>
         <li><a href="{{route('parametre.configuration')}}">Configuration</a></li>
         <li class="divider">/</li>
-        <li><a href="{{route('parametre.configuration.type.impot')}}">Type d'impôt</a></li>
-        <li class="divider">/</li>
-        <li><a href="" class="active">Corbeille</a></li>
+        <li><a href="" class="active">Invitation</a></li>
     </ul>
     <div class="container justify-content-center">
         <div class="row d-flex justify-content-center">
             <div class="col-md-12 mb-5">
                 <div class="card border border-light">
                     <div class="card-body">
-                        <div class="h5 text-center text-success">Corbeille</div>
+                        <div class="h5 text-center text-success">La liste des Biens</div>
                         <div class="row d-flex justify-content-between align-items-center me-1">
-                            
                             <div class="col-md-4 ms-auto">
                                 <input type="text" placeholder="Rechercher..." class="form-control border border-success m-3" id="searchInput" onkeyup="searchTable()">
                             </div>
-                        </div>
+                        </div>  
                         <div class="table-responsive">
-                            <table class="table table-bordered table-hover table-striped" id="myTable">
+                            <table id="biensTable" class="table table-bordered table-hover table-striped">
                                 <thead>
                                     <tr class="text-center">
                                         <th>N°</th>
+                                        <th>Propriétaire</th>
+                                        <th>Type</th>
+                                        <th>N° Biens</th>
                                         <th>Libéllé</th>
+                                        <th>Adresse</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($type_impot as $key=> $type_impots )
+                                    @foreach ($bien as $key=> $biens )
                                     <tr>
-                                        <td>{{ $key+1 }}</td>
-                                        <td>{{ $type_impots->libelle }}</td>
+                                        <td>{{ $key+1}}</td>
+                                        <td>{{ $biens->contribuable->nom.' '.$biens->contribuable->prenom }}</td>
+                                        <td>{{ $biens->typeBien->libelle}}</td>
+                                        <td>{{ $biens->numero_bien }}</td>
+                                        <td>{{ $biens->libelle}}</td>
+                                        <td>{{ $biens->adresse }}</td>
                                         <td class="d-flex justify-content-center gap-2">
-                                            <form method="POST" action="{{route('type.impot.resto',$type_impots->id) }}">
-                                                @csrf
-                                                @method('put')
-                                                <button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">Restaurer <i class="bx bx-check"></i></button>
-                                            </form>
+                                            <a href="{{route('parametre.configuration.imprimer',$biens->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Imprimer<i class="bx bx-printer"></i></a>
                                         </td>
                                     </tr>
                                     @endforeach
-                                    @if (count($type_impot) == 0)
+                                    @if (count($bien) == 0)
                                         <tr>
-                                            <th colspan="6" class="text-center">Aucun enregistrement trouvé pour le moment</th>
-                                        </tr>
+                                            <th colspan="7" class="text-center">Aucun enregistrement trouvé pour le moment</th>
+                                        </tr> 
                                     @endif
                                 </tbody>
                             </table>
-                        </div>
-                        
+                        </div>                        
                     </div>
                 </div>
             </div>
