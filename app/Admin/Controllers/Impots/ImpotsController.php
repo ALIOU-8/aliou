@@ -188,8 +188,55 @@ class ImpotsController extends Controller
         return back();
     }
 
-
-    public function imposition (string $type, string $id,) {
+    public function chercherBien(Request $request)
+    {
+        $request->validate([
+            'numero_bien' =>'required',
+            'type'=>'required'
+        ]);
+    // Récupérer le numéro du bien
+    $bienNumero = $request->numero_bien;
+    $anneeActive=Annee::where('active',1)->first();
+    $bien=Bien::where('numero_bien',$bienNumero)->with('contribuable')->with('typeBien')->first();
+    if(!$bien)
+    {
+        toastr()->error("le Bien est introuvable dans la base de donnée");
+        return back();
+    }
+    // Chercher dans les différentes tables
+    if($request->type=='cfu')
+    {
+        $recensement = Recensement_cfu::where('bien_id', $bien->id)->where('annee_id',$anneeActive->id)->first();
+       // $bien = Bien::where('id',$recensement->bien_id)->with('contribuable')->with('typeBien')->first();
+    }
+    if($request->type=='tpu')
+    {
+        $recensement = Recensement_tpu::where('bien_id', $bien->id)->where('annee_id',$anneeActive->id)->first();
+       // $bien = Bien::where('id',$recensement->bien_id)->with('contribuable')->with('typeBien')->first();
+    }
+    if($request->type=='patente')
+    {
+        $recensement = Recensement_patente::where('bien_id', $bien->id)->where('annee_id',$anneeActive->id)->first();
+       // $bien = Bien::where('id',$recensement->bien_id)->with('contribuable')->with('typeBien')->first();
+    }
+    if($request->type=='licence')
+    {
+        $recensement = Recensement_licence::where('bien_id', $bien->id)->where('annee_id',$anneeActive->id)->first();
+       // $bien = Bien::where('id',$recensement->bien_id)->with('contribuable')->with('typeBien')->first();
+    }
+    $type=$request->type;
+    if($recensement)
+        {
+            return redirect()->route('impot.imposition', [
+                'type' => $type,
+                'id' => $recensement->id // On passe uniquement l'ID
+            ]);        
+        }else{
+            toastr()->error("ce bien n'est pas recensé en $type");
+            return back(); 
+        }
+    }
+    public function imposition (string $type, string $id) {
         if ($type == "cfu") {
             $anneeActive=Annee::where('active',1)->first();
             $recensement=Recensement_cfu::where('id',$id)->with('occupant')->where('annee_id',$anneeActive->id)->with('bien')->first();
@@ -210,7 +257,7 @@ class ImpotsController extends Controller
             $recensement=Recensement_licence::where('id',$id)->where('annee_id',$anneeActive->id)->with('bien')->first();
             $bien = Bien::where('id',$recensement->bien_id)->with('contribuable')->with('typeBien')->first();
         }
-        return view('Admin::Impots.Imposition',compact('recensement','bien','type'));
+            return view('Admin::Impots.Imposition',compact('recensement','bien','type')); 
     }
 
     public function imposer (string $type, string $id, Request $request) {
@@ -224,36 +271,73 @@ class ImpotsController extends Controller
             'droit_fixe'=>'required',
             'droit_proportionnel'=>'required',
         ]);
-        $impot = new Impot();
-        $impot->type_impot = $type;
-        $anneeActive=Annee::where('active',1)->first();
-        $impot->annee_id = $anneeActive->id;
-        $impot->statut = "nonPayé";
-        $impot->montant_brute = $request->montant_brute;
-        $impot->montant_a_payer = $request->montant_a_payer;
-        $impot->date_limite = $request->date_limite;
-        $impot->base_imposition = $request->base_imposition;
-        $impot->imposition_anterieur = $request->imposition_anterieur;
-        $impot->penalite = $request->penalite;
-        $impot->droit_fixe = $request->droit_fixe;
-        $impot->droit_proportionnel = $request->droit_proportionnel;
-        $impot->article = 1;
-        $impot->role = 1;
-        if ($type == 'cfu'){
-            $impot->recensement_cfu_id = $id;
+        $anneeActive = Annee::where('active', 1)->first();
+
+        if ($anneeActive) {
+            // Chercher le dernier impôt enregistré pour cette année
+            $dernierImpot = Impot::where('annee_id', $anneeActive->id)
+                ->orderByDesc('role')
+                ->orderByDesc('article')
+                ->first();
+
+            if ($dernierImpot) {
+                // Si un impôt existe, on récupère le dernier rôle et article
+                $dernierRole = $dernierImpot->role;
+                $dernierArticle = $dernierImpot->article;
+
+                if ($dernierArticle < 10) {
+                    // Incrémenter l'article dans le même rôle
+                    $article = $dernierArticle + 1;
+                    $role = $dernierRole;
+                } else {
+                    // Si article atteint 10, on passe au rôle suivant et on remet article à 1
+                    $article = 1;
+                    $role = $dernierRole + 1;
+                }
+            } else {
+                // Si aucun impôt n'existe pour cette année, on commence avec rôle 1 et article 1
+                $role = 1;
+                $article = 1;
+            }
+
+            // Création de l'impôt avec le bon rôle et article
+            $doublons=Impot::where('annee_id',$anneeActive->id)->where('type_impot',$type)->first();
+            if($doublons)
+            {
+                toastr()->error("ce bien est déja imposé pour cette année $anneeActive->annee ");
+                return back();
+            }
+            $impot = new Impot();
+            $impot->type_impot = $type;
+            $impot->annee_id = $anneeActive->id;
+            $impot->statut = "nonPayé";
+            $impot->montant_brute = $request->montant_brute;
+            $impot->montant_a_payer = $request->montant_a_payer;
+            $impot->date_limite = $request->date_limite;
+            $impot->base_imposition = $request->base_imposition;
+            $impot->imposition_anterieur = $request->imposition_anterieur;
+            $impot->penalite = $request->penalite;
+            $impot->droit_fixe = $request->droit_fixe;
+            $impot->droit_proportionnel = $request->droit_proportionnel;
+            $impot->article = $article;
+            $impot->role = $role;
+            if ($type == 'cfu'){
+                $impot->recensement_cfu_id = $id;
+            }
+            if ($type == 'tpu'){
+                $impot->recensement_tpu_id = $id;
+            }
+            if ($type == 'patente'){
+                $impot->recensement_patente_id = $id;
+            }
+            if ($type == 'licence'){
+                $impot->recensement_licence_id = $id;
+            }
+
+            $impot->save();
+            toastr()->success('Imposition effectué avec succèss');
+            return to_route('impot.liste');
         }
-        if ($type == 'tpu'){
-            $impot->recensement_tpu_id = $id;
-        }
-        if ($type == 'patente'){
-            $impot->recensement_patente_id = $id;
-        }
-        if ($type == 'licence'){
-            $impot->recensement_licence_id = $id;
-        }
-        $impot->save();
-        toastr()->success('Imposition effectué avec succèss');
-        return to_route('impot.liste');
     }
 
     public function search(Request $request)

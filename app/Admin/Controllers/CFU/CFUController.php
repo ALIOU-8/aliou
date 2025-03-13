@@ -184,7 +184,8 @@ class CFUController extends Controller
     public function voir ($id) {
         $recensement_cfu=Recensement_cfu::where('id',$id)->with('occupant')->with('bien')->first();
         $bien = Bien::where('id',$recensement_cfu->bien_id)->with('contribuable')->first();
-        return view('Admin::CFU.Voir',compact('recensement_cfu', 'bien'));
+        $ValeurLocative=Occupant::where('recensement_cfu_id',$id)->sum('valeur_locative');
+        return view('Admin::CFU.Voir',compact('recensement_cfu', 'bien','ValeurLocative'));
     }
 
     public function corbeille () {

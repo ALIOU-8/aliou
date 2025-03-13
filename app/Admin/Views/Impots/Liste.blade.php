@@ -24,11 +24,36 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <div class="form-group">
-                                                    <label for="num_bat">Numéro du bien</label>
-                                                    <input type="text" class="form-control">
-                                                    <button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">Vérifier <i class="bx bx-check"></i></button>
-                                                </div>
+                                                <form id="recensementForm" action="{{ route('rechercher_bien') }}" method="POST">
+                                                    @csrf
+                                                    <div class="form-group">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                            <label for="numero_bien">Numéro de Bien</label>
+                                                            <input type="text" id="numero_bien" name="numero_bien" class="form-control" placeholder="Saisir le numéro">
+                                                            <div id="numero_bien_feedback" class="invalid-feedback">Numéro introuvable</div>
+                                                            @error('numero_bien')
+                                                                <p class="text-danger">{{ $message }}</p>
+                                                            @enderror
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="">Choisir le recensement</label>
+                                                                <select name="type" id="type"  class="form-control">
+                                                                    <option value=""></option>
+                                                                    <option value="cfu">CFU</option>
+                                                                    <option value="tpu">TPU</option>
+                                                                    <option value="patente">PATENTE</option>
+                                                                    <option value="licence">LICENCE</option>
+                                                                </select>
+                                                                <div id="type_feedback" class="invalid-feedback">Numéro introuvable</div>
+                                                                    @error('type')
+                                                                        <p class="text-danger">{{ $message }}</p>
+                                                                    @enderror
+                                                            </div>
+                                                        </div>
+                                                    </div>                                                        
+                                                    <button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">Imposer<i class="bx bx-money"></i><i class="bx bx-check"></i></button>
+                                                </form>
                                             </div>
                                             <div class="modal-footer">
                                                 {{-- <a href="{{route('impot.imposition',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Imposer<i class="bx bx-money"></i></a> --}}
@@ -164,7 +189,60 @@
             }
         })
         .catch(error => console.error('Erreur:', error));
+
+        
 }
+$(document).ready(function () {
+    $("#recensementForm").on("submit", function (event) {
+        var numeroBien = $("#numero_bien").val();
+        var type=$('#type').val();
+        if (numeroBien.trim() === "") {
+            event.preventDefault();
+            $("#numero_bien").addClass("is-invalid");
+            $("#numero_bien_feedback").text("Veuillez entrer un numéro de bien valide").show();
+        }
+        if (type.trim() === "") {
+            event.preventDefault();
+            $("#type").addClass("is-invalid");
+            $("#type_feedback").text("Veuillez entrer un numéro de bien valide").show();
+        }
+    });
+
+    $("#type").on("input", function () {
+        var type = $(this).val();
+        if (type.length > 0) {
+            $("#type").removeClass("is-invalid").addClass("is-valid");
+            $("#type_feedback").text("type valide").removeClass("invalid-feedback").addClass("valid-feedback").show();
+        } else {
+            $("#type").removeClass("is-valid is-invalid");
+            $("#type_feedback").text("").hide();
+        }
+    });
+
+    $("#numero_bien").on("input", function () {
+        var numeroBien = $(this).val();
+        if (numeroBien.length > 0) {
+            $.ajax({
+                url: "{{ route('verifie.numero') }}",
+                type: "GET",
+                data: { numero_bien: numeroBien },
+                success: function (response) {
+                    if (response.exists) {
+                        $("#numero_bien").removeClass("is-invalid").addClass("is-valid");
+                        $("#numero_bien_feedback").text("Numéro valide").removeClass("invalid-feedback").addClass("valid-feedback").show();
+                    } else {
+                        $("#numero_bien").removeClass("is-valid").addClass("is-invalid");
+                        $("#numero_bien_feedback").text("Numéro introuvable").removeClass("valid-feedback").addClass("invalid-feedback").show();
+                    }
+                }
+            });
+        } else {
+            $("#numero_bien").removeClass("is-valid is-invalid");
+            $("#numero_bien_feedback").text("").hide();
+        }
+    });
+});
+
 
 </script>
 @endsection

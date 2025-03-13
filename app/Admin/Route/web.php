@@ -167,8 +167,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/imposition/{type}/{id}', [ImpotsController::class, 'imposition'])->name('impot.imposition');
         Route::post('/imposer/{type}/{id}', [ImpotsController::class, 'imposer'])->name('impot.imposer');
         Route::get('/impots/search', [ImpotsController::class, 'search'])->name('impots.search');
-
-
+        Route::post('/recherche',[ImpotsController::class,'chercherBien'])->name('rechercher_bien');
     });
 
     //Les routes pour paramètre

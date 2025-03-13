@@ -96,7 +96,7 @@
                                             <tr>
                                                 <td class="text-center" colspan="4">Total</td>
                                                 <td class="text-center" colspan="1"></td>
-                                                <td class="text-center" colspan="3"></td>
+                                                <td class="text-center" colspan="3">{{$ValeurLocative." GNF"}}</td>
                                             </tr>
                                         </tfoot>
                                     </table>

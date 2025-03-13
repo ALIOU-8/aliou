@@ -7,6 +7,7 @@ use App\Models\Annee;
 use App\Models\Fonction;
 use App\Models\TypeBien;
 use App\Models\TypeImpot;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -249,14 +250,13 @@ class ParametreController extends Controller
 
     public function annee_store(Request $request)
     {
-
-        $request->validate(
-            [
-                "annee" =>"required|unique:annees|max:4",
-                'date_debut'=>'required',
-                'date_fin'=>'required',
-            ]
-        );
+        $anneeActuelle = Carbon::now()->year; // Récupère l'année actuelle (ex : 2025) 
+        ////'annee' => "required|integer|min:2025|max:$anneeActuelle",
+        $request->validate([
+            'annee' => "required|integer|min:2025",
+            'date_debut' => 'required|date',
+            'date_fin' => 'required|date|after_or_equal:date_debut',
+        ]);
          // Désactiver toutes les autres années
         Annee::query()->update(['active' => 0]);
         if($request->date_debut > $request->date_fin )
