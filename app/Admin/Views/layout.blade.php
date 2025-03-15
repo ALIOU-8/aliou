@@ -61,6 +61,11 @@
                 </a>
             </li>
             <li>
+                <a href="{{route('paiement.liste')}}" class="{{ Route::is('paiement.*') ? 'active' : '' }}">
+                    <i class="bx bxs-wallet icon"></i>Gestion Paiements
+                </a>
+            </li>
+            <li>
                 <a href="{{route('parametre.index')}}" class="{{ Route::is('parametre.*') ? 'active' : '' }}">
                     <i class="bx bxs-cog icon"></i>Paramètre
                 </a>

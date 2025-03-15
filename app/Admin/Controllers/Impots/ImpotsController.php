@@ -18,9 +18,6 @@ class ImpotsController extends Controller
     public function index () {
         $anneeActive=Annee::where('active',1)->first();
         $impot = Impot::orderBy('id','desc')->where('annee_id',$anneeActive->id)->paginate(10);
-
-
-        
         return view('Admin::Impots.Liste',compact('impot'));
     }
 
@@ -148,6 +145,7 @@ class ImpotsController extends Controller
 
         $request->validate([
             'montant' => 'required|numeric|min:4',
+            'num_quitance' => 'required|numeric|min:4|unique:paiements',
         ]);
 
         // Vérifier si l'impôt existe
@@ -173,6 +171,7 @@ class ImpotsController extends Controller
         $payement->user_id = 1;
         $payement->impot_id = $id;
         $payement->montant_payer = $request->montant;
+        $payement->num_quitance = $request->num_quitance;
         $payement->montant_restant = $impot->montant_a_payer - ($totalPaye + $request->montant);
         $payement->save();
 

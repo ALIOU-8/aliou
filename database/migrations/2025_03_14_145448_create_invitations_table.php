@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('paiements', function (Blueprint $table) {
+        Schema::create('invitations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onUpdate('cascade');
-            $table->foreignId('impot_id')->constrained('impots')->onUpdate('cascade');
-            $table->integer('montant_payer');
-            $table->integer('montant_restant');
-            $table->integer('num_quitance')->unique();
+            $table->string('nom');
+            $table->string('prenom');
+            $table->date('date_rdv');
+            $table->string('motif');
+            $table->string('se_munir');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('paiements');
+        Schema::dropIfExists('invitations');
     }
 };

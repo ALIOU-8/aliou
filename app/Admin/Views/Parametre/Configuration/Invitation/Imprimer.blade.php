@@ -34,13 +34,14 @@
             <div class="col-12">
                 <h4 class="text-center text-uppercase">lettre d'invitation</h4>
                 <p>
-                    Mr/Mme {{$bien->contribuable->nom . ' ' . $bien->contribuable->prenom}}  
+                    Mr/Mme {{$invitation->nom . ' ' . $invitation->prenom}}  ..........................................................................................................................................
                     <br>
-                    est prié de se présenter à la direction préfectorale des impots de Mamou sise en face de la station Total de poudrière le ......./...../....... à partir de 10 heures précises.
                     <br>
-                    Motif ......................................................................................................................................................................................
+                    est prié de se présenter à la direction préfectorale des impots de Mamou sise en face de la station Total de poudrière le {{$invitation->date_rdv}} à partir de 10 heures précises.
                     <br>
-                    Se munir ......................................................................................................................................................................................
+                    Motif : {{$invitation->motif}} ..........................................................................................................................................
+                    <br>
+                    Se munir : {{$invitation->se_munir}}  ..........................................................................................................................................
                     <br>
                     Veuillez recevoir, Mr/Mme, l'expression de mes sentiments distingués.
                 </p>
@@ -52,6 +53,8 @@
             <div class="col-4 offset-8">
                 <h6 class="text-center">Mamou, le 17 Février 2025</h6>
                 <h6 class="text-center">Le Directeur</h6>
+                <br>
+                <br>
                 <h6 class="text-center">LOUA Fassou</h6>
             </div>    
         </div>

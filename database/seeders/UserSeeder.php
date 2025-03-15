@@ -23,6 +23,7 @@ class UserSeeder extends Seeder
                 "prenom"=>"admin",
                 "password"=>bcrypt("1234"),
                 "droit"=>"admin",
+                "email"=>"sanoismael51@gmail.com",
                 "statut"=>0
             ]
         );
