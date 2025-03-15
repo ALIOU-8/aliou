@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 class TPUController extends Controller
 {
     public function index () {
-        $anneeActive=Annee::where('active',1)->first();
+        $anneeActive=Annee::where('active',1)->firstOrFail();
         $recencement_tpu=Recensement_tpu::where('annee_id',$anneeActive->id)->orderBy('id','desc')->get();
         return view('Admin::TPU.Liste',compact('recencement_tpu'));
     }

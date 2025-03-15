@@ -30,6 +30,7 @@ return new class extends Migration
             $table->integer('penalite');
             $table->string('droit_fixe');
             $table->string('droit_proportionnel');
+            $table->string('numero')->unique();
             $table->timestamps();
         });
     }

@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('annees', function (Blueprint $table) {
+        Schema::create('invitations', function (Blueprint $table) {
             $table->id();
-            $table->string('annee')->unique();
-            $table->date('Date_debut');
-            $table->date('Date_fin');
-            $table->boolean('active')->default(0); 
+            $table->string('nom');
+            $table->string('prenom');
+            $table->date('date_rdv');
+            $table->string('motif');
+            $table->string('se_munir');
             $table->timestamps();
-           
-            
         });
     }
 
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('annees');
+        Schema::dropIfExists('invitations');
     }
 };

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('impot_id')->constrained('impots')->onUpdate('cascade');
             $table->integer('montant_payer');
             $table->integer('montant_restant');
+            $table->integer('num_quitance')->unique();
             $table->timestamps();
         });
     }

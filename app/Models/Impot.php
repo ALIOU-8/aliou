@@ -28,4 +28,9 @@ class Impot extends Model
     {
         return $this->belongsTo(Annee::class);
     }
+
+    public function paiement()
+    {
+        return $this->hasMany(Paiement::class);
+    }
 }

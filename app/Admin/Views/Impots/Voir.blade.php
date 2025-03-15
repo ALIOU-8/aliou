@@ -18,6 +18,7 @@
                             <div class="h4 mb-2 text-center text-success"> Avis d'imposition </div>
                             <a href="" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
                         </div>
+                        <div class="h6 text-uppercase">Numero:<span class="text-success">{{ $impot->numero }}</span></div>
                         <div class="h6 mb-3 text-center">Impots établis au profit de l'Etat</div>
                         <div class="row">
                             <div class="col-md-4 d-flex flex-column align-items-center gap-1">
@@ -50,21 +51,39 @@
                                 <div class="table-responsive">
                                     <table class="table table-bordered">
                                         <thead>
+                                            @if($impot->type_impot!='patente')
                                             <th>Nature d'impôt</th>
                                             <th>Base d'imposition</th>
                                             <th>Impôt Brut</th>
                                             <th>Imposition antérieure</th>
                                             <th>Pénalités</th>
                                             <th>Impot à payer</th>
+                                            @endif
+                                            @if($impot->type_impot=='patente')
+                                            <th>Nature d'impôt</th>
+                                            <th>Droit fixe</th>
+                                            <th>Droit proportionnel</th>
+                                            <th>Pénalités</th>
+                                            <th>Impot à payer</th>
+                                            @endif
                                         </thead>
                                         <tbody>
                                             <tr>
+                                                @if($impot->type_impot!='patente')
                                                 <td class="text-uppercase">{{$impot->type_impot}}</td>
                                                 <td>{{$impot->base_imposition}}</td>
                                                 <td>{{$impot->montant_brute}}</td>
                                                 <td>{{$impot->imposition_anterieur}}</td>
                                                 <td>{{$impot->penalite}}</td>
                                                 <td>{{$impot->montant_a_payer}}</td>
+                                                @endif
+                                                @if($impot->type_impot=='patente')
+                                                <td class="text-uppercase">{{$impot->type_impot}}</td>
+                                                <td>{{$impot->droit_fixe}}</td>
+                                                <td>{{$impot->droit_proportionnel}}</td>
+                                                <td>{{$impot->penalite}}</td>
+                                                <td>{{$impot->montant_a_payer}}</td>
+                                                @endif
                                             </tr>
                                         </tbody>
                                         <tfoot>

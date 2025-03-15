@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 class PatenteController extends Controller
 {
     public function index () {
-        $anneeActive=Annee::where('active',1)->first();
+        $anneeActive=Annee::where('active',1)->firstOrFail();
         $recencement_patente=Recensement_patente::where('annee_id',$anneeActive->id)->orderBy('id','desc')->get();
         return view('Admin::Patente.Liste',compact('recencement_patente'));
     }

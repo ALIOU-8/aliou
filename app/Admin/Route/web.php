@@ -13,6 +13,8 @@ use App\Admin\Controllers\Personnels\PersonnelsController;
 use App\Admin\Controllers\Profil\ProfilController;
 use App\Admin\Controllers\TPU\TPUController;
 use App\Auth\Controllers\AuthController;
+use App\Admin\Controllers\Paiement\PaiementController;
+use App\Admin\Controllers\Invitation\InvitationController;
 use App\Models\Annee;
 use App\Models\Bien;
 use App\Models\Contribuable;
@@ -172,6 +174,13 @@ use Illuminate\Support\Facades\Route;
         Route::post('/recherche',[ImpotsController::class,'chercherBien'])->name('rechercher_bien');
     });
 
+
+    //Les routes pour la gestion paiement
+    Route::prefix('paiement')->group(function () {
+        Route::get('/', [PaiementController::class, 'index'])->name('paiement.liste');
+        Route::post('/recherche-numero',[PaiementController::class,'chercheNumero'])->name('impots.numero');
+    });
+
     //Les routes pour paramètre
     Route::prefix('parametre')->group(function () {
         Route::get('/', [ParametreController::class, 'index'])->name('parametre.index');
@@ -202,8 +211,12 @@ use Illuminate\Support\Facades\Route;
         
         
         // Invitation
-        Route::get('/configuration/invitation', [ParametreController::class, 'invitation'])->name('parametre.configuration.invitation');
-        Route::get('/configuration/invitation/imprimer/{id}', [ParametreController::class, 'imprimer_invitation'])->name('parametre.configuration.imprimer');
+        Route::get('/configuration/invitation', [InvitationController::class, 'invitation'])->name('parametre.configuration.invitation');
+        Route::get('/configuration/invitation/ajout', [InvitationController::class, 'ajout'])->name('parametre.configuration.invitation.ajout');
+        Route::post('/configuration/invitation/ajout', [InvitationController::class, 'store'])->name('parametre.configuration.invitation.store');
+        Route::get('/configuration/invitation/modif/{id}', [InvitationController::class, 'modif'])->name('parametre.configuration.invitation.modif');
+        Route::put('/configuration/invitation/modif/{id}', [InvitationController::class, 'update'])->name('parametre.configuration.invitation.update');
+        Route::get('/configuration/invitation/imprimer/{id}', [InvitationController::class, 'imprimer_invitation'])->name('parametre.configuration.imprimer');
         
         
         // Fonction 

@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 class CFUController extends Controller
 {
     public function index () {
-        $anneeActive=Annee::where('active',1)->first();
+        $anneeActive=Annee::where('active',1)->firstOrFail();
         $recencement_cfu=Recensement_cfu::where('annee_id',$anneeActive->id)->orderBy('id','desc')->get();
         return view('Admin::CFU.Liste',compact('anneeActive','recencement_cfu'));
     }

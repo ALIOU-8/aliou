@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 class LicenceController extends Controller
 {
     public function index () {
-        $anneeActive=Annee::where('active',1)->first();
+        $anneeActive=Annee::where('active',1)->firstOrFail();
         $recencement_licence=Recensement_licence::where('annee_id',$anneeActive->id)->orderBy('id','desc')->get();
         return view('Admin::Licence.Liste',compact('recencement_licence'));
     }

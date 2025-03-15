@@ -23,6 +23,7 @@ class UserSeeder extends Seeder
                 "prenom"=>"admin",
                 "password"=>bcrypt("1234"),
                 "droit"=>"admin",
+                "email"=>"sanoismael51@gmail.com",
                 "statut"=>0
             ]
         );
@@ -41,6 +42,14 @@ class UserSeeder extends Seeder
                 "fonction_id"=>1,
                 "hierachie"=>"A1",
                 "delete"=>0,
+            ]
+        );
+        Annee::create(
+            [
+            'annee' => '2025',
+            'Date_debut' => '2025-01-01',  // Date en dur
+            'Date_fin' => '2025-12-31',    // Date en dur
+            'active' => 1,
             ]
         );
     }

@@ -32,6 +32,13 @@
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
+                                <div class="col-md-6">
+                                    <label for="num_quitance">Numéro de quitance </label>
+                                    <input type="text" name="num_quitance"  class="form-control">
+                                    @error('num_quitance')
+                                    <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
                                 <div class="col-md-6 mt-4">
                                     <button class="btn btn-outline-success w-100 d-flex align-items-center justify-content-center gap-2">Payer <i class="bx bx-money"></i></button>
                                 </div>
@@ -50,6 +57,7 @@
                                             <th>Montant Total</th>
                                             <th>Montant Payer</th>
                                             <th>Montant Restant</th>
+                                            <th>N° de quitance</th>
                                             {{-- <th>Personnel</th> --}}
                                             <th>Actions</th>
                                         </tr>
@@ -62,6 +70,7 @@
                                             <td>{{$impot->montant_a_payer}}</td>
                                             <td>{{$item->montant_payer}}</td>
                                             <td>{{$item->montant_restant}}</td>
+                                            <td>{{$item->num_quitance}}</td>
                                             {{-- <td>Sano Ismael</td> --}}
                                             <td class="d-flex justify-content-center gap-2">
                                                 <a href="{{route('impot.recu',$item->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Réçu<i class="bx bx-money"></i></a>

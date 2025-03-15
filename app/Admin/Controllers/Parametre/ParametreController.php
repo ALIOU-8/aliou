@@ -154,20 +154,6 @@ class ParametreController extends Controller
         return view('Admin::Parametre.Configuration.Fonction.Corbeille',compact('contribuables'));
     }
 
-    
-    // Invitation 
-    public function invitation () {
-        $bien=Bien::where('delete',0)->orderBy('id','desc')->get();
-        // return $bien;
-        return view('Admin::Parametre.Configuration.Invitation.Index', compact('bien'));
-    }
-
-    public function imprimer_invitation (string $id) {
-        $bien=Bien::where('id',$id)->with('contribuable')->first();
-
-        return view('Admin::Parametre.Configuration.Invitation.Imprimer', compact('bien'));
-    }
-
     // Annee 
     
     public function annee () {

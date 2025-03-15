@@ -16,11 +16,8 @@ use Illuminate\Http\Request;
 class ImpotsController extends Controller
 {
     public function index () {
-        $anneeActive=Annee::where('active',1)->first();
+        $anneeActive=Annee::where('active',1)->firstOrFail();
         $impot = Impot::orderBy('id','desc')->where('annee_id',$anneeActive->id)->paginate(10);
-
-
-        
         return view('Admin::Impots.Liste',compact('impot'));
     }
 
@@ -148,6 +145,7 @@ class ImpotsController extends Controller
 
         $request->validate([
             'montant' => 'required|numeric|min:4',
+            'num_quitance' => 'required|numeric|min:4|unique:paiements',
         ]);
 
         // Vérifier si l'impôt existe
@@ -173,6 +171,7 @@ class ImpotsController extends Controller
         $payement->user_id = 1;
         $payement->impot_id = $id;
         $payement->montant_payer = $request->montant;
+        $payement->num_quitance = $request->num_quitance;
         $payement->montant_restant = $impot->montant_a_payer - ($totalPaye + $request->montant);
         $payement->save();
 
@@ -261,16 +260,26 @@ class ImpotsController extends Controller
     }
 
     public function imposer (string $type, string $id, Request $request) {
+       if($type=="patente")
+       {
         $request->validate([
             'montant_brute'=>'required',
             'montant_a_payer'=>'required',
             'date_limite'=>'required',
             'base_imposition'=>'required',
             'imposition_anterieur'=>'required',
-            'penalite'=>'required',
             'droit_fixe'=>'required',
             'droit_proportionnel'=>'required',
         ]);
+       }else{
+        $request->validate([
+            'montant_brute'=>'required',
+            'montant_a_payer'=>'required',
+            'date_limite'=>'required',
+            'base_imposition'=>'required',
+            'imposition_anterieur'=>'required',
+        ]);
+       }
         $anneeActive = Annee::where('active', 1)->first();
 
         if ($anneeActive) {
@@ -320,6 +329,8 @@ class ImpotsController extends Controller
             $impot->droit_fixe = $request->droit_fixe;
             $impot->droit_proportionnel = $request->droit_proportionnel;
             $impot->article = $article;
+            $numeroUnique = substr(time(), -5) . mt_rand(0, 9); // Extrait les 5 derniers chiffres du time() + un chiffre aléatoire
+            $impot->numero =$numeroUnique;
             $impot->role = $role;
             if ($type == 'cfu'){
                 $impot->recensement_cfu_id = $id;
@@ -339,7 +350,6 @@ class ImpotsController extends Controller
             return to_route('impot.liste');
         }
     }
-
     public function search(Request $request)
     {
     $query = $request->input('query');
