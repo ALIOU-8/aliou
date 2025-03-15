@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Paiement extends Model
 {
     use HasFactory;
+    public function impot()
+    {
+        return $this->belongsTo(Impot::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

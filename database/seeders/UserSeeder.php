@@ -32,16 +32,6 @@ class UserSeeder extends Seeder
                 "libelle"=>"Directeur",
             ]
         );
-
-        Annee::create(
-            [
-                "annee"=> 2025,
-                "Date_debut"=> 01/01/2025,
-                "Date_fin"=> 31/12/2025,
-                "active"=> 1,
-            ]
-        );
-
         Personnel::create(
             [
                 "matricule"=>"220413",
