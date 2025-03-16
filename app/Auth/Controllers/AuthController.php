@@ -32,7 +32,9 @@ class AuthController extends Controller
             'nom'=>'required',
             'prenom'=>'required',
             'droit'=>'required',
-            'password'=>'required|min:6|confirmed'
+            'password'=>'required|min:6|confirmed',
+            'telephone'=>'required|unique:users|min:9',
+            'email' => 'required|email|unique:users,email'
         ]);
         $user = new User();
         $matricule = Personnel::where('matricule',$request->matricule)->first();
@@ -44,6 +46,8 @@ class AuthController extends Controller
         $user->nom = $request->nom;
         $user->prenom = $request->prenom;
         $user->droit = $request->droit;
+        $user->email = $request->email;
+        $user->telephone = $request->telephone;
         $user->password =  bcrypt($request->password);
         $user->save();
         toastr()->success("Utilisateur ajouté avec succès !");
@@ -65,7 +69,15 @@ class AuthController extends Controller
             'nom'=>'required',
             'prenom'=>'required',
             'droit'=>'required',
-            'password'=>'required|min:6|confirmed'
+            'password'=>'required|min:6|confirmed',
+            'email'=>[
+                'required|email',
+                Rule::unique('users')->ignore($id)
+            ],
+            'telephone'=>[
+                'required|telephone',
+                Rule::unique('users')->ignore($id)
+            ]
         ]);
         $user = User::where('id',$id)->first();
         $matricule = Personnel::where('matricule',$request->matricule)->first();
@@ -77,6 +89,8 @@ class AuthController extends Controller
         $user->nom = $request->nom;
         $user->prenom = $request->prenom;
         $user->droit = $request->droit;
+        $user->email = $request->email;
+        $user->telephone = $request->telephone;
         $user->password =  bcrypt($request->password);
         $user->update();
         toastr()->success("Utilisateur modifié avec succès !");

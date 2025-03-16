@@ -24,6 +24,7 @@ class UserSeeder extends Seeder
                 "password"=>bcrypt("1234"),
                 "droit"=>"admin",
                 "email"=>"sanoismael51@gmail.com",
+                "telephone"=> 628013477,
                 "statut"=>0
             ]
         );

@@ -24,20 +24,38 @@
                             <a href="" class="btn btn-outline-success">Supprimer profil</a>
                         </div>
                         <hr>
-                        <form action="">
+                        <form action="{{route('profil.modif',$user->id)}}" method="POST">
+                            @csrf
+                            @method('put')
                             <div class="text-center h5">Informations Professionnelles</div>
                             <div class="row mt-4">
                                 <div class="col-6 mb-3">
                                     <label for="nom">Nom</label>
                                     <input type="text" name="nom" value="{{$user->nom}}" id="nom" class="form-control">
+                                    @error('nom')
+                                    <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="col-6 mb-3">
                                     <label for="prenom">Prénom</label>
                                     <input type="text" name="prenom" value="{{$user->prenom}}" id="prenom" class="form-control">
+                                    @error('prenom')
+                                    <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
-                                <div class="col-6 mb-3">
-                                    <label for="matricule">Matricule</label>
-                                    <input type="text" name="matricule" value="{{$user->matricule}}" disabled class="form-control">
+                                <div class="col-6">
+                                    <label for="email">Email</label>
+                                    <input type="text" name="email" value="{{$user->email}}" id="email" class="form-control">
+                                    @error('email')
+                                    <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="col-6">
+                                    <label for="telephone">Téléphone</label>
+                                    <input type="text" name="telephone" value="{{$user->telephone}}" id="telephone" class="form-control">
+                                    @error('telephone')
+                                    <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="col-6 mb-3 mt-4">
                                     <button class="btn btn-outline-success">Modifier</button>
@@ -45,20 +63,31 @@
                             </div>
                         </form>
                         <hr>
-                        <form action="">
+                        <form action="{{route('profil.modif.mdp',$user->id)}}" method="POST">
+                            @csrf
+                            @method('put')
                             <div class="text-center h5">Informations Personnelles</div>
                             <div class="row mt-4">
                                 <div class="col-6 mb-3">
-                                    <label for="oldpassword">Ancien mot de passe</label>
-                                    <input type="password" name="oldpassword" id="oldpassword" class="form-control">
+                                    <label for="old_password">Ancien mot de passe</label>
+                                    <input type="password" name="old_password" id="old_password" class="form-control">
+                                    @error('old_password')
+                                    <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="col-6 mb-3">
                                     <label for="password">Nouveau mot de passe</label>
                                     <input type="password" name="password" id="password" class="form-control">
+                                    @error('password')
+                                    <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="col-6 mb-3">
-                                    <label for="confirmation_password">Confirmez mot de passe</label>
-                                    <input type="password" name="confirmation_password" id="confirmation_password" class="form-control">
+                                    <label for="password_confirmation">Confirmez mot de passe</label>
+                                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control">
+                                    @error('password_confirmation')
+                                    <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="col-6 mb-3 mt-4">
                                     <button class="btn btn-outline-success">Modifier</button>

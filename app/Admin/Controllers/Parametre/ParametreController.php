@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Annee;
 use App\Models\Bien;
 use App\Models\Fonction;
+use App\Models\Impot;
 use App\Models\TypeBien;
 use App\Models\TypeImpot;
 use Carbon\Carbon;
@@ -21,7 +22,9 @@ class ParametreController extends Controller
 
     // Configuration 
     public function configuration(){
-        return view('Admin::Parametre.Configuration.Index');
+        $anneeActive=Annee::where('active',1)->firstOrFail();
+        $impot = Impot::orderBy('id','desc')->where('annee_id',$anneeActive->id)->with('paiement')->get();
+        return view('Admin::Parametre.Configuration.Index',compact('impot'));
     }
   
     // typeBiens 

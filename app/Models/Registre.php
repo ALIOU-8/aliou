@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Paiement extends Model
+class Registre extends Model
 {
     use HasFactory;
-    public function impot()    {
+    public function impot()
+    {
         return $this->belongsTo(Impot::class);
     }
-
 }

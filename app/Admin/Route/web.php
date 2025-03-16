@@ -34,6 +34,8 @@ use Illuminate\Support\Facades\Route;
 
     //Les routes pour le profil
     Route::get('/profil',[ProfilController::class, 'index'])->name('profil');
+    Route::put('/profil/{id}',[ProfilController::class, 'modif'])->name('profil.modif');
+    Route::put('/mdpUpdate/{id}',[ProfilController::class, 'mdp_update'])->name('profil.modif.mdp');
 
 
     //Les routes pour les contribuales

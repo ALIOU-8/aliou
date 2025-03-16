@@ -80,32 +80,28 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td colspan="10"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td colspan="10"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td colspan="10"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td colspan="10"></td>
-                                        </tr>
+                                        @foreach ($impot as $key => $item)
+                                        @php
+                                            $type = $item->type_impot;
+                                            $recensement = "recensement_{$type}";
+                                        @endphp
+                                        @if(isset($item->$recensement))
+                                            <tr>
+                                                <td>{{ $key + 1 }}</td>
+                                                <td>{{$item->role}}</td>
+                                                <td>{{$item->article}}</td>
+                                                <td>{{ $item->$recensement->bien->contribuable->nom . ' ' . $item->$recensement->bien->contribuable->prenom }}</td>
+                                                <td>{{$item->annee->annee}}</td>
+                                                <td>{{ $item->$recensement->bien->adresse }}</td>
+                                                <td></td>
+                                                <td>{{ $item->penalite }}</td>
+                                                <td>{{ $item->montant_a_payer }}</td>
+                                                <td>{{ $item->numero }}</td>
+                                                <td></td>
+                                            </tr>
+                                        @endif
+                                        @endforeach
                                     </tbody>
-                                    {{-- <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Sano Ismael</td>
-                                            <td>10/02/2025 à 12h:30min</td>
-                                            <td>Contribuables</td>
-                                            <td>Ajout</td>
-                                        </tr>
-                                    </tbody> --}}
                                 </table>
                             </div>
                         </div>  

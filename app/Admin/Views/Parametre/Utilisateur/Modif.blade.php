@@ -43,6 +43,20 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
+                                    <label class="form-label" for="email">Email</label>
+                                    <input class="form-control" type="mail" name="email" value="{{$user->email}}">
+                                    @error('email')
+                                    <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label" for="telephone">Téléphone</label>
+                                    <input class="form-control" type="text" name="telephone" value="{{$user->telephone}}">
+                                    @error('telephone')
+                                    <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6 mb-3">
                                     <label class="form-label" for="droit">Droit</label>
                                     <select name="droit" class="form-control" id="">
                                         <option  selected value="{{$user->droit}}">{{$user->droit }}</option>

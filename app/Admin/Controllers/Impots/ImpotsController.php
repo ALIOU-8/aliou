@@ -268,8 +268,6 @@ class ImpotsController extends Controller
             'date_limite'=>'required',
             'base_imposition'=>'required',
             'imposition_anterieur'=>'required',
-            'droit_fixe'=>'required',
-            'droit_proportionnel'=>'required',
         ]);
        }else{
         $request->validate([

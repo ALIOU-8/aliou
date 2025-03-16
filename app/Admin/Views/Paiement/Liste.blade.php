@@ -41,15 +41,9 @@
                                                     <button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">Imposer<i class="bx bx-money"></i><i class="bx bx-check"></i></button>
                                                 </form>
                                             </div>
-                                            <div class="modal-footer">
-                                                {{-- <a href="{{route('impot.imposition',1)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Imposer<i class="bx bx-money"></i></a> --}}
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-2">
-                                <a href="" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
                             </div>
                             <div class="col-md-4 ms-auto">
                                 <input type="text" placeholder="Rechercher..." class="form-control border border-success m-3" id="searchImpots" onkeyup="fetchImpots()">
@@ -73,22 +67,31 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($paiement as $key=> $item)
-                                        <tr>
-                                            <td>{{$key+1}}</td>
-                                            {{-- <td>{{$item->impot->recensement_licence->bien->contribuable->nom}}</td>
-                                            <td>{{$item->impot->recensement_licence->bien->contribuable->prenom}}</td> --}}
-                                            {{-- <td> {{$item->created_at}} </td>
-                                            <td>{{$item->impot->montant_a_payer}}</td>
-                                            <td>{{$item->montant_payer}}</td>
-                                            <td>{{$item->montant_restant}}</td> --}}
-                                            <td>{{$item->num_quitance}}</td>
-                                            {{-- <td>Sano Ismael</td> --}}
-                                            {{-- <td class="d-flex justify-content-center gap-2">
-                                                <a href="{{route('impot.payer',$item->impot->recensement_licence->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Détail<i class="bx bx-edit"></i></a>
-                                            </td> --}}
-                                        </tr>
-                                        @endforeach
+                                        @foreach ($paiement as $key => $item)
+                                        @php
+                                            $type = $item->impot->type_impot;
+                                            $recensement = "recensement_{$type}";
+                                        @endphp
+
+                                        @if(isset($item->impot->$recensement))
+                                            <tr>
+                                                <td>{{ $key + 1 }}</td>
+                                                <td>{{ $item->impot->$recensement->bien->contribuable->nom }}</td>
+                                                <td>{{ $item->impot->$recensement->bien->contribuable->prenom }}</td>
+                                                <td>{{ $item->created_at }}</td> 
+                                                <td>{{ $item->impot->montant_a_payer }}</td>
+                                                <td>{{ $item->montant_payer }}</td>
+                                                <td>{{ $item->montant_restant }}</td> 
+                                                <td>{{ $item->num_quitance }}</td>
+                                                <td class="d-flex justify-content-center gap-2">
+                                                    <a href="{{ route('impot.payer', $item->impot->$recensement->id) }}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">
+                                                        Détail<i class="bx bx-edit"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+
                                         @if(count($paiement) == 0)
                                         <tr>
                                             <td colspan="8" class="text-center">Aucun paiement trouvé</td>

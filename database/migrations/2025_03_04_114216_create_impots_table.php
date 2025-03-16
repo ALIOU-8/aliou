@@ -28,8 +28,8 @@ return new class extends Migration
             $table->integer('base_imposition');
             $table->integer('imposition_anterieur');
             $table->integer('penalite');
-            $table->string('droit_fixe');
-            $table->string('droit_proportionnel');
+            $table->string('droit_fixe')->nullable();
+            $table->string('droit_proportionnel')->nullable();
             $table->string('numero')->unique();
             $table->timestamps();
         });

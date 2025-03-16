@@ -30,6 +30,8 @@
                                         <th>Matricule</th>
                                         <th>Nom</th>
                                         <th>Prénom</th>
+                                        <th>Email</th>
+                                        <th>Téléphone</th>
                                         <th>Droit</th>
                                         <th>Statut</th>
                                         <th>Actions</th>
@@ -42,6 +44,8 @@
                                         <td> {{$item->matricule}} </td>
                                         <td> {{$item->nom}} </td>
                                         <td> {{$item->prenom}} </td>
+                                        <td> {{$item->email}} </td>
+                                        <td> {{$item->telephone}} </td>
                                         <td> {{$item->droit}} </td>
                                         <td class="@if($item->statut == 0) text-success @endif @if($item->statut == 1) text-danger @endif"> @if($item->statut == 0) Actif @endif @if($item->statut == 1) Bloqué @endif </td>
                                         <td class="d-flex justify-content-center gap-2">
