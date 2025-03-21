@@ -6,7 +6,7 @@
         <li class="divider">/</li>
         <li><a href="{{route('cfu.liste')}}">CFU</a></li>
         <li class="divider">/</li>
-        <li><a href="{{route('cfu.occupant.liste',$cfu->id)}}">Occupant</a></li>
+        <li><a href="{{route('cfu.occupant.liste',$cfu->uuid)}}">Occupant</a></li>
         <li class="divider">/</li>
         <li><a href="" class="active">Ajout Occupant</a></li>
     </ul>
@@ -17,7 +17,7 @@
                     <div class="card-body">
                         <div class="h5 mb-2 text-center text-success"> Ajout d'un occupant pour le bâtiment " {{$nombatiment->libelle}} "</div>
                         <div class="h6 mb-3 text-success">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab mollitia ratione quaerat natus rem iusto asperiores facilis libero est doloremque velit, suscipit repellendus cupiditate illo dolor perspiciatis labore reiciendis vitae?</div>
-                        <form action="{{route('cfu.occupant.store',$cfu->id)}}" class="form">
+                        <form action="{{route('cfu.occupant.store',$cfu->uuid)}}" class="form">
                             @csrf
                             <div class="row">                               
                                 <div class="col-md-6 mb-3">

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('paiements', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->foreignId('user_id')->constrained()->onUpdate('cascade');
             $table->foreignId('impot_id')->constrained('impots')->onUpdate('cascade');
             $table->integer('montant_payer');

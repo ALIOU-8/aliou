@@ -66,7 +66,12 @@
                                 <a href="" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
                             </div>
                             <div class="col-md-4 ms-auto">
-                                <input type="text" placeholder="Rechercher..." class="form-control border border-success m-3" id="searchImpots" onkeyup="fetchImpots()">
+                                <form method="GET" action="{{ route('impots.recherche') }}">
+                                    <div class="input-group mb-3">
+                                        <input type="text" name="search" class="form-control border border-success" placeholder="Rechercher..." value="{{ request('search') }}">
+                                        <button class="btn btn-success" type="submit">Rechercher</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -114,13 +119,17 @@
                                         <td> {{$item->date_limite}} </td>
                                         <td class="@if($item->statut == "nonPayé") text-danger @endif @if($item->statut == "Payé") text-success @endif @if($item->statut == "Encours") text-warning @endif"> {{$item->statut}} </td>
                                         <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('impot.voir',['type' => $item->type_impot, 'id' => $item->id])}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
-                                            <a href="{{route('impot.payer',$item->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Payer<i class="bx bx-money"></i></a>
-                                            <a href="{{route('impot.modif',$item->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
+                                            <a href="{{route('impot.voir',['type' => $item->type_impot, 'uuid' => $item->uuid])}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
+                                            <a href="{{route('impot.payer',$item->uuid)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Payer<i class="bx bx-money"></i></a>
+                                            <a href="{{route('impot.modif',$item->uuid)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
                                         </td>
                                     </tr>
                                     @endforeach
-                                    
+                                    @if(count($impot) == 0)
+                                    <tr>
+                                        <td colspan="6" class="text-center">Aucun Impôt trouvé</td>
+                                     </tr>
+                                    @endif
                                 </tbody>
                             </table>
                             <div class="d-flex justify-content-center mt-3">
@@ -136,62 +145,6 @@
 </main>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    function fetchImpots() {
-    let query = document.getElementById("searchImpots").value;
-
-    fetch("{{ route('impots.search') }}?query=" + query)
-        .then(response => response.json())
-        .then(data => {
-            let tbody = document.querySelector("#impotTable tbody");
-            tbody.innerHTML = "";
-
-            if (data.length > 0) {
-                data.forEach((impot, index) => {
-                    let row = `
-            <tr>
-                <td>${index + 1}</td>
-                <td>${impot.role}</td>
-                <td>${impot.article}</td>
-                <td class="text-uppercase">${impot.type_impot}</td>
-                <td>
-                    ${
-                        impot.type_impot === 'patente' ? (impot.recensement_patente ? impot.recensement_patente.bien.contribuable.nom + ' ' + impot.recensement_patente.bien.contribuable.prenom : 'N/A') :
-                        impot.type_impot === 'licence' ? (impot.recensement_licence ? impot.recensement_licence.bien.contribuable.nom + ' ' + impot.recensement_licence.bien.contribuable.prenom : 'N/A') :
-                        impot.type_impot === 'cfu' ? (impot.recensement_cfu ? impot.recensement_cfu.bien.contribuable.nom + ' ' + impot.recensement_cfu.bien.contribuable.prenom : 'N/A') :
-                        impot.type_impot === 'tpu' ? (impot.recensement_tpu ? impot.recensement_tpu.bien.contribuable.nom + ' ' + impot.recensement_tpu.bien.contribuable.prenom : 'N/A') :
-                        'N/A'
-                    }
-                </td>
-                <td>
-                    ${
-                        impot.type_impot === 'patente' ? (impot.recensement_patente ? impot.recensement_patente.bien.contribuable.telephone : 'N/A') :
-                        impot.type_impot === 'licence' ? (impot.recensement_licence ? impot.recensement_licence.bien.contribuable.telephone : 'N/A') :
-                        impot.type_impot === 'cfu' ? (impot.recensement_cfu ? impot.recensement_cfu.bien.contribuable.telephone : 'N/A') :
-                        impot.type_impot === 'tpu' ? (impot.recensement_tpu ? impot.recensement_tpu.bien.contribuable.telephone : 'N/A') :
-                        'N/A'
-                    }
-                </td>
-                <td>${impot.montant_a_payer}</td>
-                <td>${impot.annee.annee}</td>
-                <td>${impot.date_limite}</td>
-                <td class="${impot.statut === 'nonPayé' ? 'text-danger' : impot.statut === 'Payé' ? 'text-success' : 'text-warning'}">${impot.statut}</td>
-                <td class="d-flex justify-content-center gap-2">
-                    <a href="/impot/voir/${impot.id}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
-                    <a href="/impot/payer/${impot.id}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Payer<i class="bx bx-money"></i></a>
-                    <a href="/impot/modif/${impot.id}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
-                </td>
-            </tr>
-                    `;
-                    tbody.innerHTML += row;
-                });
-            } else {
-                tbody.innerHTML = `<tr><td colspan="8" class="text-center">Aucun impôt trouvé</td></tr>`;
-            }
-        })
-        .catch(error => console.error('Erreur:', error));
-
-        
-}
 $(document).ready(function () {
     $("#recensementForm").on("submit", function (event) {
         var numeroBien = $("#numero_bien").val();

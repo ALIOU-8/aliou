@@ -20,7 +20,7 @@
                                     <div class="modal-dialog center">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h6 class="modal-title" id="nouveau">Donnez le numéro du bien à imposer</h6>
+                                                <h6 class="modal-title" id="nouveau">Donnez le numero de l'avis d'impôsition</h6>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
@@ -38,7 +38,7 @@
                                                             </div>
                                                         </div>
                                                     </div>                                                        
-                                                    <button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">Imposer<i class="bx bx-money"></i><i class="bx bx-check"></i></button>
+                                                    <button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">payer<i class="bx bx-money"></i><i class="bx bx-check"></i></button>
                                                 </form>
                                             </div>
                                         </div>
@@ -46,7 +46,12 @@
                                 </div>
                             </div>
                             <div class="col-md-4 ms-auto">
-                                <input type="text" placeholder="Rechercher..." class="form-control border border-success m-3" id="searchImpots" onkeyup="fetchImpots()">
+                                <form method="GET" action="{{ route('paiement.recherche') }}">
+                                    <div class="input-group mb-3">
+                                        <input type="text" name="search" class="form-control border border-success" placeholder="Rechercher..." value="{{ request('search') }}">
+                                        <button class="btn btn-success" type="submit">Rechercher</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <div class="historique_de_paiement">
@@ -57,6 +62,7 @@
                                             <th>N°</th>
                                             <th>Nom</th>
                                             <th>Prénom</th>
+                                            <th>téléphone</th>
                                             <th>Date</th>
                                             <th>Montant Total</th>
                                             <th>Montant Payer</th>
@@ -78,6 +84,7 @@
                                                 <td>{{ $key + 1 }}</td>
                                                 <td>{{ $item->impot->$recensement->bien->contribuable->nom }}</td>
                                                 <td>{{ $item->impot->$recensement->bien->contribuable->prenom }}</td>
+                                                <td>{{ $item->impot->$recensement->bien->contribuable->telephone }}</td>
                                                 <td>{{ $item->created_at }}</td> 
                                                 <td>{{ $item->impot->montant_a_payer }}</td>
                                                 <td>{{ $item->montant_payer }}</td>

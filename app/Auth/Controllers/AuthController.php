@@ -17,8 +17,25 @@ class AuthController extends Controller
 
     // Utilisateur 
     public function user(){
-        $Utilisateur = User::get();
+        $Utilisateur = User::paginate(10);
         return view('Admin::Parametre.Utilisateur.Liste',compact('Utilisateur'));
+    }
+
+    public function recherche(Request $request)
+    {
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $Utilisateur=User::where(function ($q) use ($search) {
+                $q->where('matricule', 'LIKE', "%{$search}%")
+                ->orwhere('nom', 'LIKE', "%{$search}%")
+                ->orwhere('prenom', 'LIKE', "%{$search}%")
+                ->orwhere('telephone', 'LIKE', "%{$search}%")
+                ->orwhere('email', 'LIKE', "%{$search}%")
+                ->orwhere('droit', 'LIKE', "%{$search}%")
+                ;
+            })->paginate(10);
+        }
+            return view('Admin::Parametre.Utilisateur.Liste',compact('Utilisateur'));
     }
 
     public function add_user(){
@@ -34,7 +51,7 @@ class AuthController extends Controller
             'droit'=>'required',
             'password'=>'required|min:6|confirmed',
             'telephone'=>'required|unique:users|min:9',
-            'email' => 'required|email|unique:users,email'
+            'email' => 'required|email|unique:users'
         ]);
         $user = new User();
         $matricule = Personnel::where('matricule',$request->matricule)->first();
@@ -54,32 +71,32 @@ class AuthController extends Controller
         return redirect()->route('parametre.user')->with('success','Utilisateur ajouté avec succès');
     }
 
-    public function modif_user(string $id){
+    public function modif_user(string $uuid){
         $droit=['admin','cfu','tpu','licence','patente'];
-        $user = User::where('id',$id)->first();
+        $user = User::where('uuid',$uuid)->first();
         return view('Admin::Parametre.Utilisateur.Modif',compact('user','droit'));
     }
 
-    public function modification(Request $request, string $id){
+    public function modification(Request $request, string $uuid){
         $request->validate([
             'matricule'=>[
                 'required',
-                Rule::unique('users')->ignore($id)
+                Rule::unique('users','matricule')->ignore($uuid,'uuid')
             ],
             'nom'=>'required',
             'prenom'=>'required',
             'droit'=>'required',
             'password'=>'required|min:6|confirmed',
             'email'=>[
-                'required|email',
-                Rule::unique('users')->ignore($id)
+                'required',
+                Rule::unique('users','email')->ignore($uuid,'uuid')
             ],
             'telephone'=>[
-                'required|telephone',
-                Rule::unique('users')->ignore($id)
+                'required',
+                Rule::unique('users','telephone')->ignore($uuid,'uuid')
             ]
         ]);
-        $user = User::where('id',$id)->first();
+        $user = User::where('uuid',$uuid)->first();
         $matricule = Personnel::where('matricule',$request->matricule)->first();
         if($matricule == []){
             toastr()->error("Ce matricule n'appartient à aucun personnel");
@@ -97,8 +114,8 @@ class AuthController extends Controller
         return redirect()->route('parametre.user');
     }
 
-    public function bloquer (string $id){
-        $user = User::where('id',$id)->first();
+    public function bloquer (string $uuid){
+        $user = User::where('uuid',$uuid)->first();
         $message = "";
         if($user->statut == 0) {
             $user->statut = 1;  

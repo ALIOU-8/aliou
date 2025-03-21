@@ -16,20 +16,20 @@ class ProfilController extends Controller
         return view('Admin::Profil.profil',compact('user'));
     }
 
-    public function modif(Request $request, string $id){
+    public function modif(Request $request, string $uuid){
         $request->validate([
             'nom'=>'required',
             'prenom'=>'required',
             'email'=>[
-                'required|email',
-                Rule::unique('users')->ignore($id)
+                'required',
+                Rule::unique('users','email')->ignore($uuid,'uuid')
             ],
             'telephone'=>[
-                'required|telephone',
-                Rule::unique('users')->ignore($id)
+                'required',
+                Rule::unique('users','telephone')->ignore($uuid,'uuid')
             ]           
         ]);
-        $user = User::where('id',$id)->first();
+        $user = User::where('uuid',$uuid)->firstOrFail();
         $user->nom = $request->nom;
         $user->prenom = $request->prenom;
         $user->email = $request->email;
@@ -39,10 +39,10 @@ class ProfilController extends Controller
         return back();
     }
 
-    public function mdp_update (Request $request, string $id) {
+    public function mdp_update (Request $request, string $uuid) {
         //S'assurer que le nouveau mot de passe soit le meme mot de passe de confirmation
         // $idUser = Auth::guard('admin')->user()->id;
-        $user1 = User::where('id',$id)->first();
+        $user1 = User::where('uuid',$uuid)->first();
         $idUser = $user1->id;
         $user =  User::FindOrFail($idUser);
         $request->validate([

@@ -15,7 +15,7 @@
                     <div class="card-body">
                         <div class="h5 mb-2 text-center text-success"> Recensement TPU </div>
                         <div class="h6 mb-3 text-success">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab mollitia ratione quaerat natus rem iusto asperiores facilis libero est doloremque velit, suscipit repellendus cupiditate illo dolor perspiciatis labore reiciendis vitae?</div>
-                        <form action="{{route("tpu.update",$recencement_tpu->id)}}" method="POST" class="form">
+                        <form action="{{route("tpu.update",$recencement_tpu->uuid)}}" method="POST" class="form">
                             @csrf
                             @method('put')
                             <div class="row">

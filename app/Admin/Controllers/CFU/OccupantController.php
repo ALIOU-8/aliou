@@ -11,20 +11,20 @@ use Illuminate\Http\Request;
 class OccupantController extends Controller
 {
     
-    public function index ($id) {
-        $occupant = Occupant::where('recensement_cfu_id',$id)->orderBy('id', 'desc')->where('delete',0)->get();
-        $batiment = Recensement_cfu::where('id',$id)->first();
+    public function index ($uuid) {
+        $batiment = Recensement_cfu::where('uuid',$uuid)->firstOrFail();
+        $occupant = Occupant::where('recensement_cfu_id',$batiment->id)->orderBy('id', 'desc')->where('delete',0)->get();
         $nombatiment = Bien::where('id',$batiment->bien_id)->first();
         return view('Admin::CFU.Occupant.Liste',compact('occupant','nombatiment', 'batiment'));
     }
 
-    public function ajout ($id) {
-        $cfu = Recensement_cfu::where('id',$id)->first();
-        $nombatiment = Bien::where('id',$cfu->bien_id)->first();
+    public function ajout ($uuid) {
+        $cfu = Recensement_cfu::where('uuid',$uuid)->firstOrFail();
+        $nombatiment = Bien::where('id',$cfu->bien_id)->firstOrFail();
         return view('Admin::CFU.Occupant.Ajout',compact('cfu','nombatiment'));
     }
 
-    public function store (Request $request, $id) {
+    public function store (Request $request, $uuid) {
         $request->validate([
             'nom'=>'required',
             'prenom'=>'required',
@@ -36,7 +36,8 @@ class OccupantController extends Controller
             'type_occupant'=>'required',
         ]);
         $occupant = new Occupant();
-        $occupant->recensement_cfu_id = $id;
+        $cfu = Recensement_cfu::where('uuid',$uuid)->firstOrFail();
+        $occupant->recensement_cfu_id = $cfu->id;
         $occupant->nom = $request->nom;
         $occupant->prenom = $request->prenom;
         $occupant->niveau = $request->niveau;
@@ -47,24 +48,24 @@ class OccupantController extends Controller
         $occupant->type_occupant = $request->type_occupant;
         $occupant->save();
         toastr()->success('Occupant ajouté avec succèss');
-        return to_route('cfu.occupant.liste',$id);
+        return to_route('cfu.occupant.liste',$uuid);
     } 
 
-    public function delete($id) {
-        $occupant=Occupant::findOrFAil($id);
+    public function delete($uuid) {
+        $occupant=Occupant::where('uuid',$uuid)->firstOrFail();
         $occupant->delete=1;
         $occupant->update();
         toastr()->success('Occupant supprimé avec Succès');
         return back();
     }
 
-    public function modif ($id) {
-        $occupant = Occupant::where('id',$id)->first();
+    public function modif ($uuid) {
+        $occupant = Occupant::where('uuid',$uuid)->firstOrFail();
         $cfu = Recensement_cfu::where('id',$occupant->recensement_cfu_id)->first();
         return view('Admin::CFU.Occupant.Modif',compact('occupant', 'cfu'));
     }
 
-    public function update (Request $request, $id) {
+    public function update (Request $request, $uuid) {
         $request->validate([
             'nom'=>'required',
             'prenom'=>'required',
@@ -75,8 +76,8 @@ class OccupantController extends Controller
             'observation'=>'required',
             'type_occupant'=>'required',
         ]);
-        $occupant = Occupant::where('id', $id)->first();
-        $id2 = Recensement_cfu::where('id', $occupant->recensement_cfu_id)->first();
+        $occupant = Occupant::where('uuid',$uuid)->firstOrFail();
+        $id2 = Recensement_cfu::where('id', $occupant->recensement_cfu_id)->firstOrFail();
         $occupant->nom = $request->nom;
         $occupant->prenom = $request->prenom;
         $occupant->niveau = $request->niveau;
@@ -87,18 +88,18 @@ class OccupantController extends Controller
         $occupant->type_occupant = $request->type_occupant;
         $occupant->update();
         toastr()->success('Occupant modifié avec succèss');
-        return to_route('cfu.occupant.liste',$id2);
+        return to_route('cfu.occupant.liste',$id2->uuid);
     }
 
-    public function corbeille ($id) {
-        $occupant = Occupant::where('recensement_cfu_id',$id)->orderBy('id', 'desc')->where('delete',1)->get();
-        $batiment = Recensement_cfu::where('id',$id)->first();
+    public function corbeille ($uuid) {
+        $batiment = Recensement_cfu::where('uuid',$uuid)->firstOrFail();
+        $occupant = Occupant::where('recensement_cfu_id',$batiment->id)->orderBy('id', 'desc')->where('delete',1)->get();
         $nombatiment = Bien::where('id',$batiment->bien_id)->first();
         return view('Admin::CFU.Occupant.Corbeille',compact('occupant','nombatiment', 'batiment'));
     }
 
-    public function restaure ($id) {
-        $occupant=Occupant::findOrFAil($id);
+    public function restaure ($uuid) {
+        $occupant=Occupant::where('uuid',$uuid)->firstOrFail();
         $occupant->delete=0;
         $occupant->update();
         toastr()->success('Occupant restauré avec Succès');

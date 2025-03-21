@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('biens', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->foreignId('contribuable_id')->constrained()->onUpdate('cascade');
             $table->foreignId('type_bien_id')->constrained()->onUpdate('cascade');
             $table->string('libelle');

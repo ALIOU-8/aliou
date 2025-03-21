@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Annee;
 use App\Models\Impot;
 use App\Models\Paiement;
-use App\Models\Recensement_patente;
 use Illuminate\Http\Request;
 
 class PaiementController extends Controller
@@ -36,4 +35,59 @@ class PaiementController extends Controller
             return to_route('impot.payer',$impot->id);
         }
     }
+
+    public function recherche(Request $request)
+{
+    $query = Paiement::query();
+
+    if ($request->has('search')) {
+        $search = $request->input('search');
+        $query->where(function ($q) use ($search) {
+            $q->where('montant_payer', 'LIKE', "%{$search}%")
+              ->orWhere('montant_restant', 'LIKE', "%{$search}%")
+              ->orWhere('num_quitance', 'LIKE', "%{$search}%")
+              ->orWhereHas('impot', function ($impotQuery) use ($search) {
+                  $impotQuery->whereHas('recensement_cfu', function ($recensementQuery) use ($search) {
+                      $recensementQuery->whereHas('bien.contribuable', function ($contribuableQuery) use ($search) {
+                          $contribuableQuery->where('nom', 'LIKE', "%{$search}%")
+                                             ->orWhere('prenom', 'LIKE', "%{$search}%")
+                                             ->orWhere('telephone', 'LIKE', "%{$search}%");
+                      });
+                  });
+              })
+              ->orWhereHas('impot', function ($impotQuery) use ($search) {
+                $impotQuery->whereHas('recensement_tpu', function ($recensementQuery) use ($search) {
+                    $recensementQuery->whereHas('bien.contribuable', function ($contribuableQuery) use ($search) {
+                        $contribuableQuery->where('nom', 'LIKE', "%{$search}%")
+                                           ->orWhere('prenom', 'LIKE', "%{$search}%")
+                                           ->orWhere('telephone', 'LIKE', "%{$search}%");
+                                           
+                    });
+                });
+            })
+            ->orWhereHas('impot', function ($impotQuery) use ($search) {
+                $impotQuery->whereHas('recensement_patente', function ($recensementQuery) use ($search) {
+                    $recensementQuery->whereHas('bien.contribuable', function ($contribuableQuery) use ($search) {
+                        $contribuableQuery->where('nom', 'LIKE', "%{$search}%")
+                                           ->orWhere('prenom', 'LIKE', "%{$search}%")
+                                           ->orWhere('telephone', 'LIKE', "%{$search}%");
+                    });
+                });
+            })
+            ->orWhereHas('impot', function ($impotQuery) use ($search) {
+                $impotQuery->whereHas('recensement_licence', function ($recensementQuery) use ($search) {
+                    $recensementQuery->whereHas('bien.contribuable', function ($contribuableQuery) use ($search) {
+                        $contribuableQuery->where('nom', 'LIKE', "%{$search}%")
+                                           ->orWhere('prenom', 'LIKE', "%{$search}%")
+                                           ->orWhere('telephone', 'LIKE', "%{$search}%");
+                    });
+                });
+            });
+        });
+    }
+
+    $paiement = $query->paginate(10);
+    return view('Admin::Paiement.Liste', compact('paiement'));
+}
+
 }

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('type_biens', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->string('libelle')->unique();
             $table->string('status')->default(0);
             $table->timestamps();

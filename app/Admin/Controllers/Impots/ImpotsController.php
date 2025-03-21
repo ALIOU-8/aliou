@@ -25,8 +25,8 @@ class ImpotsController extends Controller
         return view('Admin::Impots.Imposition');
     }
 
-    public function modif (string $id) {
-        $impot = Impot::where('id', $id)->first();
+    public function modif (string $uuid) {
+        $impot = Impot::where('uuid', $uuid)->firstOrFail();
         if ($impot->type_impot == "cfu") {
             $anneeActive=Annee::where('active',1)->first();
             $recensement=Recensement_cfu::where('id',$impot->recensement_cfu_id)->where('annee_id',$anneeActive->id)->with('occupant')->with('bien')->first();
@@ -50,7 +50,7 @@ class ImpotsController extends Controller
         return view('Admin::Impots.Modif',compact('recensement','bien','impot'));
     }
 
-    public function update (Request $request, string $id) {
+    public function update (Request $request, string $uuid) {
         $request->validate([
             'montant_brute'=>'required',
             'montant_a_payer'=>'required',
@@ -58,10 +58,8 @@ class ImpotsController extends Controller
             'base_imposition'=>'required',
             'imposition_anterieur'=>'required',
             'penalite'=>'required',
-            'droit_fixe'=>'required',
-            'droit_proportionnel'=>'required',
         ]);
-        $impot = Impot::where('id',$id)->first();
+        $impot = Impot::where('uuid',$uuid)->firstOrFail();
         $impot->montant_brute = $request->montant_brute;
         $impot->montant_a_payer = $request->montant_a_payer;
         $impot->date_limite = $request->date_limite;
@@ -75,9 +73,9 @@ class ImpotsController extends Controller
         return to_route('impot.liste');
     }
 
-    public function voir (string $type, string $id) {
+    public function voir (string $type, string $uuid) {
         $anneeActive=Annee::where('active',1)->first();
-        $impot  = Impot::where('id',$id)->where('annee_id',$anneeActive->id)->first();
+        $impot  = Impot::where('uuid',$uuid)->where('annee_id',$anneeActive->id)->first();
         if (!$impot) {
             toastr()->error('Impôt introuvable');
             return back();
@@ -102,10 +100,10 @@ class ImpotsController extends Controller
         return view('Admin::Impots.Voir',compact('impot','recensement','bien'));
     }
 
-    public function payer (string $id) {
+    public function payer (string $uuid) {
         $anneeActive=Annee::where('active',1)->first();
-        $impot = Impot::where('id',$id)->where('annee_id',$anneeActive->id)->first();
-        $paiement = Paiement::where('impot_id',$id)->get();
+        $impot = Impot::where('uuid',$uuid)->where('annee_id',$anneeActive->id)->first();
+        $paiement = Paiement::where('impot_id',$uuid)->get();
         if($impot)
         {
             if ($impot->type_impot == "cfu") {
@@ -141,7 +139,7 @@ class ImpotsController extends Controller
         return view('Admin::Impots.Payer',compact('impot','recensement','bien','montantRestant','paiement'));
     }
 
-    public function payement(Request $request, string $id) {
+    public function payement(Request $request, string $uuid) {
 
         $request->validate([
             'montant' => 'required|numeric|min:4',
@@ -150,7 +148,7 @@ class ImpotsController extends Controller
 
         // Vérifier si l'impôt existe
         $anneeActive=Annee::where('active',1)->first();
-        $impot = Impot::where('id',$id)->where('annee_id',$anneeActive->id)->first();
+        $impot = Impot::where('id',$uuid)->where('annee_id',$anneeActive->id)->first();
 
         if (!$impot) {
             toastr()->error('Impôt introuvable');
@@ -158,7 +156,7 @@ class ImpotsController extends Controller
         }
 
         // Calcul du total des paiements déjà effectués
-        $totalPaye = Paiement::where('impot_id', $id)->sum('montant_payer');
+        $totalPaye = Paiement::where('impot_id', $uuid)->sum('montant_payer');
 
         // Vérifier que le montant payé ne dépasse pas le montant dû
         if ($request->montant > $impot->montant_a_payer - $totalPaye) {
@@ -168,8 +166,9 @@ class ImpotsController extends Controller
 
         // Création du paiement
         $payement = new Paiement();
+        $impot=Impot::where('uuid',$uuid)->firstOrFail();
         $payement->user_id = 1;
-        $payement->impot_id = $id;
+        $payement->impot_id = $impot->id;
         $payement->montant_payer = $request->montant;
         $payement->num_quitance = $request->num_quitance;
         $payement->montant_restant = $impot->montant_a_payer - ($totalPaye + $request->montant);
@@ -228,54 +227,52 @@ class ImpotsController extends Controller
         {
             return redirect()->route('impot.imposition', [
                 'type' => $type,
-                'id' => $recensement->id // On passe uniquement l'ID
+                'uuid' => $recensement->uuid // On passe uniquement l'ID
             ]);        
         }else{
             toastr()->error("ce bien n'est pas recensé en $type");
             return back(); 
         }
     }
-    public function imposition (string $type, string $id) {
+    public function imposition (string $type, string $uuid) {
         if ($type == "cfu") {
             $anneeActive=Annee::where('active',1)->first();
-            $recensement=Recensement_cfu::where('id',$id)->with('occupant')->where('annee_id',$anneeActive->id)->with('bien')->first();
+            $recensement=Recensement_cfu::where('uuid',$uuid)->with('occupant')->where('annee_id',$anneeActive->id)->with('bien')->first();
             $bien = Bien::where('id',$recensement->bien_id)->with('contribuable')->with('typeBien')->first();
         }
         if ($type == "tpu") {
             $anneeActive=Annee::where('active',1)->first();
-            $recensement=Recensement_tpu::where('id',$id)->where('annee_id',$anneeActive->id)->with('bien')->first();
+            $recensement=Recensement_tpu::where('uuid',$uuid)->where('annee_id',$anneeActive->id)->with('bien')->first();
             $bien = Bien::where('id',$recensement->bien_id)->with('contribuable')->with('typeBien')->first();
         }
         if ($type == "patente") {
             $anneeActive=Annee::where('active',1)->first();
-            $recensement=Recensement_patente::where('id',$id)->where('annee_id',$anneeActive->id)->with('bien')->first();
+            $recensement=Recensement_patente::where('uuid',$uuid)->where('annee_id',$anneeActive->id)->with('bien')->first();
             $bien = Bien::where('id',$recensement->bien_id)->with('contribuable')->with('typeBien')->first();
         }
         if ($type == "licence") {
             $anneeActive=Annee::where('active',1)->first();
-            $recensement=Recensement_licence::where('id',$id)->where('annee_id',$anneeActive->id)->with('bien')->first();
+            $recensement=Recensement_licence::where('uuid',$uuid)->where('annee_id',$anneeActive->id)->with('bien')->first();
             $bien = Bien::where('id',$recensement->bien_id)->with('contribuable')->with('typeBien')->first();
         }
             return view('Admin::Impots.Imposition',compact('recensement','bien','type')); 
     }
 
-    public function imposer (string $type, string $id, Request $request) {
+    public function imposer (string $type, string $uuid, Request $request) {
        if($type=="patente")
        {
         $request->validate([
             'montant_brute'=>'required',
             'montant_a_payer'=>'required',
             'date_limite'=>'required',
-            'base_imposition'=>'required',
-            'imposition_anterieur'=>'required',
+            'droit_fixe'=>'required',
+            'droit_proportionnel'=>'required',
         ]);
        }else{
         $request->validate([
             'montant_brute'=>'required',
             'montant_a_payer'=>'required',
             'date_limite'=>'required',
-            'base_imposition'=>'required',
-            'imposition_anterieur'=>'required',
         ]);
        }
         $anneeActive = Annee::where('active', 1)->first();
@@ -331,16 +328,20 @@ class ImpotsController extends Controller
             $impot->numero =$numeroUnique;
             $impot->role = $role;
             if ($type == 'cfu'){
-                $impot->recensement_cfu_id = $id;
+                $recensement=Recensement_cfu::where('uuid',$uuid)->first();
+                $impot->recensement_cfu_id = $recensement->id;
             }
             if ($type == 'tpu'){
-                $impot->recensement_tpu_id = $id;
+                $recensement=Recensement_tpu::where('uuid',$uuid)->first();
+                $impot->recensement_tpu_id = $recensement->id;
             }
             if ($type == 'patente'){
-                $impot->recensement_patente_id = $id;
+                $recensement=Recensement_patente::where('uuid',$uuid)->first();
+                $impot->recensement_patente_id = $recensement->id;
             }
             if ($type == 'licence'){
-                $impot->recensement_licence_id = $id;
+                $recensement=Recensement_licence::where('uuid',$uuid)->first();
+                $impot->recensement_licence_id = $recensement->id;
             }
 
             $impot->save();
@@ -348,41 +349,39 @@ class ImpotsController extends Controller
             return to_route('impot.liste');
         }
     }
-    public function search(Request $request)
+    public function recherche(Request $request)
     {
-    $query = $request->input('query');
-    $anneeActive = Annee::where('active', 1)->first();
+        if ($request->has('search')) {
+            $search = $request->input('search');
+    
+        $anneeActive = Annee::where('active', 1)->firstOrFail();
 
-    if (!$anneeActive) {
-        return response()->json([]);
-    }
-
-    $impots = Impot::where('annee_id', $anneeActive->id)
-        ->where(function ($q) use ($query) {
-            $q->where('type_impot', 'like', "%$query%")
-              ->orWhere('role', 'like', "%$query%")
-              ->orWhere('article', 'like', "%$query%")
-              ->orWhere('statut', 'like', "%$query%")
-              ->orWhere('montant_a_payer', 'like', "%$query%")
-              ->orWhereHas('recensement_cfu.bien.contribuable', function ($q) use ($query) {
-                  $q->where('nom', 'like', "%$query%")
-                    ->orWhere('prenom', 'like', "%$query%")
-                    ->orWhere('telephone', 'like', "%$query%");
+    $impot= Impot::where('annee_id', $anneeActive->id)
+        ->where(function ($q) use ($search) {
+            $q->where('type_impot', 'like', "%$search%")
+              ->orWhere('role', 'like', "%$search%")
+              ->orWhere('article', 'like', "%$search%")
+              ->orWhere('statut', 'like', "%$search%")
+              ->orWhere('montant_a_payer', 'like', "%$search%")
+              ->orWhereHas('recensement_cfu.bien.contribuable', function ($q) use ($search) {
+                  $q->where('nom', 'like', "%$search%")
+                    ->orWhere('prenom', 'like', "%$search%")
+                    ->orWhere('telephone', 'like', "%$search%");
               })
-              ->orWhereHas('recensement_tpu.bien.contribuable', function ($q) use ($query) {
-                  $q->where('nom', 'like', "%$query%")
-                    ->orWhere('prenom', 'like', "%$query%")
-                    ->orWhere('telephone', 'like', "%$query%");
+              ->orWhereHas('recensement_tpu.bien.contribuable', function ($q) use ($search) {
+                  $q->where('nom', 'like', "%$search%")
+                    ->orWhere('prenom', 'like', "%$search%")
+                    ->orWhere('telephone', 'like', "%$search%");
               })
-              ->orWhereHas('recensement_patente.bien.contribuable', function ($q) use ($query) {
-                  $q->where('nom', 'like', "%$query%")
-                    ->orWhere('prenom', 'like', "%$query%")
-                    ->orWhere('telephone', 'like', "%$query%");
+              ->orWhereHas('recensement_patente.bien.contribuable', function ($q) use ($search) {
+                  $q->where('nom', 'like', "%$search%")
+                    ->orWhere('prenom', 'like', "%$search%")
+                    ->orWhere('telephone', 'like', "%$search%");
               })
-              ->orWhereHas('recensement_licence.bien.contribuable', function ($q) use ($query) {
-                  $q->where('nom', 'like', "%$query%")
-                    ->orWhere('prenom', 'like', "%$query%")
-                    ->orWhere('telephone', 'like', "%$query%");
+              ->orWhereHas('recensement_licence.bien.contribuable', function ($q) use ($search) {
+                  $q->where('nom', 'like', "%$search%")
+                    ->orWhere('prenom', 'like', "%$search%")
+                    ->orWhere('telephone', 'like', "%$search%");
               });
         })
         ->with([
@@ -393,8 +392,9 @@ class ImpotsController extends Controller
             'annee'
         ])
         ->orderBy('id', 'desc')
-        ->get();
+        ->paginate(10);
 
-    return response()->json($impots);
+    return view("Admin::Impots.Liste",compact('impot'));
     }
+}
 }

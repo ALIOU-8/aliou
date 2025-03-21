@@ -24,7 +24,7 @@
                             <a href="" class="btn btn-outline-success">Supprimer profil</a>
                         </div>
                         <hr>
-                        <form action="{{route('profil.modif',$user->id)}}" method="POST">
+                        <form action="{{route('profil.modif',$user->uuid)}}" method="POST">
                             @csrf
                             @method('put')
                             <div class="text-center h5">Informations Professionnelles</div>
@@ -63,7 +63,7 @@
                             </div>
                         </form>
                         <hr>
-                        <form action="{{route('profil.modif.mdp',$user->id)}}" method="POST">
+                        <form action="{{route('profil.modif.mdp',$user->uuid)}}" method="POST">
                             @csrf
                             @method('put')
                             <div class="text-center h5">Informations Personnelles</div>

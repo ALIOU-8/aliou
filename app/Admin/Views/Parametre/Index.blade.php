@@ -18,7 +18,7 @@
                                     <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bx-money"></i>Somme Total  Recouvrée</div>
                                     <hr class="m-0">
                                     <div class="h4 text-center mt-1 mb-1 p-3">
-                                        200 000 000 FG                                      
+                                       {{$sommeTotal ." GNF"}}                                    
                                     </div>
                                 </div>
                             </div>

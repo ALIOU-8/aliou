@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Support\Str;
 class Recensement_cfu extends Model
 {
     public function user()
@@ -12,7 +12,7 @@ class Recensement_cfu extends Model
     }
     public function bien()
     {
-        return $this->belongsTo(Bien::class, 'bien_id');
+        return $this->belongsTo(Bien::class, 'bien_id')->where('delete', 0);
     }
     public function annee()
     {
@@ -21,6 +21,14 @@ class Recensement_cfu extends Model
 
     public function occupant()
     {
-        return $this->hasMany(Occupant::class);
+        return $this->hasMany(Occupant::class)->where('delete', 0);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->uuid = (string) Str::uuid();
+        });
     }
 }

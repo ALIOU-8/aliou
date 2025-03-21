@@ -44,7 +44,12 @@
                                 <a href="" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
                             </div>
                             <div class="col-md-4 ms-auto">
-                                <input type="text" placeholder="Rechercher..." id="searchRecensements" onkeyup="fetchRecensements()"  class="form-control border border-success m-3">
+                                <form method="GET" action="{{ route('licence.recherche') }}">
+                                    <div class="input-group mb-3">
+                                        <input type="text" name="search" class="form-control border border-success" placeholder="Rechercher..." value="{{ request('search') }}">
+                                        <button class="btn btn-success" type="submit">Rechercher</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -72,9 +77,9 @@
                                         <td>{{ $recencement_licences->Date_recensement }}</td>
                                         <td>{{ $recencement_licences->categorie }}</td>
                                         <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('licence.voir',$recencement_licences->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
-                                            <a href="{{route('impot.imposition',['type' => 'licence', 'id' => $recencement_licences->id])}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Imposer<i class="bx bx-money"></i></a>
-                                            <a href="{{route('licence.modif',$recencement_licences->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
+                                            <a href="{{route('licence.voir',$recencement_licences->uuid)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
+                                            <a href="{{route('impot.imposition',['type' => 'licence', 'uuid' => $recencement_licences->uuid])}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Imposer<i class="bx bx-money"></i></a>
+                                            <a href="{{route('licence.modif',$recencement_licences->uuid)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -85,6 +90,9 @@
                                     @endif
                                 </tbody>
                             </table>
+                            <div class="d-flex justify-content-center mt-3">
+                                {{ $recencement_licence->links('pagination::bootstrap-4') }}
+                            </div>
                         </div>
                         
                     </div>
@@ -95,42 +103,6 @@
 </main>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-
-function fetchRecensements() {
-    let query = document.getElementById("searchRecensements").value;
-
-    fetch("{{ route('recensements.licence.search') }}?query=" + query)
-        .then(response => response.json())
-        .then(data => {
-            let tbody = document.querySelector("#recensementsTable tbody");
-            tbody.innerHTML = "";
-
-            if (data.length > 0) {
-                data.forEach((recensement, index) => {
-                    let row = `
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td>${recensement.bien.contribuable ? recensement.bien.contribuable.prenom + ' ' + recensement.bien.contribuable.nom : 'N/A'}</td>
-                            <td>${recensement.bien ? recensement.bien.libelle : 'N/A'}</td>
-                            <td>${recensement.bien ? recensement.bien.numero_bien : 'N/A'}</td>
-                            <td>${recensement.bien ? recensement.annee.annee : 'N/A'}</td>
-                            <td>${recensement.Date_recensement ? recensement.Date_recensement : 'N/A'}</td>
-                            <td>${recensement.categorie ? recensement.categorie : 'N/A'}</td>
-                            <td class="d-flex justify-content-center gap-2">
-                                <a href="/licence/voir/${recensement.id}" class="btn btn-outline-success btn-sm">Voir<i class="bx bx-show"></i></a>
-                                <a href="/impot/imposition/licence/${recensement.id}" class="btn btn-outline-success btn-sm">Imposer<i class="bx bx-money"></i></a>
-                                <a href="/licence/modif/${recensement.id}" class="btn btn-outline-success btn-sm">Modifier<i class="bx bx-edit"></i></a>
-                            </td>
-                        </tr>
-                    `;
-                    tbody.innerHTML += row;
-                });
-            } else {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center">Aucun recensement trouvé</td></tr>`;
-            }
-        })
-        .catch(error => console.error('Erreur:', error));
-    }
     $(document).ready(function () {
     $("#recensementForm").on("submit", function (event) {
         var numeroBien = $("#numero_bien").val();

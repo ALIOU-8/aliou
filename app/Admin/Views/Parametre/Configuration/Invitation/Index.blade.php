@@ -21,7 +21,12 @@
                                 <a href="{{route('parametre.configuration.invitation.ajout')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Nouveau<i class="bx bx-plus"></i></a>
                             </div>
                             <div class="col-md-4 ms-auto">
-                                <input type="text" placeholder="Rechercher..." class="form-control border border-success m-3" id="searchImpots" onkeyup="fetchImpots()">
+                                <form method="GET" action="{{ route('invitation.recherche') }}">
+                                    <div class="input-group mb-3">
+                                        <input type="text" name="search" class="form-control border border-success" placeholder="Rechercher..." value="{{ request('search') }}">
+                                        <button class="btn btn-success" type="submit">Rechercher</button>
+                                    </div>
+                                </form>
                             </div>
                         </div> 
                         <div class="table-responsive">
@@ -47,8 +52,8 @@
                                         <td>{{ $item->motif}}</td>
                                         <td>{{ $item->se_munir }}</td>
                                         <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('parametre.configuration.invitation.modif',$item->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
-                                            <a href="{{route('parametre.configuration.imprimer',$item->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Imprimer<i class="bx bx-printer"></i></a>
+                                            <a href="{{route('parametre.configuration.invitation.modif',$item->uuid)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
+                                            <a href="{{route('parametre.configuration.imprimer',$item->uuid)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Imprimer<i class="bx bx-printer"></i></a>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -59,6 +64,9 @@
                                     @endif
                                 </tbody>
                             </table>
+                            <div class="d-flex justify-content-center mt-3">
+                                {{ $invitation->links('pagination::bootstrap-4') }}
+                            </div>
                         </div>                        
                     </div>
                 </div>

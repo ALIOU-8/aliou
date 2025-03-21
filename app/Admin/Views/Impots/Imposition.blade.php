@@ -43,10 +43,10 @@
                                 </div>
                             </fieldset>
                         </div>
-                        <form action="{{route('impot.imposer',['type' => $type, 'id' => $recensement->id])}}" method="POST" class="form">
+                        <form action="{{route('impot.imposer',['type' => $type, 'uuid' => $recensement->uuid])}}" method="POST" class="form">
                             @csrf
                             <div class="row">
-                                <hr>      
+                                <hr>
                                 <div class="text-center h5 text-success">Imposition du bien</div>         
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label" for="montant_brute">Montant Brute</label>

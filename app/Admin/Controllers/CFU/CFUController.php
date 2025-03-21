@@ -14,13 +14,13 @@ class CFUController extends Controller
 {
     public function index () {
         $anneeActive=Annee::where('active',1)->firstOrFail();
-        $recencement_cfu=Recensement_cfu::where('annee_id',$anneeActive->id)->orderBy('id','desc')->get();
+        $recencement_cfu=Recensement_cfu::where('annee_id',$anneeActive->id)->orderBy('id','desc')->paginate(10);
         return view('Admin::CFU.Liste',compact('anneeActive','recencement_cfu'));
     }
 
-    public function ajout ($id) {
-        $bien_recence=Bien::findOrFail($id);
-        $annee=Annee::where('active',1)->first();
+    public function ajout ($uuid) {
+        $bien_recence=Bien::where('uuid',$uuid)->firstOrFail();
+        $annee=Annee::where('active',1)->firstOrFail();
         return view('Admin::CFU.Ajout',compact('bien_recence','annee'));
     }
     public function store (Request $request) {
@@ -75,9 +75,9 @@ class CFUController extends Controller
 }
 
 
-    public function modif ($id) {
+    public function modif ($uuid) {
          // Trouver le recensement cfu par ID
-         $recencement_cfu = Recensement_cfu::findOrFail($id);
+         $recencement_cfu = Recensement_cfu::where('uuid',$uuid)->firstOrFail();
     
          // Récupérer les IDs des biens déjà recensés
          $biensRecenses = Recensement_cfu::pluck('bien_id')->toArray();
@@ -113,7 +113,7 @@ class CFUController extends Controller
         ]);
     }
 
-    public function update (Request $request, $id) {
+    public function update (Request $request, $uuid) {
         $request->validate([
             'nature_fondation'=>'required',
             'surface'=>'required',
@@ -129,7 +129,7 @@ class CFUController extends Controller
         ]);
         $doublonRecencement = Recensement_cfu::where('bien_id', $request->bien_id)
         ->where('annee_id', $request->annee_id)
-        ->where('id', '!=', $request->id) // Ignorer l'enregistrement en cours de modification
+        ->where('uuid', '!=', $request->uuid) // Ignorer l'enregistrement en cours de modification
         ->first();
         $verifDateRecensement=Annee::findOrFail($request->annee_id);
         $dateLocal=Carbon::now('UTC');
@@ -140,10 +140,10 @@ class CFUController extends Controller
         }else{
             if($doublonRecencement)
             {
-                toastr()->error('ce bien est déja recenser en TPU pour cette année');
+                toastr()->error('ce bien est déja recenser en CFU pour cette année');
                 return back();
             }else{     
-                $recensement_cfu=Recensement_cfu::findOrFail($id);
+                $recensement_cfu=Recensement_cfu::where('uuid',$uuid)->firstOrFail();
                 $recensement_cfu->user_id=1;
                 $recensement_cfu->bien_id=$request->bien_id;
                 $recensement_cfu->annee_id=$request->annee_id;
@@ -171,59 +171,55 @@ class CFUController extends Controller
             'numero_bien' =>'required'
         ]);
 
-        $verifBienExist=Bien::where('numero_bien',$request->numero_bien)->first();
+        $verifBienExist=Bien::where('numero_bien',$request->numero_bien)->where('delete',0)->first();
         if($verifBienExist)
         {
-            return to_route('cfu.ajout',$verifBienExist->id);
+            return to_route('cfu.ajout',$verifBienExist->uuid);
         }else{
             toastr()->error("Bien. '$request->numero_bien.' est introuvable dans la base de données");
              return back();
         }
     }
 
-    public function voir ($id) {
-        $recensement_cfu=Recensement_cfu::where('id',$id)->with('occupant')->with('bien')->first();
+    public function voir ($uuid) {
+        $recensement_cfu=Recensement_cfu::where('uuid',$uuid)->with('occupant')->with('bien')->firstOrFail();
         $bien = Bien::where('id',$recensement_cfu->bien_id)->with('contribuable')->first();
-        $ValeurLocative=Occupant::where('recensement_cfu_id',$id)->sum('valeur_locative');
+        $ValeurLocative=Occupant::where('recensement_cfu_id',$recensement_cfu->id)->where('delete', 0)->sum('valeur_locative');
         return view('Admin::CFU.Voir',compact('recensement_cfu', 'bien','ValeurLocative'));
     }
 
     public function corbeille () {
         return view('Admin::CFU.Corbeille');
     }
-
-    public function search(Request $request)
+    public function recherche(Request $request)
     {
-    $query = $request->get('query');
+        if ($request->has('search')) {
+        $search = $request->input('search');
 
         // Récupérer l'année active
-        $anneeActive = Annee::where('active', 1)->first();
-        if (!$anneeActive) {
-            return response()->json(['message' => 'Aucune année active trouvée'], 404);
-        }
-
-        // Recherche filtrée par l'année active
-        $recensements = Recensement_cfu::where('annee_id', $anneeActive->id)
-            ->whereHas('bien', function ($q) use ($query) {
-                $q->where('libelle', 'like', "%$query%")
-                ->orWhere('adresse', 'like', "%$query%")
-                ->orWhere('numero_bien', 'like', "%$query%")
-                ->orWhereHas('contribuable', function ($q) use ($query) {
-                    $q->where('nom', 'like', "%$query%")
-                        ->orWhere('prenom', 'like', "%$query%");
+        $anneeActive = Annee::where('active', 1)->firstOrFail();
+        $recencement_cfu = Recensement_cfu::where('annee_id', $anneeActive->id)
+            ->whereHas('bien', function ($q) use ($search) {
+                $q->where('libelle', 'like', "%$search%")
+                ->orWhere('adresse', 'like', "%$search%")
+                ->orWhere('numero_bien', 'like', "%$search%")
+                ->orWhereHas('contribuable', function ($q) use ($search) {
+                    $q->where('nom', 'like', "%$search%")
+                        ->orWhere('prenom', 'like', "%$search%");
                 })
-                ->orWhereHas('typeBien', function ($q) use ($query) {
-                    $q->where('libelle', 'like', "%$query%");
+                ->orWhereHas('typeBien', function ($q) use ($search) {
+                    $q->where('libelle', 'like', "%$search%");
                 });
             })
-            ->orWhereHas('annee', function ($q) use ($query, $anneeActive) {
-                $q->where('annee', 'like', "%$query%")
+            ->orWhereHas('annee', function ($q) use ($search, $anneeActive) {
+                $q->where('annee', 'like', "%$search%")
                 ->where('id', $anneeActive->id); // Filtrage par année active
             })
             ->with(['bien.contribuable', 'bien.typeBien', 'annee']) // Charge les relations nécessaires
             ->orderBy('id', 'desc')
-            ->get();
-            return response()->json($recensements);
+            ->paginate(10);
+            return view('Admin::CFU.Liste',compact('recencement_cfu'));
+        }
     }
 
     // public function statistique()  {

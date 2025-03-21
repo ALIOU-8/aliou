@@ -6,7 +6,7 @@
         <li class="divider">/</li>
         <li><a href="{{route('cfu.liste')}}">CFU</a></li>
         <li class="divider">/</li>
-        <li><a href="{{route('cfu.occupant.liste',$batiment->id)}}">Occupant</a></li>
+        <li><a href="{{route('cfu.occupant.liste',$batiment->uuid)}}">Occupant</a></li>
         <li class="divider">/</li>
         <li><a href="" class="active">Corbeille</a></li>
     </ul>
@@ -50,7 +50,7 @@
                                         <td>{{$item->observation}}</td>
                                         <td>{{$item->type_occupant}}</td>
                                         <td class="d-flex justify-content-center gap-2">
-                                            <form method="POST" action="{{route('cfu.occupant.restaure',$item->id)}}">
+                                            <form method="POST" action="{{route('cfu.occupant.restaure',$item->uuid)}}">
                                                 @csrf
                                                 @method('put')
                                                 <button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">Restaurer <i class="bx bx-check"></i></button>

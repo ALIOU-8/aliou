@@ -9,8 +9,23 @@ use Illuminate\Http\Request;
 class InvitationController extends Controller
 {
     public function invitation () {
-        $invitation=Invitation::get();
+        $invitation=Invitation::paginate(10);
         return view('Admin::Parametre.Configuration.Invitation.Index',compact('invitation'));
+    }
+
+    public function recherche(Request $request)
+    {
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $invitation=Invitation::where(function ($q) use ($search) {
+                $q->where('nom', 'LIKE', "%{$search}%")
+                  ->orWhere('prenom', 'LIKE', "%{$search}%")
+                  ->orWhere('date_rdv', 'LIKE', "%{$search}%")
+                  ->orWhere('motif', 'LIKE', "%{$search}%")
+                  ->orWhere('se_munir', 'LIKE', "%{$search}%");
+            })->paginate(10);
+        }
+         return view('Admin::Parametre.Configuration.Invitation.Index',compact('invitation'));
     }
 
     public function ajout () {
@@ -39,12 +54,12 @@ class InvitationController extends Controller
 
     }
 
-    public function modif (string $id) {
-        $invitation= Invitation::where('id',$id)->first();
+    public function modif (string $uuid) {
+        $invitation= Invitation::where('uuid',$uuid)->firstOrFail();
         return view('Admin::Parametre.Configuration.Invitation.Modif',compact('invitation'));
     }
 
-    public function update(Request $request,string $id)
+    public function update(Request $request,string $uuid)
     {
         $request->validate([
             'nom'=>'required',
@@ -54,7 +69,7 @@ class InvitationController extends Controller
             'se_munir'=>'required'
         ]);
 
-        $invitation= Invitation::where('id',$id)->first();
+        $invitation= Invitation::where('uuid',$uuid)->first();
         $invitation->nom=$request->nom;
         $invitation->prenom=$request->prenom;
         $invitation->date_rdv=$request->date_rdv;
@@ -66,8 +81,8 @@ class InvitationController extends Controller
 
     }
 
-    public function imprimer_invitation (string $id) {
-        $invitation=Invitation::where('id',$id)->first();
+    public function imprimer_invitation (string $uuid) {
+        $invitation=Invitation::where('uuid',$uuid)->firstOrFail();
         return view('Admin::Parametre.Configuration.Invitation.Imprimer', compact('invitation'));
     }
 }

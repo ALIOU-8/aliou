@@ -6,7 +6,7 @@
         <li class="divider">/</li>
         <li><a href="{{route('cfu.liste')}}">CFU</a></li>
         <li class="divider">/</li>
-        <li><a href="{{route('cfu.occupant.liste',$cfu->id)}}">Occupant</a></li>
+        <li><a href="{{route('cfu.occupant.liste',$cfu->uuid)}}">Occupant</a></li>
         <li class="divider">/</li>
         <li><a href="" class="active">Modification CFU</a></li>
     </ul>
@@ -17,7 +17,7 @@
                     <div class="card-body">
                         <div class="h5 mb-2 text-center text-success"> Modification Occupant </div>
                         <div class="h6 mb-3 text-success">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab mollitia ratione quaerat natus rem iusto asperiores facilis libero est doloremque velit, suscipit repellendus cupiditate illo dolor perspiciatis labore reiciendis vitae?</div>
-                        <form action="{{route('cfu.occupant.update',$occupant->id)}}" class="form">
+                        <form action="{{route('cfu.occupant.update',$occupant->uuid)}}" class="form">
                             @csrf
                             @method('put')
                             <div class="row">                               

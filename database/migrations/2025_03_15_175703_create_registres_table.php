@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('registres', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->foreignId('impot_id')->constrained('impots')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });

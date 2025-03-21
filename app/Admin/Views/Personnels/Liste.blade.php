@@ -23,7 +23,12 @@
                                 <a href="{{route('personnels.corbeille')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Corbeille <i class="bx bx-trash"></i></a>
                             </div>
                             <div class="col-md-4 ms-auto">
-                                <input type="text" placeholder="Rechercher..." class="form-control border border-success m-3" id="searchInput" onkeyup="searchTable()">
+                                <form method="GET" action="{{ route('personnel.recherche') }}">
+                                    <div class="input-group mb-3">
+                                        <input type="text" name="search" class="form-control border border-success" placeholder="Rechercher..." value="{{ request('search') }}">
+                                        <button class="btn btn-success" type="submit">Rechercher</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -79,7 +84,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <a href="{{route('personnels.modif',$personnels->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
+                                            <a href="{{route('personnels.modif',$personnels->uuid)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
                                             <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer">Supprimer<i class="bx bx-trash"></i></a>
                                             {{-- Modal pour confirmer la suppression  --}}
                                             <div class="modal fade" id="supprimer" aria-labelledby="supprimer" aria-hidden="true">
@@ -92,7 +97,7 @@
                                                         <div class="modal-body">
                                                             <div class="text-start">{{ $personnels->nom }}</div>
                                                             <div class="text-start">{{ $personnels->prenom }}</div>
-                                                            <form action="{{route('personnel.supprimer',$personnels->id) }}" method="post">
+                                                            <form action="{{route('personnel.supprimer',$personnels->uuid) }}" method="post">
                                                                 @method('put')
                                                                 @csrf
                                                                 <button type="submit" class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1">Confirmer <i class="bx bx-check"></i></button>
@@ -103,14 +108,17 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        @if (count($personnel) == 0)
-                                        <th colspan="8" class="text-center">Aucun enregistrement trouvé pour le moment</th>
-                                        @endif
-                                    </tr>
                                     @endforeach
+                                    @if (count($personnel) == 0)
+                                        <tr>
+                                            <th colspan="6" class="text-center">Aucun enregistrement trouvé pour le moment</th>
+                                        </tr>
+                                    @endif
                                 </tbody>
                             </table>
+                            <div class="d-flex justify-content-center mt-3">
+                                {{ $personnel->links('pagination::bootstrap-4') }}
+                            </div>
                         </div>
                         
                     </div>
@@ -119,30 +127,4 @@
         </div>
     </div>
 </main>
-<script>
-    function searchTable() {
-        // Récupère la valeur de la recherche
-        let searchQuery = document.getElementById("searchInput").value.toLowerCase();
-        let table = document.getElementById("myTable");
-        let rows = table.getElementsByTagName("tr");
-        
-        // Parcours chaque ligne du tableau (sauf l'en-tête)
-        for (let i = 1; i < rows.length; i++) {
-            let cells = rows[i].getElementsByTagName("td");
-            let rowText = "";
-            
-            // Concatène le texte des cellules à rechercher
-            for (let j = 0; j < cells.length - 1; j++) {  // Ne pas inclure la dernière colonne "Actions"
-                rowText += cells[j].textContent.toLowerCase();
-            }
-            
-            // Si le texte de la ligne correspond à la recherche, l'afficher, sinon la masquer
-            if (rowText.includes(searchQuery)) {
-                rows[i].style.display = "";
-            } else {
-                rows[i].style.display = "none";
-            }
-        }
-    }
-</script>
 @endsection

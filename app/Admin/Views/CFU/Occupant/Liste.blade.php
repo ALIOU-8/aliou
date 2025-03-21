@@ -16,13 +16,13 @@
                         <div class="h5 text-center text-success">La liste des Occupant du bâtiment " {{$nombatiment->libelle}} "</div>
                         <div class="row d-flex justify-content-between align-items-center me-1">
                             <div class="col-md-2">
-                                <a href="{{route('cfu.occupant.ajout',$batiment->id)}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Nouveau <i class="bx bx-plus"></i></a>
+                                <a href="{{route('cfu.occupant.ajout',$batiment->uuid)}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Nouveau <i class="bx bx-plus"></i></a>
                             </div>
                             <div class="col-md-2">
                                 <a href="" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
                             </div>
                             <div class="col-md-2">
-                                <a href="{{route('cfu.occupant.corbeille',$batiment->id)}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Corbeille <i class="bx bx-trash"></i></a>
+                                <a href="{{route('cfu.occupant.corbeille',$batiment->uuid)}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Corbeille <i class="bx bx-trash"></i></a>
                             </div>
                             <div class="col-md-4 ms-auto">
                                 <input type="text" placeholder="Rechercher..." class="form-control border border-success m-3" id="searchInput" onkeyup="searchTable()">
@@ -57,7 +57,7 @@
                                         <td>{{$item->observation}}</td>
                                         <td>{{$item->type_occupant}}</td>
                                         <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('cfu.occupant.modif',$item->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
+                                            <a href="{{route('cfu.occupant.modif',$item->uuid)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
                                             <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer{{$item->id}}">Supprimer<i class="bx bx-trash"></i></a>
                                             {{-- Modal pour confirmer la suppression  --}}
                                             <div class="modal fade" id="supprimer{{$item->id}}" aria-labelledby="supprimer" aria-hidden="true">
@@ -71,7 +71,7 @@
                                                             <div class="text-start">{{$item->nom}}</div>
                                                             <div class="text-start">{{$item->prenom}}</div>
                                                             <div class="text-start">{{$item->activite}}</div>
-                                                            <a href="{{ route('cfu.occupant.delete',$item->id) }}" class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1">Confirmer <i class="bx bx-check"></i></a>
+                                                            <a href="{{ route('cfu.occupant.delete',$item->uuid) }}" class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1">Confirmer <i class="bx bx-check"></i></a>
                                                         </div>
                                                     </div>
                                                 </div>

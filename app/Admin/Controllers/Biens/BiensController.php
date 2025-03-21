@@ -59,10 +59,10 @@ class BiensController extends Controller
         return to_route("biens.liste");
     }
     
-    public function update(Request $request, $id)
+    public function update(Request $request, $uuid)
     {
     // Récupérer le bien à modifier
-    $bien = Bien::findOrFail($id);
+    $bien = Bien::where('uuid',$uuid)->firstOrFail();
 
     // Validation des données
     $request->validate([
@@ -112,39 +112,79 @@ class BiensController extends Controller
     return redirect()->route('biens.liste');
     }
 
-    public function search(Request $request)
+
+    public function recherche(Request $request)
     {
-        $query = $request->get('query');
-        $biens = Bien::where('delete', 0)
-        ->where(function ($q) use ($query) {
-        $q->where('libelle', 'like', "%$query%")
-          ->orWhere('adresse', 'like', "%$query%")
-          ->orWhere('numero_bien', 'like', "%$query%")
-          ->orWhereHas('contribuable', function ($q) use ($query) {
-              $q->where('nom', 'like', "%$query%")
-                ->orWhere('prenom', 'like', "%$query%");
-          })
-          ->orWhereHas('typeBien', function ($q) use ($query) {
-              $q->where('libelle', 'like', "%$query%");
-          });
-    })
-    ->with(['contribuable','typeBien']) // Charge les relations
-    ->get();
-    return response()->json($biens);
+    $query = Bien::where('delete', 0); // Filtre les biens non supprimés
+
+    // Vérifier s'il y a une requête de recherche
+    if ($request->has('search')) {
+        $search = $request->input('search');
+        $query->where(function ($q) use ($search) {
+            // Recherche dans les colonnes des biens
+            $q->where('libelle', 'LIKE', "%{$search}%")
+              ->orWhere('adresse', 'LIKE', "%{$search}%")
+              ->orWhere('numero_bien', 'LIKE', "%{$search}%")
+              // Recherche dans les relations
+              ->orWhereHas('contribuable', function ($q) use ($search) {
+                  $q->where('nom', 'LIKE', "%{$search}%")
+                    ->orWhere('prenom', 'LIKE', "%{$search}%")
+                    ->orWhere('telephone', 'LIKE', "%{$search}%");
+              })
+              ->orWhereHas('typeBien', function ($q) use ($search) {
+                  $q->where('libelle', 'LIKE', "%{$search}%");
+              });
+        });
     }
-    
+
+    // Exécution de la recherche et pagination
+    $bien = $query->with(['contribuable', 'typeBien']) // Charger les relations
+                   ->paginate(10); // Pagination avec 10 résultats par page
+
+    return view('Admin::Biens.Liste', compact('bien'));
+    }
 
 
+    public function recherche_corbeille(Request $request)
+    {
+    $query = Bien::where('delete', 1); // Filtre les biens non supprimés
 
-    public function modif ($id) {
+    // Vérifier s'il y a une requête de recherche
+    if ($request->has('search')) {
+        $search = $request->input('search');
+        $query->where(function ($q) use ($search) {
+            // Recherche dans les colonnes des biens
+            $q->where('libelle', 'LIKE', "%{$search}%")
+              ->orWhere('adresse', 'LIKE', "%{$search}%")
+              ->orWhere('numero_bien', 'LIKE', "%{$search}%")
+              // Recherche dans les relations
+              ->orWhereHas('contribuable', function ($q) use ($search) {
+                  $q->where('nom', 'LIKE', "%{$search}%")
+                    ->orWhere('prenom', 'LIKE', "%{$search}%")
+                    ->orWhere('telephone', 'LIKE', "%{$search}%");
+              })
+              ->orWhereHas('typeBien', function ($q) use ($search) {
+                  $q->where('libelle', 'LIKE', "%{$search}%");
+              });
+        });
+    }
+
+    // Exécution de la recherche et pagination
+    $bien = $query->with(['contribuable', 'typeBien']) // Charger les relations
+                   ->paginate(10); // Pagination avec 10 résultats par page
+
+    return view('Admin::Biens.Corbeille', compact('bien'));
+    }
+
+    public function modif ($uuid) {
         $contribuable=Contribuable::where('delete',0)->get();
         $typeBien=TypeBien::where('status',0)->get();
-        $bien=Bien::findOrFail($id);
+        $bien=Bien::where('uuid',$uuid)->firstOrFail();
         return view('Admin::Biens.Modif',compact('bien','contribuable','typeBien'));
     }
 
-    public function voir ($id) {
-        $biens=Bien::findOrFail($id);
+    public function voir ($uuid) {
+        $biens=Bien::where('uuid',$uuid)->firstOrFail();
         return view('Admin::Biens.Voir',compact('biens'));
     }
 
@@ -152,16 +192,16 @@ class BiensController extends Controller
         $bien=Bien::where('delete',1)->orderBy('id','desc')->get();
         return view('Admin::Biens.Corbeille',compact('bien'));
     }
-    public function delete($id) {
-        $bien=Bien::findOrFAil($id);
+    public function delete($uuid) {
+        $bien=Bien::where('uuid',$uuid)->firstOrFail();
         $bien->delete=1;
         $bien->update();
         toastr()->success('Bien Supprimez avec Succes');
         return to_route('biens.liste');
 
     }
-    public function restaure($id) {
-        $bien=Bien::findOrFAil($id);
+    public function restaure($uuid) {
+        $bien=Bien::where('uuid',$uuid)->firstOrFail();
         $bien->delete=0;
         $bien->update();
         toastr()->success('Bien Supprimez avec Succes');

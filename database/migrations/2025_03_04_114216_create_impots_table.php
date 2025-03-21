@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('impots', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->string('type_impot');
             $table->foreignId('annee_id')->constrained()->onUpdate('cascade');
             $table->foreignId('recensement_cfu_id')->nullable()->on('recensement_cfus')->onDelete('cascade');
@@ -25,9 +26,9 @@ return new class extends Migration
             $table->date('date_limite');
             $table->string('role');
             $table->string('article');
-            $table->integer('base_imposition');
-            $table->integer('imposition_anterieur');
-            $table->integer('penalite');
+            $table->integer('base_imposition')->nullable();
+            $table->integer('imposition_anterieur')->nullable();
+            $table->integer('penalite')->nullable();
             $table->string('droit_fixe')->nullable();
             $table->string('droit_proportionnel')->nullable();
             $table->string('numero')->unique();

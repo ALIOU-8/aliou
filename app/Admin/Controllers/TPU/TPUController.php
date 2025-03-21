@@ -13,14 +13,14 @@ class TPUController extends Controller
 {
     public function index () {
         $anneeActive=Annee::where('active',1)->firstOrFail();
-        $recencement_tpu=Recensement_tpu::where('annee_id',$anneeActive->id)->orderBy('id','desc')->get();
+        $recencement_tpu=Recensement_tpu::where('annee_id',$anneeActive->id)->orderBy('id','desc')->paginate(10);
         return view('Admin::TPU.Liste',compact('recencement_tpu'));
     }
 
 
-    public function modif($id) {
+    public function modif($uuid) {
         // Trouver le recensement TPU par ID
-        $recencement_tpu = Recensement_tpu::findOrFail($id);
+        $recencement_tpu = Recensement_tpu::where('uuid',$uuid)->firstOrFail();
     
         // Récupérer les IDs des biens déjà recensés
         $biensRecenses = Recensement_tpu::pluck('bien_id')->toArray();
@@ -34,8 +34,8 @@ class TPUController extends Controller
     }
     
 
-    public function voir($id) {
-        $recensement_tpu=Recensement_tpu::findOrFail($id);
+    public function voir($uuid) {
+        $recensement_tpu=Recensement_tpu::where('uuid',$uuid)->firstOrFail();
         return view('Admin::TPU.Voir',compact('recensement_tpu'));
     }
 
@@ -43,10 +43,10 @@ class TPUController extends Controller
         return view('Admin::TPU.Corbeille');
     }
 
-    public function ajout($id)
+    public function ajout($uuid)
     {
-        $bien_recence=Bien::findOrFail($id);
-        $annee=Annee::where('active',1)->first();
+        $bien_recence=Bien::where('uuid',$uuid)->firstOrFail();
+        $annee=Annee::where('active',1)->firstOrFail();
         return view('Admin::TPU.Ajout',compact('bien_recence','annee'));
     }
     public function verifier(Request $request)
@@ -54,54 +54,46 @@ class TPUController extends Controller
         $bien=Bien::where('numero_bien',$request->numero_bien)->where('delete',0)->exists();
         return response()->json(['exists'=>$bien]);
     }
-
-    public function search(Request $request)
+    public function recherche(Request $request)
     {
-    $query = $request->get('query');
+        if ($request->has('search')) {
+        $search = $request->input('search');
 
         // Récupérer l'année active
-        $anneeActive = Annee::where('active', 1)->first();
-        if (!$anneeActive) {
-            return response()->json(['message' => 'Aucune année active trouvée'], 404);
-        }
-
-        // Recherche filtrée par l'année active
-        $recensements = Recensement_tpu::where('annee_id', $anneeActive->id)
-            ->whereHas('bien', function ($q) use ($query) {
-                $q->where('libelle', 'like', "%$query%")
-                ->orWhere('adresse', 'like', "%$query%")
-                ->orWhere('numero_bien', 'like', "%$query%")
-                ->orWhereHas('contribuable', function ($q) use ($query) {
-                    $q->where('nom', 'like', "%$query%")
-                        ->orWhere('prenom', 'like', "%$query%");
+        $anneeActive = Annee::where('active', 1)->firstOrFail();
+        $recencement_tpu = Recensement_tpu::where('annee_id', $anneeActive->id)
+            ->whereHas('bien', function ($q) use ($search) {
+                $q->where('libelle', 'like', "%$search%")
+                ->orWhere('adresse', 'like', "%$search%")
+                ->orWhere('numero_bien', 'like', "%$search%")
+                ->orWhereHas('contribuable', function ($q) use ($search) {
+                    $q->where('nom', 'like', "%$search%")
+                        ->orWhere('prenom', 'like', "%$search%");
                 })
-                ->orWhereHas('typeBien', function ($q) use ($query) {
-                    $q->where('libelle', 'like', "%$query%");
+                ->orWhereHas('typeBien', function ($q) use ($search) {
+                    $q->where('libelle', 'like', "%$search%");
                 });
             })
-            ->orWhereHas('annee', function ($q) use ($query, $anneeActive) {
-                $q->where('annee', 'like', "%$query%")
+            ->orWhereHas('annee', function ($q) use ($search, $anneeActive) {
+                $q->where('annee', 'like', "%$search%")
                 ->where('id', $anneeActive->id); // Filtrage par année active
             })
             ->with(['bien.contribuable', 'bien.typeBien', 'annee']) // Charge les relations nécessaires
             ->orderBy('id', 'desc')
-            ->get();
-            return response()->json($recensements);
+            ->paginate(10);
+            return view('Admin::TPU.Liste',compact('recencement_tpu'));
+        }
     }
-
-    
-
-
     public function recense(Request $request)
     {
         $request->validate([
             'numero_bien' =>'required'
         ]);
 
-        $verifBienExist=Bien::where('numero_bien',$request->numero_bien)->first();
+        $verifBienExist=Bien::where('numero_bien',$request->numero_bien)->where('delete',0)->first();
         if($verifBienExist)
         {
-            return to_route('tpu.ajout',$verifBienExist->id);
+            return to_route('tpu.ajout',$verifBienExist->uuid);
         }else{
             toastr()->error("Bien. '$request->numero_bien.' est introuvable dans la base de données");
              return back();
@@ -162,7 +154,7 @@ class TPUController extends Controller
     
 
 
-    public function update(Request $request,$id)
+    public function update(Request $request,$uuid)
     {
         $request->validate([
             'categorie' =>'required',
@@ -171,7 +163,7 @@ class TPUController extends Controller
         ]);
         $doublonRecencement = Recensement_tpu::where('bien_id', $request->bien_id)
         ->where('annee_id', $request->annee_id)
-        ->where('id', '!=', $request->id) // Ignorer l'enregistrement en cours de modification
+        ->where('uuid', '!=', $request->uuid) // Ignorer l'enregistrement en cours de modification
         ->first();
         $verifDateRecensement=Annee::findOrFail($request->annee_id);
         $dateLocal=Carbon::now('UTC');
@@ -185,7 +177,7 @@ class TPUController extends Controller
                 toastr()->error('ce bien est déja recenser en TPU pour cette année');
                 return back();
             }else{
-                $recencement_tpu=Recensement_tpu::findOrFail($id);
+                $recencement_tpu=Recensement_tpu::where('uuid',$uuid)->firstOrFail();
                 $recencement_tpu->user_id=1;
                 $recencement_tpu->bien_id=$request->bien_id;
                 $recencement_tpu->annee_id=$request->annee_id;

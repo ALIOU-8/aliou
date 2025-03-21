@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Support\Str;
 class Bien extends Model
 {
     use HasFactory;
@@ -17,5 +17,12 @@ class Bien extends Model
     public function typeBien()
     {
         return $this->belongsTo(TypeBien::class);
+    }
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->uuid = (string) Str::uuid();
+        });
     }
 }

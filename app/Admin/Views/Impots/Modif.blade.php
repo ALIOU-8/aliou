@@ -42,7 +42,7 @@
                                 </div>
                             </fieldset>
                         </div>
-                        <form action="{{route('impot.update',$impot->id)}}" method="post" class="form">
+                        <form action="{{route('impot.update',$impot->uuid)}}" method="post" class="form">
                             @csrf
                             @method('put')
                             <div class="row">
@@ -90,6 +90,7 @@
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
+                                @if($impot->type_impot=='patente')
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label" for="droit_fixe">Droit fixe</label>
                                     <input class="form-control" type="text" name="droit_fixe" value="{{$impot->droit_fixe}}">
@@ -103,7 +104,8 @@
                                     @error('droit_proportionnel')
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
-                                </div>               
+                                </div>
+                                @endif              
                                 <div class="d-flex justify-content-start">
                                     <button class="btn btn-outline-success col-6 col-md-3 d-flex justify-content-center align-items-center gap-1">Valider la modification <i class="bx bx-save"></i></button>
                                 </div>

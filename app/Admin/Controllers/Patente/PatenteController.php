@@ -5,7 +5,6 @@ namespace App\Admin\Controllers\Patente;
 use App\Http\Controllers\Controller;
 use App\Models\Annee;
 use App\Models\Bien;
-use App\Models\Recensement_licence;
 use App\Models\Recensement_patente;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -14,12 +13,12 @@ class PatenteController extends Controller
 {
     public function index () {
         $anneeActive=Annee::where('active',1)->firstOrFail();
-        $recencement_patente=Recensement_patente::where('annee_id',$anneeActive->id)->orderBy('id','desc')->get();
+        $recencement_patente=Recensement_patente::where('annee_id',$anneeActive->id)->orderBy('id','desc')->paginate(10);
         return view('Admin::Patente.Liste',compact('recencement_patente'));
     }
 
-    public function ajout ($id) {
-        $bien_recence=Bien::findOrFail($id);
+    public function ajout ($uuid) {
+        $bien_recence=Bien::where('uuid',$uuid)->firstOrFail();
         $annee=Annee::where('active',1)->first();
         return view('Admin::Patente.Ajout',compact('bien_recence','annee'));
     }
@@ -58,7 +57,7 @@ class PatenteController extends Controller
         
     }
 
-    public function update(Request $request,$id)
+    public function update(Request $request,$uuid)
     {
         $request->validate([
             'categorie' =>'required',
@@ -67,7 +66,7 @@ class PatenteController extends Controller
         ]);
         $doublonRecencement = Recensement_patente::where('bien_id', $request->bien_id)
         ->where('annee_id', $request->annee_id)
-        ->where('id', '!=', $request->id) // Ignorer l'enregistrement en cours de modification
+        ->where('uuid', '!=', $request->uuid) // Ignorer l'enregistrement en cours de modification
         ->first();
         $verifDateRecensement=Annee::findOrFail($request->annee_id);
         $dateLocal=Carbon::now('UTC');
@@ -81,7 +80,7 @@ class PatenteController extends Controller
                 toastr()->error('ce bien est déja recenser en patente pour cette année');
                 return back();
             }else{
-                $recensement_patente=Recensement_patente::findOrFail($id);
+                $recensement_patente=Recensement_patente::where('uuid',$uuid)->firstOrFail();
                 $recensement_patente->user_id=1;
                 $recensement_patente->bien_id=$request->bien_id;
                 $recensement_patente->annee_id=$request->annee_id;
@@ -95,9 +94,9 @@ class PatenteController extends Controller
         }
     }
 
-    public function modif ($id) {
-        // Trouver le recensement licence par ID
-        $recensement_patente =Recensement_patente::findOrFail($id);
+    public function modif ($uuid) {
+        // Trouver le recensement licence par uuid
+        $recensement_patente =Recensement_patente::where('uuid',$uuid)->firstOrFail();
  
         // Récupérer les IDs des biens déjà recensés
         $biensRecenses =Recensement_patente::pluck('bien_id')->toArray();
@@ -110,8 +109,8 @@ class PatenteController extends Controller
 
      return view('Admin::Patente.Modif',compact('recensement_patente','bien'));
     }    
-    public function voir ($id) {
-        $recensement_patente=Recensement_patente::findOrFail($id);
+    public function voir ($uuid) {
+        $recensement_patente=Recensement_patente::where('uuid',$uuid)->firstOrFail();
         return view('Admin::Patente.Voir',compact('recensement_patente'));
     }
     public function recense(Request $request)
@@ -120,10 +119,10 @@ class PatenteController extends Controller
             'numero_bien' =>'required'
         ]);
 
-        $verifBienExist=Bien::where('numero_bien',$request->numero_bien)->first();
+        $verifBienExist=Bien::where('numero_bien',$request->numero_bien)->where('delete',0)->first();
         if($verifBienExist)
         {
-            return to_route('patente.ajout',$verifBienExist->id);
+            return to_route('patente.ajout',$verifBienExist->uuid);
         }else{
             toastr()->error("Bien. '$request->numero_bien.' est introuvable dans la base de données");
              return back();
@@ -146,40 +145,37 @@ class PatenteController extends Controller
                 ]
         ]);
     }
-    public function search(Request $request)
+
+    public function recherche(Request $request)
     {
-    $query = $request->get('query');
+        if ($request->has('search')) {
+        $search = $request->input('search');
 
         // Récupérer l'année active
-        $anneeActive = Annee::where('active', 1)->first();
-        if (!$anneeActive) {
-            return response()->json(['message' => 'Aucune année active trouvée'], 404);
-        }
-
-        // Recherche filtrée par l'année active
-        $recensements = Recensement_patente::where('annee_id', $anneeActive->id)
-            ->whereHas('bien', function ($q) use ($query) {
-                $q->where('libelle', 'like', "%$query%")
-                ->orWhere('adresse', 'like', "%$query%")
-                ->orWhere('numero_bien', 'like', "%$query%")
-                ->orWhereHas('contribuable', function ($q) use ($query) {
-                    $q->where('nom', 'like', "%$query%")
-                        ->orWhere('prenom', 'like', "%$query%");
+        $anneeActive = Annee::where('active', 1)->firstOrFail();
+        $recencement_patente = Recensement_patente::where('annee_id', $anneeActive->id)
+            ->whereHas('bien', function ($q) use ($search) {
+                $q->where('libelle', 'like', "%$search%")
+                ->orWhere('adresse', 'like', "%$search%")
+                ->orWhere('numero_bien', 'like', "%$search%")
+                ->orWhereHas('contribuable', function ($q) use ($search) {
+                    $q->where('nom', 'like', "%$search%")
+                        ->orWhere('prenom', 'like', "%$search%");
                 })
-                ->orWhereHas('typeBien', function ($q) use ($query) {
-                    $q->where('libelle', 'like', "%$query%");
+                ->orWhereHas('typeBien', function ($q) use ($search) {
+                    $q->where('libelle', 'like', "%$search%");
                 });
             })
-            ->orWhereHas('annee', function ($q) use ($query, $anneeActive) {
-                $q->where('annee', 'like', "%$query%")
+            ->orWhereHas('annee', function ($q) use ($search, $anneeActive) {
+                $q->where('annee', 'like', "%$search%")
                 ->where('id', $anneeActive->id); // Filtrage par année active
             })
             ->with(['bien.contribuable', 'bien.typeBien', 'annee']) // Charge les relations nécessaires
             ->orderBy('id', 'desc')
-            ->get();
-            return response()->json($recensements);
+            ->paginate(10);
+            return view('Admin::Patente.Liste',compact('recencement_patente'));
+        }
     }
-
     public function corbeille () {
         return view('Admin::Patente.Corbeille');
     }

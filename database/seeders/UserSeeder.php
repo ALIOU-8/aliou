@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Annee;
 use App\Models\Fonction;
 use App\Models\Personnel;
+use App\Models\TypeBien;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -32,6 +33,11 @@ class UserSeeder extends Seeder
         Fonction::create(
             [
                 "libelle"=>"Directeur",
+            ]
+        );
+        TypeBien::create(
+            [
+                "libelle"=>"boutique",
             ]
         );
         Personnel::create(

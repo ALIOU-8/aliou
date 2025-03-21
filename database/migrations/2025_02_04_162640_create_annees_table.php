@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('annees', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->string('annee')->unique();
             $table->date('Date_debut');
             $table->date('Date_fin');

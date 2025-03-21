@@ -19,7 +19,7 @@
                     <div class="card-body">
                         <div class="h5 mb-2 text-center text-success">Modification Invitation</div>
                         <div class="h6 mb-3 text-success">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab mollitia ratione quaerat natus rem iusto asperiores facilis libero est doloremque velit, suscipit repellendus cupiditate illo dolor perspiciatis labore reiciendis vitae?</div>
-                        <form action="{{route('parametre.configuration.invitation.update',$invitation->id)}}" method="post" class="form">
+                        <form action="{{route('parametre.configuration.invitation.update',$invitation->uuid)}}" method="post" class="form">
                             @csrf
                             @method('put')
                             <div class="row">

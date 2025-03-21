@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('fonctions', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->String('libelle')->unique();
             $table->string('delete')->default(0);
             $table->timestamps();

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('recensement_tpus', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->foreignId('user_id')->constrained()->onUpdate('cascade');
             $table->foreignId('bien_id')->constrained()->onUpdate('cascade');
             $table->foreignId('annee_id')->constrained()->onUpdate('cascade');

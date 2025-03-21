@@ -15,7 +15,7 @@
                     <div class="card-body">
                         <div class="h5 mb-2 text-center text-success"> Recensement CFU </div>
                         <div class="h6 mb-3 text-success">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab mollitia ratione quaerat natus rem iusto asperiores facilis libero est doloremque velit, suscipit repellendus cupiditate illo dolor perspiciatis labore reiciendis vitae?</div>
-                        <form action="{{ route('cfu.update',$recencement_cfu->id) }}" method="POST" class="form">
+                        <form action="{{ route('cfu.update',$recencement_cfu->uuid) }}" method="POST" class="form">
                             @csrf
                             @method('put')
                             <div class="row">

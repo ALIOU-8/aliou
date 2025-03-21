@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Support\Str;
 class Impot extends Model
 {
     use HasFactory;
@@ -37,5 +37,13 @@ class Impot extends Model
     public function paiement()
     {
         return $this->hasMany(Paiement::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->uuid = (string) Str::uuid();
+        });
     }
 }

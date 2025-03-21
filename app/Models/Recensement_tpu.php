@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Support\Str;
 class Recensement_tpu extends Model
 {
     public function user()
@@ -17,5 +17,13 @@ class Recensement_tpu extends Model
     public function annee()
     {
         return $this->belongsTo(Annee::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->uuid = (string) Str::uuid();
+        });
     }
 }

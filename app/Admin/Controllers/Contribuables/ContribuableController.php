@@ -16,30 +16,44 @@ class ContribuableController extends Controller
         ->paginate(10);    
         return view('Admin::Contribuables.Liste',compact('contribuables'));
     }
-    public function search(Request $request)
+    public function recherche(Request $request)
     {
-        $query=$request->get('query');
-        $contribuables=Contribuable::where('delete',0)->where(
-            function($q) use ($query)
-            {
-                $q->where('nom','like',"%$query%")
-                ->orWhere('prenom','like',"%$query%")
-                ->orWhere('telephone','like',"%$query%")
-                ->orWhere('profession','like',"%$query%");
-                
-            }
-        )
-        ->with('bien.typeBien') // Charge les biens et leur type
-        ->get();
-        return response()->json($contribuables);
+        $query = Contribuable::where('delete', 0); // Filtre les contribuables non supprimés
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('nom', 'LIKE', "%{$search}%")
+                  ->orWhere('prenom', 'LIKE', "%{$search}%")
+                  ->orWhere('telephone', 'LIKE', "%{$search}%")
+                  ->orWhere('profession', 'LIKE', "%{$search}%");
+            });
+        }
+            $contribuables = $query->paginate(10);
+         return view('Admin::Contribuables.Liste', compact('contribuables'));
     }
-    
+    public function recherche_corbeille(Request $request)
+    {
+        $query = Contribuable::where('delete', 1); // Filtre les contribuables non supprimés
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('nom', 'LIKE', "%{$search}%")
+                  ->orWhere('prenom', 'LIKE', "%{$search}%")
+                  ->orWhere('telephone', 'LIKE', "%{$search}%")
+                  ->orWhere('profession', 'LIKE', "%{$search}%");
+            });
+        }
+            $contribuables = $query->paginate(10);
+         return view('Admin::Contribuables.Corbeille', compact('contribuables'));
+    }
     public function ajout () {
         return view('Admin::Contribuables.Ajout');
     }
 
-    public function modif (string $id) {
-        $contribuables = Contribuable::FindOrFail($id);
+    public function modif (string $uuid) {
+        $contribuables = Contribuable::where('uuid',$uuid)->firstOrFail();
         return view('Admin::Contribuables.Modif',compact('contribuables'));
     }
 
@@ -61,7 +75,7 @@ class ContribuableController extends Controller
         toastr()->success('Contribuable Ajoutez avec Succes');
         return to_route('contribuables.liste');
     }
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $uuid)
     {
         $request->validate([
             'nom' => 'required',
@@ -69,12 +83,12 @@ class ContribuableController extends Controller
             'telephone' => [
                 'required',
                 'numeric',
-                Rule::unique('contribuables')->ignore($id), // Exclure l'ID actuel
+                Rule::unique('contribuables', 'telephone')->ignore($uuid, 'uuid'),
             ],
             'profession' => 'required',
         ]);
 
-            $contribuable = Contribuable::findOrFail($id);
+            $contribuable = Contribuable::where('uuid',$uuid)->firstOrFail();
             $contribuable->nom = $request->nom;
             $contribuable->prenom = $request->prenom;
             $contribuable->telephone = $request->telephone;
@@ -85,17 +99,17 @@ class ContribuableController extends Controller
             return to_route('contribuables.liste');
      }
 
-    public function delete(string $id)
+    public function delete(string $uuid)
     {
-        $contribuable=Contribuable::findOrFail($id);
+        $contribuable=Contribuable::where('uuid',$uuid)->firstOrFail();
         $contribuable->delete=1;
         $contribuable->update();
         toastr()->success('Contribuable Supprimez avec Succes');
         return to_route('contribuables.liste');
     }
-    public function restaure (string $id)
+    public function restaure (string $uuid)
     {
-        $contribuable=Contribuable::findOrFail($id);
+        $contribuable=Contribuable::where('uuid',$uuid)->firstOrFail();
         $contribuable->delete=0;
         $contribuable->update();
         toastr()->success('Contribuable restaurez avec Succes');

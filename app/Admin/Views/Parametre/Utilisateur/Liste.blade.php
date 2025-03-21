@@ -19,7 +19,12 @@
                                 <a href="{{route('parametre.user.add')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Nouveau <i class="bx bx-plus"></i></a>
                             </div>
                             <div class="col-md-4 ms-auto">
-                                <input type="text" placeholder="Rechercher..." class="form-control border border-success m-3">
+                                <form method="GET" action="{{ route('recherche.user') }}">
+                                    <div class="input-group mb-3">
+                                        <input type="text" name="search" class="form-control border border-success" placeholder="Rechercher..." value="{{ request('search') }}">
+                                        <button class="btn btn-success" type="submit">Rechercher</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -49,14 +54,21 @@
                                         <td> {{$item->droit}} </td>
                                         <td class="@if($item->statut == 0) text-success @endif @if($item->statut == 1) text-danger @endif"> @if($item->statut == 0) Actif @endif @if($item->statut == 1) Bloqué @endif </td>
                                         <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('parametre.user.modif',$item->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
-                                            <a href="{{route('parametre.user.bloquer',$item->id)}}" class="btn @if($item->statut == 0) btn-outline-danger @endif @if($item->statut == 1) btn-outline-success @endif btn-sm d-flex align-items-center gap-1"> @if($item->statut == 0) bloquer @endif @if($item->statut == 1) débloquer @endif <i class="bx bx-trash"></i></a>
+                                            <a href="{{route('parametre.user.modif',$item->uuid)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
+                                            <a href="{{route('parametre.user.bloquer',$item->uuid)}}" class="btn @if($item->statut == 0) btn-outline-danger @endif @if($item->statut == 1) btn-outline-success @endif btn-sm d-flex align-items-center gap-1"> @if($item->statut == 0) bloquer @endif @if($item->statut == 1) débloquer @endif <i class="bx bx-trash"></i></a>
                                         </td>
                                     </tr>
                                     @endforeach
-                                    
+                                    @if (count($Utilisateur) == 0)
+                                        <tr>
+                                            <th colspan="6" class="text-center">Aucun enregistrement trouvé pour le moment</th>
+                                        </tr>
+                                    @endif
                                 </tbody>
                             </table>
+                            <div class="d-flex justify-content-center mt-3">
+                                {{ $Utilisateur->links('pagination::bootstrap-4') }}
+                            </div>
                         </div>
                         
                     </div>
