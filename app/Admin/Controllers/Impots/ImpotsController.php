@@ -103,7 +103,7 @@ class ImpotsController extends Controller
     public function payer (string $uuid) {
         $anneeActive=Annee::where('active',1)->first();
         $impot = Impot::where('uuid',$uuid)->where('annee_id',$anneeActive->id)->first();
-        $paiement = Paiement::where('impot_id',$uuid)->get();
+        $paiement = Paiement::where('impot_id',$impot->id)->get();
         if($impot)
         {
             if ($impot->type_impot == "cfu") {
@@ -148,7 +148,7 @@ class ImpotsController extends Controller
 
         // Vérifier si l'impôt existe
         $anneeActive=Annee::where('active',1)->first();
-        $impot = Impot::where('id',$uuid)->where('annee_id',$anneeActive->id)->first();
+        $impot = Impot::where('uuid',$uuid)->where('annee_id',$anneeActive->id)->first();
 
         if (!$impot) {
             toastr()->error('Impôt introuvable');
@@ -156,7 +156,7 @@ class ImpotsController extends Controller
         }
 
         // Calcul du total des paiements déjà effectués
-        $totalPaye = Paiement::where('impot_id', $uuid)->sum('montant_payer');
+        $totalPaye = Paiement::where('impot_id', $impot->id)->sum('montant_payer');
 
         // Vérifier que le montant payé ne dépasse pas le montant dû
         if ($request->montant > $impot->montant_a_payer - $totalPaye) {
@@ -304,13 +304,6 @@ class ImpotsController extends Controller
                 $article = 1;
             }
 
-            // Création de l'impôt avec le bon rôle et article
-            $doublons=Impot::where('annee_id',$anneeActive->id)->where('type_impot',$type)->first();
-            if($doublons)
-            {
-                toastr()->error("ce bien est déja imposé pour cette année $anneeActive->annee ");
-                return back();
-            }
             $impot = new Impot();
             $impot->type_impot = $type;
             $impot->annee_id = $anneeActive->id;
@@ -330,18 +323,46 @@ class ImpotsController extends Controller
             if ($type == 'cfu'){
                 $recensement=Recensement_cfu::where('uuid',$uuid)->first();
                 $impot->recensement_cfu_id = $recensement->id;
+                // Création de l'impôt avec le bon rôle et article
+                $doublons=Impot::where('annee_id',$anneeActive->id)->where('recensement_cfu_id',$recensement->id)->where('type_impot',$type)->first();
+                if($doublons)
+                {
+                    toastr()->error("ce bien est déja imposé en CFU pour cette année $anneeActive->annee ");
+                    return back();
+                }
             }
             if ($type == 'tpu'){
                 $recensement=Recensement_tpu::where('uuid',$uuid)->first();
                 $impot->recensement_tpu_id = $recensement->id;
+                // Création de l'impôt avec le bon rôle et article
+                $doublons=Impot::where('annee_id',$anneeActive->id)->where('recensement_cfu_id',$recensement->id)->where('type_impot',$type)->first();
+                if($doublons)
+                {
+                    toastr()->error("ce bien est déja imposé en TPU pour cette année $anneeActive->annee ");
+                    return back();
+                }
             }
             if ($type == 'patente'){
                 $recensement=Recensement_patente::where('uuid',$uuid)->first();
                 $impot->recensement_patente_id = $recensement->id;
+                // Création de l'impôt avec le bon rôle et article
+                $doublons=Impot::where('annee_id',$anneeActive->id)->where('recensement_cfu_id',$recensement->id)->where('type_impot',$type)->first();
+                if($doublons)
+                {
+                    toastr()->error("ce bien est déja imposé en PATENTE pour cette année $anneeActive->annee ");
+                    return back();
+                }
             }
             if ($type == 'licence'){
                 $recensement=Recensement_licence::where('uuid',$uuid)->first();
                 $impot->recensement_licence_id = $recensement->id;
+                // Création de l'impôt avec le bon rôle et article
+                $doublons=Impot::where('annee_id',$anneeActive->id)->where('recensement_cfu_id',$recensement->id)->where('type_impot',$type)->first();
+                if($doublons)
+                {
+                    toastr()->error("ce bien est déja imposé en LICENCE pour cette année $anneeActive->annee ");
+                    return back();
+                }
             }
 
             $impot->save();

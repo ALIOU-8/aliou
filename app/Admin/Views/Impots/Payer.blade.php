@@ -15,7 +15,7 @@
                     <div class="card-body">
                         <div class="h5 mb-2 text-center text-success"> Fiche de paye de Mr/Mme {{$bien->contribuable->nom . ' ' . $bien->contribuable->prenom}}  </div>
                         <div class="">
-                            <form action="{{route('impot.payement',$impot->id)}}" method="POST" class="row">
+                            <form action="{{route('impot.payement',$impot->uuid)}}" method="POST" class="row">
                                 @csrf
                                 <div class="col-md-6 mb-3">
                                     <label for="">Montant A payer</label>
