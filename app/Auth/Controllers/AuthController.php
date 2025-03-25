@@ -3,16 +3,18 @@
 namespace App\Auth\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ForgetPasswordMail;
 use App\Models\Personnel;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
     public function login () {
-        return view('Auth::layout');
+        return view('Auth::login');
     }
 
     // Utilisateur 
@@ -39,7 +41,7 @@ class AuthController extends Controller
     }
 
     public function add_user(){
-        $droit=['admin','cfu','tpu','licence','patente'];
+        $droit=['admin','cfu','tpu','patente'];
         return view('Admin::Parametre.Utilisateur.Ajout',compact('droit'));
     }
 
@@ -72,7 +74,7 @@ class AuthController extends Controller
     }
 
     public function modif_user(string $uuid){
-        $droit=['admin','cfu','tpu','licence','patente'];
+        $droit=['admin','cfu','tpu','patente'];
         $user = User::where('uuid',$uuid)->first();
         return view('Admin::Parametre.Utilisateur.Modif',compact('user','droit'));
     }
@@ -133,14 +135,29 @@ class AuthController extends Controller
 
     public function login_store (Request $request){
         $credits = $request->validate([
-            'matricule'=>'required',
+            'email'=>'required',
             'password'=>'required'
         ]);
-        $user = User::where('matricule', $request->matricule)->first();         
+        $user = User::where('email', $request->email)->first();         
         if($user){
             $droitUser = $user->droit;
             if(Auth::attempt($credits)){
-                return redirect()->intended('/');
+                if($droitUser === 'admin'){
+                    toastr()->success('Bienvenue à vous '.$user->nom);
+                    return redirect()->route('dashboard');
+                }elseif($droitUser === 'cfu'){
+                    toastr()->success('Bienvenue à vous '.$user->nom);
+                    return redirect()->route('dashboard.cfu');
+                }elseif($droitUser === 'tpu'){
+                    toastr()->success('Bienvenue à vous '.$user->nom);
+                    return redirect()->route('dashboard.tpu');
+                }elseif($droitUser ==='patente'){   
+                    toastr()->success('Bienvenue à vous '.$user->nom);
+                    return redirect()->route('dashboard.patente');
+                }else{
+                    toastr()->error('Identifiant incorrect');
+                    return back();
+                }
             }else{
                 toastr()->error('Identifiant incorrect');
                 return back();
@@ -149,6 +166,80 @@ class AuthController extends Controller
             toastr()->error('Identifiant incorrect');
             return back();
         }
+    }
+
+    public function logout(Request $request){
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/login');
+    }
+
+    //Mot de passe oublié 
+
+    public function forget(){
+        return view('Auth::forget');
+    }
+
+    public function verification(Request $request){
+        $request->validate([
+            'email' => 'required|email'
+        ]);
+        $user = User::where('email', $request->email)->first();
+        if(!$user){
+            toastr()->error('Email non trouvé');
+            return back();
+        }
+        $otp = rand(min: 0000000, max: 999999);
+        // $message = "Votre code de verificacion est :".$otp;
+        toastr()->info("Un code de vérification a été envoyé à votre email.");
+        // toastr("$message");
+        // Mettre l'otp et le numéro de téléphone en session 
+        session()->put('otp', $otp);
+        session()->put('email', $request->email);
+        // Envoyer un mail à cet email avec l'otp
+        Mail::to($request->email)->send(new ForgetPasswordMail($otp));
+        return redirect()->route('auth.otp');
+        
+    }
+
+    public function otp(){
+        // Vérifier si la session est active
+        if(session()->get('otp')){
+            return view('Auth::otp');
+        }else{
+            toastr()->error('Veuillez générer un nouveau code');
+            return redirect()->route('auth.forget');
+        }
+    }
+
+    public function confirm_otp(Request $request){
+        // Recuperer l'otp de la session 160322
+        $request->validate([
+            'otp' => 'required|numeric'
+        ]);
+        $otp = session()->get('otp');
+        if($otp != $request->otp){
+            toastr()->error('Code incorrect');
+            return back();
+        }
+        return redirect()->route('auth.mdp');
+    }
+
+    public function mdp(){
+        return view('Auth::mdp');
+    }
+
+    public function mdp_update(Request $request){
+        request()->validate([
+            'password'=>'required|confirmed|min:6'
+        ]);
+        $email = session()->get('email');
+        $user = User::where('email', $email)->first();
+        $user->password =  bcrypt($request->password);
+        $user->update();
+        toastr()->success('Mot de passe modifié');
+        return redirect()->route('login');
     }
 
 }
