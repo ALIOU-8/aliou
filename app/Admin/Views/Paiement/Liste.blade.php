@@ -91,7 +91,7 @@
                                                 <td>{{ $item->montant_restant }}</td> 
                                                 <td>{{ $item->num_quitance }}</td>
                                                 <td class="d-flex justify-content-center gap-2">
-                                                    <a href="{{ route('impot.payer', $item->impot->$recensement->id) }}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">
+                                                    <a href="{{ route('impot.payer', $item->impot->uuid) }}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">
                                                         Détail<i class="bx bx-edit"></i>
                                                     </a>
                                                 </td>

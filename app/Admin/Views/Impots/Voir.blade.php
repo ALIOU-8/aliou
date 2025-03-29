@@ -16,7 +16,7 @@
                         <div class="d-flex justify-content-between">
                             <div class="h6 text-uppercase">République de Guinée</div>
                             <div class="h4 mb-2 text-center text-success"> Avis d'imposition </div>
-                            <a href="" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
+                            <a href="{{route('impot.imprimer',['type' => $impot->type_impot, 'uuid' => $impot->uuid])}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Imprimer<i class="bx bx-show"></i></a>
                         </div>
                         <div class="h6 text-uppercase">Numero:<span class="text-success">{{ $impot->numero }}</span></div>
                         <div class="h6 mb-3 text-center">Impots établis au profit de l'Etat</div>

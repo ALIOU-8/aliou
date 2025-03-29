@@ -8,59 +8,129 @@
         <li><a href="" class="active">Dashboard</a></li> --}}
     </ul>
     <div class="container justify-content-center">
-        <div class="row d-flex justify-content-center mb-5">
+        <div class="row d-flex justify-content-center">
             <div class="col-md-12 ">
                 <div class="card border border-light">
                     <div class="card-body">
-                        <div class="row mb-3">
-                            <div class="col-md-4 mb-4">
+                        <div class="row">
+                            <div class="text-center h5 mb-3 text-success">Statistiques sur les Personnels </div>
+                            <div class="col-md-3 mb-4">
                                 <div class="card border shadow p-2">
-                                    <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-user"></i>Nombre de Personnels</div>
+                                    <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-user"></i>Personnels</div>
                                     <hr class="m-0">
-                                    <div class="h4 text-center mt-1 mb-1 p-1">
+                                    <div class="h4 text-center p-1">
                                         {{$personnel}}                                    
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 mb-4">
+                            <div class="col-md-3 mb-4">
                                 <div class="card border shadow p-2">
-                                    <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-user"></i>Nombre de Contribluables</div>
+                                    <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-user"></i>Contribluables</div>
                                     <hr class="m-0">
-                                    <div class="h4 text-center mt-1 mb-1 p-1">
+                                    <div class="h4 text-center p-1">
                                         {{$contribuable}}                                      
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 mb-4">
+                            <div class="col-md-3 mb-4">
                                 <div class="card border shadow p-2">
-                                    <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-user"></i>Nombre de Biens</div>
+                                    <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-user"></i>Biens</div>
                                     <hr class="m-0">
-                                    <div class="h4 text-center mt-1 mb-1 p-1">
+                                    <div class="h4 text-center p-1">
                                         {{$bien}}                                      
                                     </div>
                                 </div>
                             </div>
-                        </div>     
+                            <div class="col-md-3 mb-4">
+                                <div class="card border shadow p-2">
+                                    <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-user"></i>Utilisateurs</div>
+                                    <hr class="m-0">
+                                    <div class="h4 text-center p-1">
+                                        {{$user}}                                      
+                                    </div>
+                                </div>
+                            </div>
+                        </div>              
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+<main>
+    <div class="container justify-content-center">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-12 ">
+                <div class="card border border-light">
+                    <div class="card-body">
                         <div class="row">
+                            <div class="text-center h5 mb-3 text-success">Statistiques sur les biens de l'année {{$annee->annee}} </div>
+                            <div class="col-md-3 mb-4">
+                                <div class="card border shadow p-2">
+                                    <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-user"></i>Biens recenser</div>
+                                    <hr class="m-0">
+                                    <div class="h4 text-center p-1">
+                                        {{$bienrecencer}}                                    
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-4">
+                                <div class="card border shadow p-2">
+                                    <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-user"></i>Biens imposer</div>
+                                    <hr class="m-0">
+                                    <div class="h4 text-center p-1">
+                                        {{$bienImposer}}                                      
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-4">
+                                <div class="card border shadow p-2">
+                                    <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-user"></i>Impôts payés</div>
+                                    <hr class="m-0">
+                                    <div class="h4 text-center p-1">
+                                        {{$totalImpostsPayes}}                                      
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-4">
+                                <div class="card border shadow p-2">
+                                    <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-user"></i>Impôts non payés</div>
+                                    <hr class="m-0">
+                                    <div class="h4 text-center p-1">
+                                        {{$totalImpostsNonPayes}}                                      
+                                    </div>
+                                </div>
+                            </div>
+                        </div>              
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+<main>
+    <div class="container justify-content-center">
+        <div class="row d-flex justify-content-center mb-5">
+            <div class="col-md-12 ">
+                <div class="card border border-light">
+                    <div class="card-body">    
+                        <div class="row">
+                            <div class="text-center h5 mb-3 text-success">Statistiques sur les biens de l'année {{$annee->annee}} </div>
                             <div class="col-md-6">
                                 <div class="card">
-                                    <div class="card-body shadow">
-                                        <div class="h6 text-success text-center">Choix de l'année</div>
-                                        <select class="form-control" name="" id="">
-                                            @foreach ($annees as $item)
-                                                <option value="{{$item->annee}}">{{$item->annee}}</option>
-                                            @endforeach
-                                        </select> 
-                                        <hr>
-                                        <button class="btn btn-outline-success d-flex align-items-center gap-1">Afficher <i class="fa fa-eye"></i></button>
+                                    <div class="card-body border shadow">
+                                        <div class="h6 text-success text-center">Statistiques du recensement pour l'année {{$annee->annee}} </div>
+                                        <canvas id="myChart"></canvas>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-body border shadow">
-                                        <div class="h6 text-success text-center">Statistiques du recensement pour l'année 2024 </div>
-                                        <canvas id="myChart"></canvas>
+                                        <div class="h6 text-success text-center">Statistiques des impôts pour l'année {{$annee->annee}} </div>
+                                        <canvas id="Chart"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -69,7 +139,108 @@
                 </div>
             </div>
         </div>
+        <hr>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body border shadow">
+                            <div class="h6 text-success text-center">Statistiques paiement des impôts  pour l'année {{$annee->annee}} </div>
+                            <canvas id="monChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="calendar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script>
+        const ctx = document.getElementById('monChart');
+        
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['CFU', 'TPU', 'PATENTE', 'LICENCE'],
+                datasets: [{
+                    label: '# nombre impôts payé',
+                    data: <?php echo json_encode($donneePayes); ?>,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script> 
+    {{-- Chart en bar  --}}
+    <script>
+        const ctx2 = document.getElementById('myChart');
+        
+        new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['CFU', 'TPU', 'PATENTE', 'LICENCE'],
+                datasets: [{
+                    label: '# nombre de personnes recencé',
+                    data: <?php echo json_encode($data); ?>,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>  
 
+    {{-- Chart en dognut  --}}
+    <script>
+        const ctx1 = document.getElementById('Chart');        
+      
+        new Chart(ctx1, {
+          type: 'doughnut',
+          data: {
+            labels: ['CFU', 'TPU', 'PATENTE', 'LICENCE'],
+            datasets: [{
+              label: '# nombre de personnes imposé',
+              data: <?php echo json_encode($dataDonught); ?>,
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale:'fr'
+            });
+            calendar.render();
+        });
+
+    </script>
 </main>
 @endsection
+

@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Annee;
 use App\Models\Fonction;
 use App\Models\Personnel;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-
 class PersonnelsController extends Controller
 {
     public function index () {
@@ -137,9 +137,13 @@ class PersonnelsController extends Controller
     }
 
     public function imprimer () {
-        $personnel=Personnel::where('delete',0)->orderBy('id','desc')->get();
-        $annee=Annee::where('active',1)->firstOrFail();
-        return view('Admin::Personnels.Imprimer',compact('personnel','annee'));
+        $personnel = Personnel::where('delete', 0)->orderBy('id', 'desc')->get();
+        $annee = Annee::where('active', 1)->firstOrFail();
+
+        $pdf = Pdf::loadView('Admin::Personnels.Imprimer', compact('personnel', 'annee'));
+        
+        return $pdf->stream('personnels.pdf'); 
+
     }
 
     public function corbeille () {

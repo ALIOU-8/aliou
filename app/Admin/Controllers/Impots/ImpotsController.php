@@ -12,12 +12,18 @@ use App\Models\Recensement_licence;
 use App\Models\Recensement_patente;
 use App\Models\Recensement_tpu;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ImpotsController extends Controller
 {
     public function index () {
         $anneeActive=Annee::where('active',1)->firstOrFail();
-        $impot = Impot::orderBy('id','desc')->where('annee_id',$anneeActive->id)->paginate(10);
+        if (Auth::user()->droit != 'admin') {
+            $impot = Impot::orderBy('id','desc')->where('annee_id',$anneeActive->id)->where('type_impot', Auth::user()->droit)->paginate(10);
+        }else {
+            $impot = Impot::orderBy('id','desc')->where('annee_id',$anneeActive->id)->paginate(10);
+        }
         return view('Admin::Impots.Liste',compact('impot'));
     }
 
@@ -72,7 +78,37 @@ class ImpotsController extends Controller
         toastr()->success('Imposition modifié avec succèss');
         return to_route('impot.liste');
     }
-
+    public function imprimer(String $type,String $uuid)
+    {
+        $anneeActive=Annee::where('active',1)->first();
+        $impot  = Impot::where('uuid',$uuid)->where('annee_id',$anneeActive->id)->first();
+        if (!$impot) {
+            toastr()->error('Impôt introuvable');
+            return back();
+        }
+        if ($type == "cfu") {
+            $recensement=Recensement_cfu::where('id',$impot->recensement_cfu_id)->where('annee_id',$anneeActive->id)->with('occupant')->with('bien')->first();
+            $bien = Bien::where('id',$recensement->bien_id)->with('contribuable')->with('typeBien')->first();
+        }
+        if ($type == "tpu") {
+            $recensement=Recensement_tpu::where('id',$impot->recensement_tpu_id)->where('annee_id',$anneeActive->id)->with('bien')->first();
+            $bien = Bien::where('id',$recensement->bien_id)->with('contribuable')->with('typeBien')->first();
+        }
+        if ($type == "patente") {
+            $recensement=Recensement_patente::where('id',$impot->recensement_patente_id)->where('annee_id',$anneeActive->id)->with('bien')->first();
+            $bien = Bien::where('id',$recensement->bien_id)->with('contribuable')->with('typeBien')->first();
+        }
+        if ($type == "licence") {
+            $recensement=Recensement_licence::where('id',$impot->recensement_licence_id)->where('annee_id',$anneeActive->id)->with('bien')->first();
+            $bien = Bien::where('id',$recensement->bien_id)->with('contribuable')->with('typeBien')->first();
+        }
+        if($recensement)
+        {
+            $pdf = Pdf::loadView('Admin::Impots.imprimer',compact('impot','recensement','bien'));
+             return $pdf->stream('impôt.pdf'); 
+        }
+        
+    }
     public function voir (string $type, string $uuid) {
         $anneeActive=Annee::where('active',1)->first();
         $impot  = Impot::where('uuid',$uuid)->where('annee_id',$anneeActive->id)->first();
@@ -97,7 +133,10 @@ class ImpotsController extends Controller
             $bien = Bien::where('id',$recensement->bien_id)->with('contribuable')->with('typeBien')->first();
         }
         if($recensement)
-        return view('Admin::Impots.Voir',compact('impot','recensement','bien'));
+        {
+            return view('Admin::Impots.Voir',compact('impot','recensement','bien'));
+        }
+       
     }
 
     public function payer (string $uuid) {

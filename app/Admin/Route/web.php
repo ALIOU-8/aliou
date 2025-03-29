@@ -30,7 +30,12 @@ use Illuminate\Support\Facades\Route;
     });
 
     //Les routes pour le dashboard
-    Route::get('/dashboard',[DashboardController::class, 'index'])->name('dashboard');
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/',[DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/cfu',[DashboardController::class, 'cfu'])->name('dashboard.cfu');
+        Route::get('/tpu',[DashboardController::class, 'tpu'])->name('dashboard.tpu');
+        Route::get('/patente',[DashboardController::class, 'patente'])->name('dashboard.patente');
+    });
 
     //Les routes pour le profil
     Route::get('/profil',[ProfilController::class, 'index'])->name('profil');
@@ -176,6 +181,7 @@ use Illuminate\Support\Facades\Route;
         Route::post('/imposer/{type}/{uuid}', [ImpotsController::class, 'imposer'])->name('impot.imposer');
         Route::get('/recherche', [ImpotsController::class, 'recherche'])->name('impots.recherche');
         Route::post('/recherche',[ImpotsController::class,'chercherBien'])->name('rechercher_bien');
+        Route::get('/imprimer/{type}/{uuid}', [ImpotsController::class, 'imprimer'])->name('impot.imprimer');
     });
 
 
