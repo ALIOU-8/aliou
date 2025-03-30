@@ -50,7 +50,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label" for="fonction">Fonction</label>
                                     <select name="fonction" class="form-control" id="">
-                                        <option selected value="{{$personnel->id}}">{{$personnel->fonction->libelle}}</option>
+                                        <option selected value="{{$personnel->fonction_id}}">{{$personnel->fonction->libelle}}</option>
                                         @foreach ($fonction as $fonctions )
                                         @if($personnel->fonction->libelle != $fonctions->libelle )
                                         <option  value="{{$fonctions->id}}">{{ $fonctions->libelle}}</option>

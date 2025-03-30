@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+
+class EventServiceProvider extends ServiceProvider
+{
+    /**
+     * Register services.
+     */
+    public function register(): void
+    {
+        //
+    }
+
+    /**
+     * Bootstrap services.
+     */
+    public function boot(): void
+    {
+        
+    }
+
+    protected $listen=[
+        'Illuminate\Auth\Events\Logout'=>[
+            'App\Listeners\LogUserLogout'
+        ],
+        'Illuminate\Auth\Events\login'=>[
+            'App\Listeners\LogUserLogin'
+        ],
+
+    ];
+}

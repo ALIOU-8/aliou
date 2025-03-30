@@ -3,10 +3,13 @@
 namespace App\Admin\Controllers\Biens;
 
 use App\Http\Controllers\Controller;
+use App\Models\Annee;
 use App\Models\Bien;
 use App\Models\Contribuable;
+use App\Models\Historique;
 use App\Models\TypeBien;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BiensController extends Controller
 {
@@ -55,6 +58,16 @@ class BiensController extends Controller
         $bien->adresse=$request->adresse;
         $bien->numero_bien=$numero_bien;
         $bien->save();
+        $annee=Annee::where('active',1)->first();
+        Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Ajout',
+                'activite'=>'Bien',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
         toastr()->success("Le bien $numero_bien a été ajouter avec succes.");
         return to_route("biens.liste");
     }
@@ -107,7 +120,16 @@ class BiensController extends Controller
             $bien->adresse=$request->adresse;
             $bien->update();
     }
-
+    $annee=Annee::where('active',1)->first();
+        Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Modifier',
+                'activite'=>'Bien',
+                'annee_id'=>$annee->id,
+               'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
     toastr()->success("Bien mis à jour avec succès !");
     return redirect()->route('biens.liste');
     }
@@ -196,6 +218,16 @@ class BiensController extends Controller
         $bien=Bien::where('uuid',$uuid)->firstOrFail();
         $bien->delete=1;
         $bien->update();
+        $annee=Annee::where('active',1)->first();
+        Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'supprimer',
+                'activite'=>'Bien',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
         toastr()->success('Bien Supprimez avec Succes');
         return to_route('biens.liste');
 
@@ -204,6 +236,16 @@ class BiensController extends Controller
         $bien=Bien::where('uuid',$uuid)->firstOrFail();
         $bien->delete=0;
         $bien->update();
+        $annee=Annee::where('active',1)->first();
+        Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'restorer',
+                'activite'=>'Bien',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
         toastr()->success('Bien Supprimez avec Succes');
         return to_route('biens.liste');
 

@@ -8,7 +8,9 @@ use App\Models\Fonction;
 use App\Models\Personnel;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use App\Models\Historique;
 class PersonnelsController extends Controller
 {
     public function index () {
@@ -88,6 +90,16 @@ class PersonnelsController extends Controller
         $personnel->fonction_id=$request->fonction;
         $personnel->hierachie=$request->hierachie;
         $personnel->save();
+        $annee=Annee::where('active',1)->first();
+        Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Ajout',
+                'activite'=>'personnel',
+                'annee_id'=>$annee->id,
+               'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
         toastr()->success('Personnel enregistré avec succes');
         return to_route('personnels.liste');
 
@@ -119,6 +131,16 @@ class PersonnelsController extends Controller
         $personnel->fonction_id=$request->fonction;
         $personnel->hierachie=$request->hierachie;
         $personnel->update();
+        $annee=Annee::where('active',1)->first();
+        Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Modifier',
+                'activite'=>'personnel',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
         toastr()->success('Personnel modifié avec succes');
         return to_route('personnels.liste');
 
@@ -141,13 +163,22 @@ class PersonnelsController extends Controller
         $annee = Annee::where('active', 1)->firstOrFail();
 
         $pdf = Pdf::loadView('Admin::Personnels.Imprimer', compact('personnel', 'annee'));
-        
+        $annee=Annee::where('active',1)->first();
+        Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Imprimer',
+                'activite'=>'personnel',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
         return $pdf->stream('personnels.pdf'); 
 
     }
 
     public function corbeille () {
-        $personnel=Personnel::where('delete',1)->orderBy('id','desc')->get();
+        $personnel=Personnel::where('delete',1)->orderBy('id','desc')->paginate(10);
         return view ('Admin::Personnels.Corbeille',compact('personnel'));
     }
 
@@ -156,6 +187,16 @@ class PersonnelsController extends Controller
         $personnel=Personnel::where('uuid',$uuid)->firstOrFail();
         $personnel->delete=1;
         $personnel->update();
+        $annee=Annee::where('active',1)->first();
+        Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Supprimer',
+                'activite'=>'personnel',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
         toastr()->success('personnel Supprimez avec Succes');
         return to_route('personnels.liste');
     }
@@ -164,6 +205,16 @@ class PersonnelsController extends Controller
         $personnel=Personnel::where('uuid',$uuid)->firstOrFail();
         $personnel->delete=0;
         $personnel->update();
+        $annee=Annee::where('active',1)->first();
+        Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Restaurer',
+                'activite'=>'personnel',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
         toastr()->success('personnel restaurez avec Succes');
         return to_route('personnels.liste');
     }

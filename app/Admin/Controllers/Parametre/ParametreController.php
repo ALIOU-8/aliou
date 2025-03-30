@@ -2,15 +2,16 @@
 
 namespace App\Admin\Controllers\Parametre;
 
-use App\Http\Controllers\Controller;
-use App\Models\Annee;
-use App\Models\Bien;
-use App\Models\Fonction;
-use App\Models\Impot;
-use App\Models\TypeBien;
 use Carbon\Carbon;
+use App\Models\Bien;
+use App\Models\Annee;
+use App\Models\Impot;
+use App\Models\Fonction;
+use App\Models\TypeBien;
+use App\Models\Historique;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Http\Controllers\Controller;
 
 class ParametreController extends Controller
 {
@@ -18,7 +19,8 @@ class ParametreController extends Controller
     public function index() {
         $anneeActive=Annee::where('active',1)->firstOrFail();
         $sommeTotal=Impot::orderBy('id','desc')->where('annee_id',$anneeActive->id)->where('statut','Payé')->sum('montant_a_payer');
-        return view('Admin::Parametre.Index',compact('sommeTotal'));
+        $historique=Historique::where('annee_id',$anneeActive->id)->orderBy('id','desc')->paginate(10);
+        return view('Admin::Parametre.Index',compact('sommeTotal','historique'));
     }
 
     // Configuration 

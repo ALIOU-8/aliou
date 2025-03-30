@@ -51,20 +51,35 @@
                                             <th>N°</th>
                                             <th>Nom et Prénom</th>
                                             <th>Date et Heure</th>
+                                            <th>Durée</th>
                                             <th>Activités</th>
+                                            <th>Droit</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach ($historique as $key=> $historiques )
                                         <tr>
-                                            <td>1</td>
-                                            <td>Sano Ismael</td>
-                                            <td>10/02/2025 à 12h:30min</td>
-                                            <td>Contribuables</td>
-                                            <td>Ajout</td>
+                                            <td>{{ $key+1 }}</td>
+                                            <td>{{ $historiques->user->nom.' '.$historiques->user->prenom }}</td>
+                                            <td>{{ $historiques->date }}</td>
+                                            <td class="text-success">{{ $historiques->updated_at->locale('fr')->diffForHumans() }}</td>
+                                            <td>{{ $historiques->activite }}</td>
+                                            <td>{{ $historiques->user->droit}}</td>
+                                            <td>{{ $historiques->action }}</td>
                                         </tr>
+                                        @endforeach
+                                        
+                                        @if(count($historique) == 0)
+                                        <tr>
+                                            <td colspan="8" class="text-center">Aucune historique trouvée</td>
+                                        </tr>
+                                        @endif
                                     </tbody>
                                 </table>
+                                <div class="d-flex justify-content-center mt-3">
+                                    {{ $historique->links('pagination::bootstrap-4') }}
+                                </div>
                             </div>
                         </div>                      
                     </div>
