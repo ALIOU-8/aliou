@@ -141,35 +141,35 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();         
         if($user){
             $droitUser = $user->droit;
-            if(Auth::attempt($credits)){
-                if($user->statut==0)
+            if($user->statut==0)
                 {
-                    if($droitUser === 'admin'){
-                        toastr()->success('Bienvenue à vous '.$user->nom);
-                        return redirect()->route('dashboard');
-                    }elseif($droitUser === 'cfu'){
-                        toastr()->success('Bienvenue à vous '.$user->nom);
-                        return redirect()->route('dashboard.cfu');
-                    }elseif($droitUser === 'tpu'){
-                        toastr()->success('Bienvenue à vous '.$user->nom);
-                        return redirect()->route('dashboard.tpu');
-                    }elseif($droitUser ==='patente'){   
-                        toastr()->success('Bienvenue à vous '.$user->nom);
-                        return redirect()->route('dashboard.patente');
-                    }else{
-                        toastr()->error('Identifiant incorrect');
-                        return back();
-                    }
+                    if(Auth::attempt($credits)){
+                        if($droitUser === 'admin'){
+                            toastr()->success('Bienvenue à vous '.$user->nom);
+                            return redirect()->route('dashboard');
+                        }elseif($droitUser === 'cfu'){
+                            toastr()->success('Bienvenue à vous '.$user->nom);
+                            return redirect()->route('dashboard.cfu');
+                        }elseif($droitUser === 'tpu'){
+                            toastr()->success('Bienvenue à vous '.$user->nom);
+                            return redirect()->route('dashboard.tpu');
+                        }elseif($droitUser ==='patente'){   
+                            toastr()->success('Bienvenue à vous '.$user->nom);
+                            return redirect()->route('dashboard.patente');
+                        }else{
+                            toastr()->error('Identifiant incorrect');
+                            return back();
+                        }
+                }else{
+                    toastr()->error('Identifiant incorrect');
+                    return back();
+                }
                 }else{
                     toastr()->error('Votre compte a été désactivé contactez l\'administrateur');
                      return back();
                 }
-            }else{
-                toastr()->error('Identifiant incorrect');
-                return back();
-            }
         }else{
-            toastr()->error('Identifiant incorrect');
+            toastr()->error('pas de compte pour ces identifiants');
             return back();
         }
     }
