@@ -5,6 +5,7 @@ namespace App\Admin\Controllers\Impots;
 use App\Http\Controllers\Controller;
 use App\Models\Annee;
 use App\Models\Bien;
+use App\Models\Historique;
 use App\Models\Impot;
 use App\Models\Paiement;
 use App\Models\Recensement_cfu;
@@ -75,6 +76,16 @@ class ImpotsController extends Controller
         $impot->droit_fixe = $request->droit_fixe;
         $impot->droit_proportionnel = $request->droit_proportionnel;
         $impot->update();
+        $annee=Annee::where('active',1)->first();
+        Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Modifier',
+                'activite'=>'Impôt',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
         toastr()->success('Imposition modifié avec succèss');
         return to_route('impot.liste');
     }
@@ -105,6 +116,16 @@ class ImpotsController extends Controller
         if($recensement)
         {
             $pdf = Pdf::loadView('Admin::Impots.imprimer',compact('impot','recensement','bien'));
+            $annee=Annee::where('active',1)->first();
+             Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Imprimer',
+                'activite'=>'Impôt',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
              return $pdf->stream('impôt.pdf'); 
         }
         
@@ -206,13 +227,22 @@ class ImpotsController extends Controller
         // Création du paiement
         $payement = new Paiement();
         $impot=Impot::where('uuid',$uuid)->firstOrFail();
-        $payement->user_id = 1;
+        $payement->user_id =Auth::user()->id;
         $payement->impot_id = $impot->id;
         $payement->montant_payer = $request->montant;
         $payement->num_quitance = $request->num_quitance;
         $payement->montant_restant = $impot->montant_a_payer - ($totalPaye + $request->montant);
         $payement->save();
-
+        $annee=Annee::where('active',1)->first();
+            Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Payer',
+                'activite'=>'Impôt',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
         // Mise à jour du statut de l'impôt
         if ($payement->montant_restant <= 0) {
             $impot->statut = "Payé";
@@ -405,6 +435,16 @@ class ImpotsController extends Controller
             }
 
             $impot->save();
+            $annee=Annee::where('active',1)->first();
+            Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Ajout',
+                'activite'=>'Impôt',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
             toastr()->success('Imposition effectué avec succèss');
             return to_route('impot.liste');
         }

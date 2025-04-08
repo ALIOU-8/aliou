@@ -5,9 +5,11 @@ namespace App\Admin\Controllers\Patente;
 use App\Http\Controllers\Controller;
 use App\Models\Annee;
 use App\Models\Bien;
+use App\Models\Historique;
 use App\Models\Recensement_patente;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PatenteController extends Controller
 {
@@ -43,13 +45,23 @@ class PatenteController extends Controller
                 return back();
             }else{
                 $recencement_patente=new Recensement_patente();
-                $recencement_patente->user_id=1;
+                $recencement_patente->user_id=Auth::user()->id;
                 $recencement_patente->bien_id=$request->bien_id;
                 $recencement_patente->annee_id=$request->annee_id;
                 $recencement_patente->Date_rdv=$request->Date_rdv;
                 $recencement_patente->Date_recensement=$request->Date_recensement;
                 $recencement_patente->categorie=$request->categorie;
                 $recencement_patente->save();
+                $annee=Annee::where('active',1)->first();
+            Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Ajout',
+                'activite'=>'patente',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
                 toastr()->success("Recensement effectué avec succes");
                 return to_route("patente.liste");
             }
@@ -88,6 +100,16 @@ class PatenteController extends Controller
                 $recensement_patente->Date_recensement=$request->Date_recensement;
                 $recensement_patente->categorie=$request->categorie;
                 $recensement_patente->update();
+                $annee=Annee::where('active',1)->first();
+            Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Modifier',
+                'activite'=>'Patente',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
                 toastr()->success("Recensement Modifier avec succes");
                 return to_route("patente.liste");
             }

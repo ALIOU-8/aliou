@@ -15,7 +15,7 @@ class PaiementController extends Controller
         // Récupérer les IDs des impôts liés à l'année active
         $impotsIds = Impot::where('annee_id', $anneeActive->id)->pluck('id');
         // Filtrer les paiements en fonction des impôts récupérés
-        $paiement = Paiement::whereIn('impot_id', $impotsIds)->with('impot')->get();
+        $paiement = Paiement::whereIn('impot_id', $impotsIds)->with('impot')->paginate(10);
         
 
         return view('Admin::Paiement.Liste',compact('paiement','anneeActive'));

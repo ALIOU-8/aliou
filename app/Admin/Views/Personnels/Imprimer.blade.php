@@ -74,7 +74,7 @@
         </table>
 
         <div style="margin-top: 20px; text-align: right;">
-            <h6>Mamou, le 17 Février 2025</h6>
+            <h6>Mamou, le {{ date('d:M:Y')}}</h6>
             <h6>Le Directeur</h6>
             <h6>LOUA Fassou</h6>
         </div>

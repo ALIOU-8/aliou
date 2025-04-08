@@ -5,9 +5,11 @@ namespace App\Admin\Controllers\TPU;
 use App\Http\Controllers\Controller;
 use App\Models\Annee;
 use App\Models\Bien;
+use App\Models\Historique;
 use App\Models\Recensement_tpu;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TPUController extends Controller
 {
@@ -121,13 +123,23 @@ class TPUController extends Controller
                 return back();
             }else{
                 $recencement_tpu=new Recensement_tpu();
-                $recencement_tpu->user_id=1;
+                $recencement_tpu->user_id=Auth::user()->id;
                 $recencement_tpu->bien_id=$request->bien_id;
                 $recencement_tpu->annee_id=$request->annee_id;
                 $recencement_tpu->Date_rdv=$request->Date_rdv;
                 $recencement_tpu->Date_recensement=$request->Date_recensement;
                 $recencement_tpu->categorie=$request->categorie;
                 $recencement_tpu->save();
+                $annee=Annee::where('active',1)->first();
+            Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Ajout',
+                'activite'=>'TPU',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
                 toastr()->success("Recensement effectué avec succes");
                 return to_route("tpu.liste");
             }
@@ -185,6 +197,16 @@ class TPUController extends Controller
                 $recencement_tpu->Date_recensement=$request->Date_recensement;
                 $recencement_tpu->categorie=$request->categorie;
                 $recencement_tpu->update();
+                $annee=Annee::where('active',1)->first();
+            Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Mofifier',
+                'activite'=>'TPU',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
                 toastr()->success("Recensement Modifier avec succes");
                 return to_route("tpu.liste");
             }

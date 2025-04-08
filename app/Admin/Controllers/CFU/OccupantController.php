@@ -3,10 +3,13 @@
 namespace App\Admin\Controllers\CFU;
 
 use App\Http\Controllers\Controller;
+use App\Models\Annee;
 use App\Models\Bien;
+use App\Models\Historique;
 use App\Models\Occupant;
 use App\Models\Recensement_cfu;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OccupantController extends Controller
 {
@@ -47,6 +50,16 @@ class OccupantController extends Controller
         $occupant->observation = $request->observation;
         $occupant->type_occupant = $request->type_occupant;
         $occupant->save();
+        $annee=Annee::where('active',1)->first();
+            Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Ajout',
+                'activite'=>'occupant',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
         toastr()->success('Occupant ajouté avec succèss');
         return to_route('cfu.occupant.liste',$uuid);
     } 
@@ -55,6 +68,16 @@ class OccupantController extends Controller
         $occupant=Occupant::where('uuid',$uuid)->firstOrFail();
         $occupant->delete=1;
         $occupant->update();
+        $annee=Annee::where('active',1)->first();
+            Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Supprimer',
+                'activite'=>'occupant',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
         toastr()->success('Occupant supprimé avec Succès');
         return back();
     }
@@ -87,6 +110,16 @@ class OccupantController extends Controller
         $occupant->observation = $request->observation;
         $occupant->type_occupant = $request->type_occupant;
         $occupant->update();
+        $annee=Annee::where('active',1)->first();
+            Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Modifier',
+                'activite'=>'occupant',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
         toastr()->success('Occupant modifié avec succèss');
         return to_route('cfu.occupant.liste',$id2->uuid);
     }
@@ -102,6 +135,16 @@ class OccupantController extends Controller
         $occupant=Occupant::where('uuid',$uuid)->firstOrFail();
         $occupant->delete=0;
         $occupant->update();
+        $annee=Annee::where('active',1)->first();
+            Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Restorer',
+                'activite'=>'occupant',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
         toastr()->success('Occupant restauré avec Succès');
         return back();
     }

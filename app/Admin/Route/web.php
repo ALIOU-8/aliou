@@ -56,6 +56,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/recherche', [ContribuableController::class, 'recherche'])->name('contribuables.recherche');
         Route::get('/recherche-corbeille', [ContribuableController::class, 'recherche_corbeille'])->name('contribuables.recherche.corbeille');
         Route::get('/voir/{uuid}',[ContribuableController::class,'voir'])->name('contribuables.voir');
+        Route::get('/imprimer',[ContribuableController::class,'imprimer'])->name('contribuable.imprimer');
     });
 
     //Les routes pour les personnels
@@ -89,6 +90,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/recherche-corbeille', [BiensController::class, 'recherche_corbeille'])->name('bien.recherche.corbeille');
         ///
         Route::get('/get-contribuable', [BiensController::class, 'getContribuable'])->name('get.contribuable');
+        Route::get('/imprimer',[BiensController::class,'imprimer'])->name('bien.imprimer');
     });
 
     //Les routes pour la gestion CFU

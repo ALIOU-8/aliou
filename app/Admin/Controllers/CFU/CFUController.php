@@ -5,10 +5,12 @@ namespace App\Admin\Controllers\CFU;
 use App\Http\Controllers\Controller;
 use App\Models\Annee;
 use App\Models\Bien;
+use App\Models\Historique;
 use App\Models\Occupant;
 use App\Models\Recensement_cfu;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CFUController extends Controller
 {
@@ -68,6 +70,16 @@ class CFUController extends Controller
         $recensement_cfu->type=$request->type;
         $recensement_cfu->nbre_etage=$request->nbre_etage;
         $recensement_cfu->save();
+        $annee=Annee::where('active',1)->first();
+            Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Ajout',
+                'activite'=>'CFU',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
         toastr()->success('Recensement effectué avec succèss');
         return to_route('cfu.liste');
         }
@@ -144,7 +156,7 @@ class CFUController extends Controller
                 return back();
             }else{     
                 $recensement_cfu=Recensement_cfu::where('uuid',$uuid)->firstOrFail();
-                $recensement_cfu->user_id=1;
+                $recensement_cfu->user_id=Auth::user()->id;
                 $recensement_cfu->bien_id=$request->bien_id;
                 $recensement_cfu->annee_id=$request->annee_id;
                 $recensement_cfu->nature_fondation=$request->nature_fondation;
@@ -159,6 +171,16 @@ class CFUController extends Controller
                 $recensement_cfu->type=$request->type;
                 $recensement_cfu->nbre_etage=$request->nbre_etage;
                 $recensement_cfu->update();
+                $annee=Annee::where('active',1)->first();
+            Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Mofier',
+                'activite'=>'CFU',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
                 toastr()->success('Recensement modifié avec succèss');
                 return to_route('cfu.liste');
     }

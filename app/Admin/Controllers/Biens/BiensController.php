@@ -8,6 +8,7 @@ use App\Models\Bien;
 use App\Models\Contribuable;
 use App\Models\Historique;
 use App\Models\TypeBien;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -203,6 +204,24 @@ class BiensController extends Controller
         $typeBien=TypeBien::where('status',0)->get();
         $bien=Bien::where('uuid',$uuid)->firstOrFail();
         return view('Admin::Biens.Modif',compact('bien','contribuable','typeBien'));
+    }
+
+    public function imprimer()
+    {
+        $bien=Bien::where('delete',0)->orderBy('id','desc')->get();
+        $annee = Annee::where('active', 1)->firstOrFail();
+        $pdf = Pdf::loadView('Admin::Biens.imprimer', compact('bien', 'annee'));
+        $annee=Annee::where('active',1)->first();
+        Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Imprimer',
+                'activite'=>'Bien',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
+        return $pdf->stream('bien.pdf'); 
     }
 
     public function voir ($uuid) {

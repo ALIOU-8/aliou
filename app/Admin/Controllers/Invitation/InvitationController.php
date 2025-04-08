@@ -3,8 +3,12 @@
 namespace App\Admin\Controllers\Invitation;
 
 use App\Http\Controllers\Controller;
+use App\Models\Annee;
 use App\Models\Invitation;
+use App\Models\Historique;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class InvitationController extends Controller
 {
@@ -49,6 +53,16 @@ class InvitationController extends Controller
         $invitation->motif=$request->motif;
         $invitation->se_munir=$request->se_munir;
         $invitation->save();
+        $annee=Annee::where('active',1)->first();
+        Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Ajout',
+                'activite'=>'Invitation',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
         toastr()->success('invitation enregistré avec succes');
         return to_route('parametre.configuration.invitation');
 
@@ -76,6 +90,16 @@ class InvitationController extends Controller
         $invitation->motif=$request->motif;
         $invitation->se_munir=$request->se_munir;
         $invitation->update();
+        $annee=Annee::where('active',1)->first();
+        Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Modifier',
+                'activite'=>'Invitation',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
         toastr()->success('invitation modifié avec succes');
         return to_route('parametre.configuration.invitation');
 
@@ -83,6 +107,17 @@ class InvitationController extends Controller
 
     public function imprimer_invitation (string $uuid) {
         $invitation=Invitation::where('uuid',$uuid)->firstOrFail();
-        return view('Admin::Parametre.Configuration.Invitation.Imprimer', compact('invitation'));
+        $annee=Annee::where('active',1)->first();
+        Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Imprimer',
+                'activite'=>'Invitation',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
+        $pdf = Pdf::loadView('Admin::Parametre.Configuration.Invitation.Imprimer', compact('invitation','annee'));
+        return $pdf->stream('invitation.pdf'); 
     }
 }

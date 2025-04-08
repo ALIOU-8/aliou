@@ -5,9 +5,11 @@ namespace App\Admin\Controllers\Licence;
 use App\Http\Controllers\Controller;
 use App\Models\Annee;
 use App\Models\Bien;
+use App\Models\Historique;
 use App\Models\Recensement_licence;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LicenceController extends Controller
 {
@@ -43,13 +45,23 @@ class LicenceController extends Controller
                 return back();
             }else{
                 $recensement_licence=new Recensement_licence();
-                $recensement_licence->user_id=1;
+                $recensement_licence->user_id=Auth::user()->id;
                 $recensement_licence->bien_id=$request->bien_id;
                 $recensement_licence->annee_id=$request->annee_id;
                 $recensement_licence->Date_rdv=$request->Date_rdv;
                 $recensement_licence->Date_recensement=$request->Date_recensement;
                 $recensement_licence->categorie=$request->categorie;
                 $recensement_licence->save();
+                $annee=Annee::where('active',1)->first();
+                 Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Ajout',
+                'activite'=>'Licence',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
                 toastr()->success("Recensement effectué avec succes");
                 return to_route("licence.liste");
             }
@@ -104,6 +116,16 @@ class LicenceController extends Controller
                 $recencement_licence->Date_recensement=$request->Date_recensement;
                 $recencement_licence->categorie=$request->categorie;
                 $recencement_licence->update();
+                $annee=Annee::where('active',1)->first();
+            Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Modifier',
+                'activite'=>'Licence',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
                 toastr()->success("Recensement Modifier avec succes");
                 return to_route("licence.liste");
             }

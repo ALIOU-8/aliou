@@ -41,29 +41,33 @@
                 </td>
             </tr>
         </table>
-        <div class="container mt-3">
-            <div class="row">
-                <div class="col-12">
-                    <h4 style="text-align: center">lettre d'invitation</h4>
-                    <p>
-                        Mr/Mme {{$invitation->nom . ' ' . $invitation->prenom}}  ..........................................................................................................................................
-                        <br>
-                        <br>
-                        est prié de se présenter à la direction préfectorale des impots de Mamou sise en face de la station Total de poudrière le {{$invitation->date_rdv}} à partir de 10 heures précises.
-                        <br>
-                        Motif : {{$invitation->motif}} ..........................................................................................................................................
-                        <br>
-                        Se munir : {{$invitation->se_munir}}  ..........................................................................................................................................
-                        <br>
-                        Veuillez recevoir, Mr/Mme, l'expression de mes sentiments distingués.
-                    </p>
-                </div>   
-            </div>
-        </div>
+
+        <h4 style="text-align: center; margin-top: 10px;">Liste des Contribuables</h4>
+        <table class="table">
+            <thead>
+                <tr class="text-center">
+                    <th>N°</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Téléphone</th>
+                    <th>Profession</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($contribuables as $key=>$contribuable)
+                <tr>
+                    <td>{{ $key +1 }}</td>
+                    <td>{{ $contribuable->nom }}</td>
+                    <td>{{ $contribuable->prenom }}</td>
+                    <td>{{ $contribuable->telephone }}</td>
+                    <td>{{ $contribuable->profession }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+
         <div style="margin-top: 20px; text-align: right;">
             <h6>Mamou, le {{ date('d:M:Y')}}</h6>
-            <h6>Le Directeur</h6>
-            <h6>LOUA Fassou</h6>
         </div>
     </div>
 </body>
