@@ -37,7 +37,7 @@ class UserSeeder extends Seeder
         );
         TypeBien::create(
             [
-                "libelle"=>"boutique",
+                "libelle"=>"Boutique",
             ]
         );
         Personnel::create(

@@ -42,26 +42,28 @@
             </tr>
         </table>
 
-        <h4 style="text-align: center; margin-top: 10px;">Liste des Contribuables</h4>
+        <h4 style="text-align: center; margin-top: 10px;">Liste des biens recencer en CFU</h4>
         <table class="table">
             <thead>
-                <tr class="text-center">
+                <tr>
                     <th>N°</th>
-                    <th>Nom</th>
-                    <th>Prénom</th>
-                    <th>Téléphone</th>
-                    <th>Profession</th>
+                    <th>Propriétaire</th>
+                    <th>Type</th>
+                    <th>N° Biens</th>
+                    <th>Libéllé</th>
+                    <th>Adresse</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($contribuables as $key=>$contribuable)
-                <tr>
-                    <td>{{ $key +1 }}</td>
-                    <td>{{ $contribuable->nom }}</td>
-                    <td>{{ $contribuable->prenom }}</td>
-                    <td>{{ $contribuable->telephone }}</td>
-                    <td>{{ $contribuable->profession }}</td>
-                </tr>
+                @foreach ($cfu as $key=> $item )
+                    <tr>
+                        <td>{{ $key+1}}</td>
+                        <td>{{ $item->bien->contribuable->nom.' '.$item->bien->contribuable->prenom }}</td>
+                        <td>{{ $item->bien->typeBien->libelle}}</td>
+                        <td>{{ $item->bien->numero_bien }}</td>
+                        <td>{{ $item->bien->libelle}}</td>
+                        <td>{{ $item->bien->adresse }}</td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>
@@ -73,7 +75,6 @@
                 <h6 style="margin: 0;">LOUA Fassou</h6>
             </div>
         </div>
-        
     </div>
 </body>
 </html>

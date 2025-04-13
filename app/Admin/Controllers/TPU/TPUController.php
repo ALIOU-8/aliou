@@ -7,6 +7,7 @@ use App\Models\Annee;
 use App\Models\Bien;
 use App\Models\Historique;
 use App\Models\Recensement_tpu;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -211,6 +212,24 @@ class TPUController extends Controller
                 return to_route("tpu.liste");
             }
         }
+    }
+
+    public function imprimer()
+    {
+        $annee = Annee::where('active', 1)->firstOrFail();
+        $tpu= Recensement_tpu::where('annee_id',$annee->id)->with('bien')->orderBy('id','desc')->get();
+        $pdf = Pdf::loadView('Admin::TPU.imprimer', compact('tpu', 'annee'));
+        $annee=Annee::where('active',1)->first();
+        Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Imprimer',
+                'activite'=>'TPU',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
+        return $pdf->stream('tpu.pdf'); 
     }
 }
 

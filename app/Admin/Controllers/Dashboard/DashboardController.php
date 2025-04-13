@@ -33,20 +33,32 @@ class DashboardController extends Controller
 
         //Nombre de biens recencer pour une année active
         $annee = Annee::where('active', 1)->first();
+        if ($annee) {
+            $cfuIds = Recensement_cfu::where('annee_id', $annee->id)->pluck('bien_id');
+            $tpuIds = Recensement_tpu::where('annee_id', $annee->id)->pluck('bien_id');
+            $patenteIds = Recensement_patente::where('annee_id', $annee->id)->pluck('bien_id');
+            $licenceIds = Recensement_licence::where('annee_id', $annee->id)->pluck('bien_id');
 
-        $cfuBR = Recensement_cfu::where('annee_id',$annee->id)->count();
-        $tpuBR = Recensement_tpu::where('annee_id',$annee->id)->count();
-        $patenteBR = Recensement_patente::where('annee_id',$annee->id)->count();
-        $licenceBR = Recensement_licence::where('annee_id',$annee->id)->count();
-        if($annee) {
-            $bienrecencer =  $cfuBR + $tpuBR + $patenteBR + $licenceBR;
+            // Fusionner tous les IDs et retirer les doublons
+            $allBienIds = $cfuIds->merge($tpuIds)->merge($patenteIds)->merge($licenceIds)->unique();
+            $bienrecencer = $allBienIds->count();
         } else {
             $bienrecencer = 0;
         }
 
         //Nombre de biens imposer pour cette annee
-        if($annee) {
-            $bienImposer = Impot::where('annee_id',$annee->id)->count();
+        if ($annee) {
+            $cfuIIds = Impot::where('annee_id', $annee->id)->where('type_impot', 'cfu')->pluck('recensement_cfu_id');
+            $tpuIIds = Impot::where('annee_id', $annee->id)->where('type_impot', 'tpu')->pluck('recensement_tpu_id');
+            $patenteIIds = Impot::where('annee_id', $annee->id)->where('type_impot', 'patente')->pluck('recensement_patente_id');
+            $licenceIIds = Impot::where('annee_id', $annee->id)->where('type_impot', 'licence')->pluck('recensement_licence_id');
+
+            // Fusionner tous les IDs et retirer les doublons
+            $allBienIIds = $cfuIIds->merge($tpuIIds)->merge($patenteIIds)->merge($licenceIIds)->unique();
+            $bienImposer = $allBienIIds->count();
+            $bienImposer = Impot::where('annee_id', $annee->id)->where('type_impot', 'patente')->pluck('recensement_patente_id')->count();
+
+            
         } else {
             $bienImposer = 0;
         }
@@ -58,6 +70,10 @@ class DashboardController extends Controller
         $totalImpostsNonPayes = Impot::where('statut', 'nonPayé')->where('annee_id',$annee->id)->count();
 
         //Les données du graph en bar
+        $cfuBR = Recensement_cfu::where('annee_id',$annee->id)->count();
+        $tpuBR = Recensement_tpu::where('annee_id',$annee->id)->count();
+        $patenteBR = Recensement_patente::where('annee_id',$annee->id)->count();
+        $licenceBR = Recensement_licence::where('annee_id',$annee->id)->count();
         $data = array($cfuBR,$tpuBR,$patenteBR,$licenceBR);
 
         //Les données du graph en donught
@@ -148,11 +164,11 @@ class DashboardController extends Controller
         }
 
         // Nombre d'impôts payés
-        $totalImpostsPayes = Impot::where('statut', '!=' , 'nonPayé')->where('annee_id',$annee->id)->where('type_impot','licence')->count();
+        $totalImpostsPayes = Impot::where('statut', '!=' , 'nonPayé')->where('annee_id',$annee->id)->where('type_impot','licence')->count()+
                              Impot::where('statut', '!=' , 'nonPayé')->where('annee_id',$annee->id)->where('type_impot','patente')->count();
 
         // Nombre d'impôts non payés
-        $totalImpostsNonPayes = Impot::where('statut', 'nonPayé')->where('annee_id',$annee->id)->where('type_impot','licence')->count();
+        $totalImpostsNonPayes = Impot::where('statut', 'nonPayé')->where('annee_id',$annee->id)->where('type_impot','licence')->count()+
                                 Impot::where('statut', 'nonPayé')->where('annee_id',$annee->id)->where('type_impot','patente')->count();
         
         return view('Admin::Dashboard.cfu',compact('annee','bienrecencer','bienImposer','totalImpostsPayes','totalImpostsNonPayes'));

@@ -17,7 +17,7 @@
                                 <a href="{{route('contribuables.ajout')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Nouveau <i class="bx bx-plus"></i></a>
                             </div>
                             <div class="col-md-2">
-                                <a href="{{ route('contribuable.imprimer') }}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
+                                <a href="{{ route('contribuable.imprimer') }}" target="_blank" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
                             </div>
                             <div class="col-md-2">
                                 <a href="{{route('contribuables.restaurer')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Corbeille <i class="bx bx-trash"></i></a>
@@ -52,7 +52,7 @@
                                         <td>{{ $contribuable->telephone }}</td>
                                         <td>{{ $contribuable->profession }}</td>
                                         <td class="d-flex justify-content-center gap-2">
-                                            <a class="btn btn-outline-success btn-sm d-flex align-items-center gap-1" href="" data-bs-toggle="modal" data-bs-target="#voir{{$contribuable->uuid}}">Voir<i class="bx bx-show"></i></a>
+                                            <a class="btn btn-outline-success btn-sm d-flex align-items-center gap-1" href="" data-bs-toggle="modal" data-bs-target="#voir{{$contribuable->uuid}}">Biens<i class="bx bx-show"></i></a>
                                             {{-- Modal pour voir  --}}
                                             
                                             <div class="modal fade" id="voir{{$contribuable->uuid}}" aria-labelledby="voir" aria-hidden="true">
@@ -69,6 +69,7 @@
                                                                     <div class="h6">Numéro du bien : {{ $biens->numero_bien }}</div>
                                                                     <div class="h6">Nom du bien : {{ $biens->libelle }}</div>
                                                                 </div>
+                                                                <hr>
                                                             @endforeach
                                                             <hr>
                                                             <div class="text-end">Total bien: {{ Count($contribuable->bien) }}</div>
@@ -78,7 +79,7 @@
                                             </div>
                                             
                                             <a href="{{route('contribuables.modif',$contribuable->uuid)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
-                                            <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer{{$contribuable->uuid}}">Supprimer<i class="bx bx-trash"></i></a>
+                                            <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer{{$contribuable->uuid}}">Supprimer<i class="bx bx-x"></i></a>
                                             {{-- Modal pour confirmer la suppression  --}}
                                             <div class="modal fade" id="supprimer{{$contribuable->uuid}}" aria-labelledby="supprimer" aria-hidden="true">
                                                 <div class="modal-dialog center">
@@ -100,7 +101,7 @@
                                     @endforeach
                                     @if (count($contribuables) == 0)
                                         <tr>
-                                            <th colspan="6" class="text-center">Aucun enregistrement trouvé pour le moment</th>
+                                            <td colspan="6" class="text-center">Aucun enregistrement trouvé pour le moment</td>
                                         </tr>
                                     @endif
                                 </tbody>

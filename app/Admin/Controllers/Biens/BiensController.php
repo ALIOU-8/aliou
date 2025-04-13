@@ -230,7 +230,7 @@ class BiensController extends Controller
     }
 
     public function corbeille() {
-        $bien=Bien::where('delete',1)->orderBy('id','desc')->get();
+        $bien=Bien::where('delete',1)->orderBy('id','desc')->paginate(10);
         return view('Admin::Biens.Corbeille',compact('bien'));
     }
     public function delete($uuid) {

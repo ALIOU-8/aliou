@@ -41,7 +41,7 @@
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                <a href="" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
+                                <a href="{{ route('patente.imprimer') }}" target="_blank" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
                             </div>
                             <div class="col-md-4 ms-auto">
                                 <form method="GET" action="{{ route('patente.recherche') }}">
@@ -60,7 +60,6 @@
                                         <th>Propriétaire</th>
                                         <th>Biens</th>
                                         <th>N° bien</th>
-                                        <th>Année</th>
                                         <th>Date</th>
                                         <th>Catégorie</th>
                                         <th>Actions</th>
@@ -73,7 +72,6 @@
                                         <td>{{ $recencement_patentes->bien->contribuable->prenom.' '.$recencement_patentes->bien->contribuable->nom }}</td>
                                         <td>{{ $recencement_patentes->bien->libelle }}</td>
                                         <td>{{$recencement_patentes->bien->numero_bien  }}</td>
-                                        <td>{{ $recencement_patentes->annee->annee }}</td>
                                         <td>{{ $recencement_patentes->Date_recensement }}</td>
                                         <td>{{ $recencement_patentes->categorie }}</td>
                                         <td class="d-flex justify-content-center gap-2">

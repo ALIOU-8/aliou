@@ -17,10 +17,10 @@
                                 <a href="{{route('biens.ajout')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Nouveau <i class="bx bx-plus"></i></a>
                             </div>
                             <div class="col-md-2">
-                                <a href="{{ route('bien.imprimer') }}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
+                                <a href="{{ route('bien.imprimer') }}" target="_blank" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
                             </div>
                             <div class="col-md-2">
-                                <a href="{{route('biens.corbeille')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Corbeille <i class="bx bx-tra"></i></a>
+                                <a href="{{route('biens.corbeille')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Corbeille <i class="bx bx-trash"></i></a>
                             </div>
                             <div class="col-md-4 ms-auto">
                                 <form method="GET" action="{{ route('bien.recherche') }}">
@@ -37,7 +37,6 @@
                                     <tr class="text-center">
                                         <th>N°</th>
                                         <th>Propriétaire</th>
-                                        <th>Type</th>
                                         <th>N° Biens</th>
                                         <th>Libéllé</th>
                                         <th>Adresse</th>
@@ -49,15 +48,14 @@
                                     <tr>
                                         <td>{{ $key+1}}</td>
                                         <td>{{ $biens->contribuable->nom.' '.$biens->contribuable->prenom }}</td>
-                                        <td>{{ $biens->typeBien->libelle}}</td>
                                         <td>{{ $biens->numero_bien }}</td>
-                                        <td>{{ $biens->libelle}}</td>
+                                        <td>{{ $biens->typeBien->libelle .' '. $biens->libelle}}</td>
                                         <td>{{ $biens->adresse }}</td>
                                         <td class="d-flex justify-content-center gap-2">
                                             <a href="{{route('biens.voir',$biens->uuid)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
                                             <a href="{{route('biens.modif',$biens->uuid)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
-                                            <a class="btn btn-outline-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#recencer{{$biens->id}}">Recencer<i class="bx bx-trash"></i></a>
-                                            <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer{{$biens->id}}">Supprimer<i class="bx bx-trash"></i></a>
+                                            <a class="btn btn-outline-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#recencer{{$biens->id}}">Recencer<i class="bx bx-file"></i></a>
+                                            <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer{{$biens->id}}">Supprimer<i class="bx bx-x"></i></a>
                                             {{-- Modal pour confirmer la suppression  --}}
                                             <div class="modal fade" id="supprimer{{$biens->id}}" aria-labelledby="supprimer" aria-hidden="true">
                                                 <div class="modal-dialog center">
@@ -100,7 +98,7 @@
                                     @endforeach
                                     @if (count($bien) == 0)
                                         <tr>
-                                            <th colspan="6" class="text-center">Aucun enregistrement trouvé pour le moment</th>
+                                            <td colspan="6" class="text-center">Aucun enregistrement trouvé pour le moment</td>
                                         </tr> 
                                     @endif
                                 </tbody>

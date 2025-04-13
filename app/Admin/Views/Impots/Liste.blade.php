@@ -8,7 +8,7 @@
     </ul>
     <div class="container justify-content-center">
         <div class="row d-flex justify-content-center">
-            <div class="col-md-12 ">
+            <div class="col-md-12 mb-5 ">
                 <div class="card border border-light">
                     <div class="card-body">
                         <div class="h5 text-center text-success">La liste des Impôts</div>
@@ -63,7 +63,24 @@
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                <a href="" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
+                                <a class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1"data-bs-toggle="modal" data-bs-target="#imprimer">Imprimer <i class="bx bx-printer"></i></a>
+                                <div class="modal fade" id="imprimer" tabindex="-1" aria-labelledby="imprimer" aria-hidden="true">
+                                    <div class="modal-dialog center">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h6 class="modal-title">Que voulez-vous imprimer ?</h6>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body d-flex gap-3">
+                                                <button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">CFU<i class="bx bxs-printer"></i></button>
+                                                <button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">TPU<i class="bx bxs-printer"></i></button>
+                                                <button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">PATENTE<i class="bx bxs-printer"></i></button>
+                                                <button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">LICENCE<i class="bx bxs-printer"></i></button>
+                                                <button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">TOUT<i class="bx bxs-printer"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-4 ms-auto">
                                 <form method="GET" action="{{ route('impots.recherche') }}">
@@ -79,13 +96,9 @@
                                 <thead>
                                     <tr class="text-center">
                                         <th>N°</th>
-                                        <th>Rôle</th>
-                                        <th>Article</th>
-                                        <th>Type d'impôt</th>
+                                        <th>Impôt</th>
                                         <th>Nom et prenom</th>
-                                        <th>Téléphone</th>
                                         <th>Montant à payer</th>
-                                        <th>Année</th>
                                         <th>Date limite</th>
                                         <th>Status</th>
                                         <th>Actions</th>
@@ -95,31 +108,24 @@
                                     @foreach ($impot as $key => $item)
                                     <tr>
                                         <td>{{$key+1}}</td>
-                                        <td> {{$item->role}} </td>
-                                        <td> {{$item->article}} </td>
                                         <td class="text-uppercase"> {{$item->type_impot}} </td>
                                         @if($item->type_impot=='patente')
                                         <td>{{$item->recensement_patente->bien->contribuable->nom.' '.$item->recensement_patente->bien->contribuable->prenom}}</td>
-                                        <td>{{$item->recensement_patente->bien->contribuable->telephone}}</td>
                                         @endif
                                         @if($item->type_impot=='licence')
                                         <td>{{$item->recensement_licence->bien->contribuable->nom.' '.$item->recensement_licence->bien->contribuable->prenom}}</td>
-                                        <td>{{$item->recensement_licence->bien->contribuable->telephone}}</td>
                                         @endif
                                         @if($item->type_impot=='cfu')
                                         <td>{{$item->recensement_cfu->bien->contribuable->nom.' '.$item->recensement_cfu->bien->contribuable->prenom}}</td>
-                                        <td>{{$item->recensement_cfu->bien->contribuable->telephone}}</td>
                                         @endif
                                         @if($item->type_impot=='tpu')
                                         <td>{{$item->recensement_tpu->bien->contribuable->nom.' '.$item->recensement_tpu->bien->contribuable->prenom}}</td>
-                                        <td>{{$item->recensement_tpu->bien->contribuable->telephone}}</td>
                                         @endif
-                                        <td> {{$item->montant_a_payer}} </td>
-                                        <td>{{$item->annee->annee}} </td>
+                                        <td> {{ number_format($item->montant_a_payer, 0, ',', ' ') }} FG </td>
                                         <td> {{$item->date_limite}} </td>
                                         <td class="@if($item->statut == "nonPayé") text-danger @endif @if($item->statut == "Payé") text-success @endif @if($item->statut == "Encours") text-warning @endif"> {{$item->statut}} </td>
                                         <td class="d-flex justify-content-center gap-2">
-                                            <a href="{{route('impot.voir',['type' => $item->type_impot, 'uuid' => $item->uuid])}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>
+                                            <a href="{{route('impot.voir',['type' => $item->type_impot, 'uuid' => $item->uuid])}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Avis<i class="bx bx-show"></i></a>
                                             <a href="{{route('impot.payer',$item->uuid)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Payer<i class="bx bx-money"></i></a>
                                             <a href="{{route('impot.modif',$item->uuid)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
                                         </td>
@@ -195,7 +201,5 @@ $(document).ready(function () {
         }
     });
 });
-
-
 </script>
 @endsection

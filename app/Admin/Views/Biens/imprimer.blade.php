@@ -69,7 +69,11 @@
         </table>
 
         <div style="margin-top: 20px; text-align: right;">
-            <h6>Mamou, le {{ date('d:M:Y')}}</h6>
+            <div style="display: inline-block; text-align: center;">
+                <h6 style="margin: 0;">Mamou, le {{ \Carbon\Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY') }}</h6><br><br>
+                <h6 style="margin: 0;">Le Directeur</h6><br><br><br>
+                <h6 style="margin: 0;">LOUA Fassou</h6>
+            </div>
         </div>
     </div>
 </body>

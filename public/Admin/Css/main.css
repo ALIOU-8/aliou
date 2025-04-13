@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Baloo+Paaji+2:wght@400;500;600&amp;display=swap");
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css');
 *{
     font-family: 'Baloo Paaji 2';
     margin : 0;
@@ -34,6 +35,68 @@ a {
 
 li {
     list-style: none !important;
+}
+
+/* Table  */
+body .table-responsive th{
+    background-color: #478e09;
+    color: #D0E4FF;
+    font-weight: bolder;
+}
+
+/* Dashboard card */
+body .card-custom {
+    position: relative; /* Pour positionner des éléments internes */
+    background: linear-gradient(135deg, #b30000 10%, #478e09 90%); /* Dégradé entre le rouge et le vert foncé */
+    color: white;
+    font-weight: bolder;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    overflow: hidden; /* Évite les débordements */
+    padding: 1.5rem; /* Espace interne */
+    height: 145px; /* Hauteur fixe pour que le contenu ne déborde pas */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Espacement entre les éléments */
+}
+
+body .icon-user {
+    font-size: 2.5rem;
+    border-radius: 50%;
+    padding: 15px;
+}
+
+body .icon-print {
+    color: #e0e0e0;
+    font-size: 1.3rem;
+    position: absolute; /* Pour le placer précisément dans la carte */
+    top: 15px;
+    right: 15px;
+    background-color: rgba(255, 255, 255, 0.1); /* Fond facultatif pour l'icône */
+    padding: 8px;
+    border-radius: 8px;
+    transition: color 0.3s ease;
+}
+
+body .icon-print:hover {
+    color: white;
+    cursor: pointer;
+}
+
+body .label-title {
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+body .user-count {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 0.5rem;
+    word-wrap: break-word; /* Assure que les textes longs ne débordent pas */
+    overflow-wrap: break-word; /* Casse les mots longs pour éviter qu'ils sortent */
 }
 
 

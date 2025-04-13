@@ -21,12 +21,16 @@ use App\Models\Contribuable;
 use App\Models\Personnel;
 use Illuminate\Support\Facades\Route;
 
+    // Route::get('/', function () {
+    //     $personnel = Personnel::where('delete', 0)->count();
+    //     $contribuable = Contribuable::where('delete', 0)->count();
+    //     $bien = Bien::where('delete', 0)->count();
+    //     $annees = Annee::get();
+    //     return view('Admin::Dashboard.dashboard',compact('personnel','contribuable','bien','annees'));
+    // });
+
     Route::get('/', function () {
-        $personnel = Personnel::where('delete', 0)->count();
-        $contribuable = Contribuable::where('delete', 0)->count();
-        $bien = Bien::where('delete', 0)->count();
-        $annees = Annee::get();
-        return view('Admin::Dashboard.dashboard',compact('personnel','contribuable','bien','annees'));
+        return view('Auth::login');
     });
 
     //Les routes pour le dashboard
@@ -105,8 +109,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/corbeille', [CFUController::class, 'corbeille'])->name('cfu.corbeille');
         Route::post('/recense',[CFUController::class,'recense'])->name('cfu.recense');
         Route::get('/recherche', [CFUController::class, 'recherche'])->name('cfu.recherche');
-        // Route::get('/statistique', [CFUController::class, 'statistique'])->name('cfu.statistique');
-
+        Route::get('/imprimer',[CFUController::class,'imprimer'])->name('cfu.imprimer');
     });
 
     //Les routes pour la gestion CFU/Occupant
@@ -135,8 +138,7 @@ use Illuminate\Support\Facades\Route;
         Route::put('/update/{uuid}',[TPUcontroller::class,'update'])->name('tpu.update');
         Route::get('/contribuable-get', [TPUController::class, 'getContribuable'])->name('get.contribuable.details');
         Route::get('/recherche', [TPUController::class, 'recherche'])->name('tpu.recherche');
-
-
+        Route::get('/imprimer',[TPUController::class,'imprimer'])->name('tpu.imprimer');
     });
 
     //Les routes pour la gestion Patente
@@ -152,6 +154,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/recherche', [PatenteController::class, 'recherche'])->name('patente.recherche');
         Route::post('/recense',[PatenteController::class,'recense'])->name('patente.recense');
         Route::get('/corbeille', [PatenteController::class, 'corbeille'])->name('patente.corbeille');
+        Route::get('/imprimer',[PatenteController::class,'imprimer'])->name('patente.imprimer');
     });
 
     //Les routes pour la gestion Licence
@@ -166,6 +169,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/contribuable-get', [LicenceController::class, 'getContribuable'])->name('contribuable.details');
         Route::get('/recherche', [LicenceController::class, 'recherche'])->name('licence.recherche');
         Route::post('/recense',[LicenceController::class,'recense'])->name('licence.recense');
+        Route::get('/imprimer',[LicenceController::class,'imprimer'])->name('licence.imprimer');
     });
 
     //Les routes pour la gestion impot
@@ -184,6 +188,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/recherche', [ImpotsController::class, 'recherche'])->name('impots.recherche');
         Route::post('/recherche',[ImpotsController::class,'chercherBien'])->name('rechercher_bien');
         Route::get('/imprimer/{type}/{uuid}', [ImpotsController::class, 'imprimer'])->name('impot.imprimer');
+        Route::get('/imprimer/{type}', [ImpotsController::class, 'imprimer_liste'])->name('impot.imprimer.liste');
     });
 
 
@@ -250,4 +255,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/configuration/annee/edit/{uuid}',[ParametreController::class,'annee_edit'])->name('parametre.configuration.annee.edit');
         Route::post('/annees//activer/{uuid}', [ParametreController::class, 'activer'])->name('annees.activer');
         Route::get('/recherche-annee', [ParametreController::class, 'recherche_annee'])->name('annee.recherche');
+
+        ///comptabilité
+        Route::get('/compatabilité',[ParametreController::class,'comptabilite'])->name('compatabilite.index');
     });

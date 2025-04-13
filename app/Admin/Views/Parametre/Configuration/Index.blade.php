@@ -53,75 +53,45 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="h5 text-center text-success mt-3">Tableau matricielle</div>
-                            <div class="row d-flex justify-content-between align-items-center me-1">
-                                <div class="col-md-2">
-                                    <a href="" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
-                                </div>
-                                <div class="col-md-2">
-                                    <a href="" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Exporter <i class="bx bx-printer"></i></a>
-                                </div>
-                                <div class="col-md-4 ms-auto">
-                                    <input type="text" placeholder="Rechercher..." class="form-control border border-success m-3">
-                                </div>
-                            </div>
+                            <div class="h5 text-center text-success">Historique de l'application</div>
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr class="text-center">
                                             <th>N°</th>
-                                            <th>N° Role</th>
-                                            <th>N° Article</th>
                                             <th>Nom et Prénom</th>
-                                            <th>Exercice</th>
-                                            <th>Année</th>
-                                            <th>Adresse</th>
-                                            <th>IMF</th>
-                                            <th>Pénalités</th>
-                                            <th>Total à payer</th>
-                                            <th>N° et date </th>
-                                            <th>Observation</th>
+                                            <th>Date et Heure</th>
+                                            <th>Durée</th>
+                                            <th>Activités</th>
+                                            <th>Droit</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($impot as $key => $item)
-                                        @php
-                                            $type = $item->type_impot;
-                                            $recensement = "recensement_{$type}";
-                                        @endphp
-                                        @if(isset($item->$recensement))
-                                            <tr>
-                                                <td>{{ $key + 1 }}</td>
-                                                <td>{{$item->role}}</td>
-                                                <td>{{$item->article}}</td>
-                                                <td>{{$item->$recensement->bien->contribuable->nom . ' ' . $item->$recensement->bien->contribuable->prenom }}</td>
-                                                <td>{{ $item->$recensement->bien->contribuable->profession }}</td>
-                                                <td>{{$item->annee->annee}}</td>
-                                                <td>{{ $item->$recensement->bien->adresse }}</td>
-                                                <td>{{ $item->type_impot }}</td>
-                                                <td>{{ $item->penalite }}</td>
-                                                <td>{{ $item->montant_a_payer }}</td>
-                                                <td>{{ $item->numero }}</td>
-                                                <td></td>
-                                            </tr>
-                                        @endif
-                                        @endforeach
-                                    </tbody>
-                                    <tfoot>
+                                        @foreach ($historique as $key=> $historiques )
                                         <tr>
-                                            <td class="text-center" colspan="4">Total</td>
-                                            <td class="text-center" colspan="1"></td>
-                                            <td class="text-center" colspan="1"></td>
-                                            <td class="text-center" colspan="1"></td>
-                                            <td class="text-center" colspan="3">{{$sommeTotal." GNF"}}</td>
+                                            <td>{{ $key+1 }}</td>
+                                            <td>{{ $historiques->user->nom.' '.$historiques->user->prenom }}</td>
+                                            <td>{{ $historiques->date }}</td>
+                                            <td class="text-success">{{ $historiques->updated_at->locale('fr')->diffForHumans() }}</td>
+                                            <td>{{ $historiques->activite }}</td>
+                                            <td>{{ $historiques->user->droit}}</td>
+                                            <td>{{ $historiques->action }}</td>
                                         </tr>
-                                    </tfoot>
+                                        @endforeach
+                                        
+                                        @if(count($historique) == 0)
+                                        <tr>
+                                            <td colspan="8" class="text-center">Aucune historique trouvée</td>
+                                        </tr>
+                                        @endif
+                                    </tbody>
                                 </table>
                                 <div class="d-flex justify-content-center mt-3">
-                                    {{ $impot->links('pagination::bootstrap-4') }}
+                                    {{ $historique->links('pagination::bootstrap-4') }}
                                 </div>
                             </div>
-                        </div>  
+                        </div> 
                     </div>
                 </div>
             </div>

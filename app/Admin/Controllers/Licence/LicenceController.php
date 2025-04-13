@@ -7,6 +7,7 @@ use App\Models\Annee;
 use App\Models\Bien;
 use App\Models\Historique;
 use App\Models\Recensement_licence;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -203,6 +204,24 @@ class LicenceController extends Controller
             ->paginate(10);
             return view('Admin::Licence.Liste',compact('recencement_licence'));
         }
+    }
+
+    public function imprimer()
+    {
+        $annee = Annee::where('active', 1)->firstOrFail();
+        $licence= Recensement_licence::where('annee_id',$annee->id)->with('bien')->orderBy('id','desc')->get();
+        $pdf = Pdf::loadView('Admin::Licence.imprimer', compact('licence', 'annee'));
+        $annee=Annee::where('active',1)->first();
+        Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Imprimer',
+                'activite'=>'Licence',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
+        return $pdf->stream('licence.pdf'); 
     }
     
 }

@@ -8,6 +8,7 @@ use App\Models\Bien;
 use App\Models\Historique;
 use App\Models\Occupant;
 use App\Models\Recensement_cfu;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,6 +26,7 @@ class CFUController extends Controller
         $annee=Annee::where('active',1)->firstOrFail();
         return view('Admin::CFU.Ajout',compact('bien_recence','annee'));
     }
+
     public function store (Request $request) {
         $request->validate([
             'nature_fondation'=>'required',
@@ -244,7 +246,21 @@ class CFUController extends Controller
         }
     }
 
-    // public function statistique()  {
-    //     return view('Admin::CFU.statistique');
-    // }
+    public function imprimer()
+    {
+        $annee = Annee::where('active', 1)->firstOrFail();
+        $cfu= Recensement_cfu::where('annee_id',$annee->id)->with('bien')->orderBy('id','desc')->get();
+        $pdf = Pdf::loadView('Admin::CFU.imprimer', compact('cfu', 'annee'));
+        $annee=Annee::where('active',1)->first();
+        Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Imprimer',
+                'activite'=>'CFU',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
+        return $pdf->stream('cfu.pdf'); 
+    }
 }

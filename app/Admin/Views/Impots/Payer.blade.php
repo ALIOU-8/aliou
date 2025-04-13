@@ -73,8 +73,8 @@
                                             <td>{{$item->num_quitance}}</td>
                                             {{-- <td>Sano Ismael</td> --}}
                                             <td class="d-flex justify-content-center gap-2">
-                                                <a href="{{route('impot.recu',$item->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Réçu<i class="bx bx-money"></i></a>
-                                                <a href="{{route('impot.modif.payement',$item->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
+                                                {{-- <a href="{{route('impot.recu',$item->id)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Réçu<i class="bx bx-money"></i></a> --}}
+                                                <a href="{{route('impot.modif.payement',$item->uuid)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
                                             </td>
                                         </tr>
                                         @endforeach

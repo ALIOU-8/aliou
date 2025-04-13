@@ -17,18 +17,23 @@ class ParametreController extends Controller
 {
     // Paramètre 
     public function index() {
-        $anneeActive=Annee::where('active',1)->firstOrFail();
-        $sommeTotal=Impot::orderBy('id','desc')->where('annee_id',$anneeActive->id)->where('statut','Payé')->sum('montant_a_payer');
-        $historique=Historique::where('annee_id',$anneeActive->id)->orderBy('id','desc')->paginate(10);
-        return view('Admin::Parametre.Index',compact('sommeTotal','historique'));
+        return view('Admin::Parametre.Index');
     }
+    //compatabilite
 
+    public function comptabilite()
+    {
+        $anneeActive=Annee::where('active',1)->firstOrFail();
+        $sommeTotalRecouvrer=Impot::orderBy('id','desc')->where('annee_id',$anneeActive->id)->where('statut','Payé')->sum('montant_a_payer');
+        $sommeTotalRecenser=Impot::orderBy('id','desc')->where('annee_id',$anneeActive->id)->sum('montant_a_payer');
+        $impot = Impot::orderBy('id','asc')->where('annee_id',$anneeActive->id)->with('paiement')->paginate(10);
+        return view('Admin::Parametre.comptabilite.index',compact('sommeTotalRecenser','sommeTotalRecouvrer','impot'));
+    }
     // Configuration 
     public function configuration(){
         $anneeActive=Annee::where('active',1)->firstOrFail();
-        $impot = Impot::orderBy('id','asc')->where('annee_id',$anneeActive->id)->with('paiement')->paginate(10);
-        $sommeTotal=Impot::orderBy('id','desc')->where('annee_id',$anneeActive->id)->sum('montant_a_payer');
-        return view('Admin::Parametre.Configuration.Index',compact('impot','sommeTotal'));
+        $historique=Historique::where('annee_id',$anneeActive->id)->orderBy('id','desc')->paginate(10);
+        return view('Admin::Parametre.Configuration.Index',compact('historique'));
     }
   
     // typeBiens 
@@ -93,7 +98,7 @@ class ParametreController extends Controller
     public function type_bien_edit($uuid)
     {
         $type_bien=TypeBien::where('uuid',$uuid)->firstOrFail();
-        $liste_type_bien= TypeBien::where('status',0)->get();
+        $liste_type_bien= TypeBien::where('status',0)->paginate(10);
        return view('Admin::Parametre.Configuration.TypeBien.Type',compact('type_bien','liste_type_bien'));
     }
 
@@ -158,7 +163,7 @@ class ParametreController extends Controller
     public function fonction_edit($uuid)
     {
         $fonction=Fonction::where('uuid',$uuid)->firstOrFail();
-        $liste_fonction= Fonction::where('delete',0)->get();
+        $liste_fonction= Fonction::where('delete',0)->paginate(10);
        return view('Admin::Parametre.Configuration.Fonction.Index',compact('fonction','liste_fonction'));
     }
 
@@ -297,7 +302,7 @@ class ParametreController extends Controller
     public function annee_edit($uuid)
     {
         $annee=Annee::where('uuid',$uuid)->firstOrFail();
-        $annees = Annee::orderBy('libelle', 'desc')->get();
+        $annees = Annee::orderBy('libelle', 'desc')->paginate(10);
        return view('Admin::Parametre.Configuration.Annee.Index',compact('annee','annees'));
     }
 

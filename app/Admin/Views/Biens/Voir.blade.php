@@ -15,7 +15,7 @@
                     <div class="card-body">
                         <div class="container">
                             <div class="row">
-                            <div class="h4 text-center">Informations du Propriétaire </div>
+                            <div class="h4 text-center text-white bg-success">Informations du Propriétaire </div>
                             <div class="col-md-6 mb-3">
                                 <h4>Nom</h4><span class="text-success h5">{{ $biens->contribuable->nom}}</span>
                             </div> 
@@ -30,7 +30,7 @@
                             </div> 
                         </div>
                         <div class="row">
-                            <div class="h4 text-center">Informations du bien </div>
+                            <div class="h4 text-center text-white bg-success">Informations du bien </div>
                             <div class="col-md-6 mb-3">
                                 <h4>Type de bien : </h4><span class="text-success h5">{{ $biens->typeBien->libelle }}</span>
                             </div> 

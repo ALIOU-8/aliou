@@ -60,14 +60,12 @@
                                     <thead>
                                         <tr class="text-center">
                                             <th>N°</th>
-                                            <th>Nom</th>
-                                            <th>Prénom</th>
+                                            <th>Contribuables</th>
                                             <th>téléphone</th>
                                             <th>Date</th>
                                             <th>Montant Total</th>
                                             <th>Montant Payer</th>
                                             <th>Montant Restant</th>
-                                            <th>N° de quitance</th>
                                             {{-- <th>Personnel</th> --}}
                                             <th>Actions</th>
                                         </tr>
@@ -82,14 +80,12 @@
                                         @if(isset($item->impot->$recensement))
                                             <tr>
                                                 <td>{{ $key + 1 }}</td>
-                                                <td>{{ $item->impot->$recensement->bien->contribuable->nom }}</td>
-                                                <td>{{ $item->impot->$recensement->bien->contribuable->prenom }}</td>
+                                                <td>{{ $item->impot->$recensement->bien->contribuable->prenom .' '. $item->impot->$recensement->bien->contribuable->nom }}</td>
                                                 <td>{{ $item->impot->$recensement->bien->contribuable->telephone }}</td>
                                                 <td>{{ $item->created_at }}</td> 
-                                                <td>{{ $item->impot->montant_a_payer }}</td>
-                                                <td>{{ $item->montant_payer }}</td>
-                                                <td>{{ $item->montant_restant }}</td> 
-                                                <td>{{ $item->num_quitance }}</td>
+                                                <td>{{ number_format($item->impot->montant_a_payer, 0, ',', ' ') }} FG</td>
+                                                <td>{{ number_format($item->montant_payer, 0, ',', ' ') }} FG</td>
+                                                <td>{{ number_format($item->montant_restant, 0, ',', ' ') }} FG</td> 
                                                 <td class="d-flex justify-content-center gap-2">
                                                     <a href="{{ route('impot.payer', $item->impot->uuid) }}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">
                                                         Détail<i class="bx bx-edit"></i>

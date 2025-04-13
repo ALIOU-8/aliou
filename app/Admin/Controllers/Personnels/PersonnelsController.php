@@ -148,9 +148,9 @@ class PersonnelsController extends Controller
 
 
     public function modif ($uuid) {
-    $fonction=Fonction::where('delete',0)->get();
-    $personnel=Personnel::where('uuid',$uuid)->firstOrFail();
-    $hierachie=['A1','A2','B1','B2'];
+        $fonction=Fonction::where('delete',0)->get();
+        $personnel=Personnel::where('uuid',$uuid)->firstOrFail();
+        $hierachie=['A1','A2','B1','B2'];
         return view('Admin::Personnels.Modif',compact("personnel","fonction","hierachie"));
     }
 

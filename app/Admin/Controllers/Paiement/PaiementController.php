@@ -32,7 +32,7 @@ class PaiementController extends Controller
             toastr()->error("numero de l'avis introuvable");
             return back();
         }else{
-            return to_route('impot.payer',$impot->id);
+            return to_route('impot.payer',$impot->uuid);
         }
     }
 

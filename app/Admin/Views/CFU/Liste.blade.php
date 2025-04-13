@@ -41,7 +41,7 @@
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                <a href="" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
+                                <a href="{{ route('cfu.imprimer') }}" target="_blank" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
                             </div>
                             <div class="col-md-4 ms-auto">
                                 <form method="GET" action="{{ route('cfu.recherche') }}">
@@ -60,7 +60,6 @@
                                         <th>Propriétaire</th>
                                         <th>Biens</th>
                                         <th>N° bien</th>
-                                        <th>Année</th>
                                         <th>Date</th>
                                         <th>Actions</th>
                                     </tr>
@@ -72,7 +71,6 @@
                                         <td>{{ $recencement_cfus->bien->contribuable->prenom.' '.$recencement_cfus->bien->contribuable->nom }}</td>
                                         <td>{{ $recencement_cfus->bien->libelle }}</td>
                                         <td>{{$recencement_cfus->bien->numero_bien  }}</td>
-                                        <td>{{ $recencement_cfus->annee->annee }}</td>
                                         <td>{{ $recencement_cfus->date_recensement }}</td>
                                         <td class="d-flex justify-content-center gap-2">
                                             <a href="{{route('cfu.voir',$recencement_cfus->uuid)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Voir<i class="bx bx-show"></i></a>

@@ -4,9 +4,9 @@
     @csrf
     <div class="row">
         <div class="col-12 mb-4">
-            <label for="email">Email</label>
-            <input type="email" placeholder="Entrez votre email" class="form-control" name="email">
-            @error('email')
+            <label for="matricule">Matricule</label>
+            <input type="text" placeholder="Entrez votre matricule" class="form-control" name="matricule">
+            @error('matricule')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
         </div>

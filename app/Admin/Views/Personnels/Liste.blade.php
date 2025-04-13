@@ -8,7 +8,7 @@
     </ul>
     <div class="container justify-content-center">
         <div class="row d-flex justify-content-center">
-            <div class="col-md-12 ">
+            <div class="col-md-12 mb-5">
                 <div class="card border border-light">
                     <div class="card-body">
                         <div class="h5 text-center text-success">La liste des personnels</div>
@@ -17,7 +17,7 @@
                                 <a href="{{route('personnels.ajout')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Nouveau <i class="bx bx-plus"></i></a>
                             </div>
                             <div class="col-md-2 ">
-                                <a href="{{route('personnels.imprimer')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
+                                <a href="{{route('personnels.imprimer')}}" target="_blank" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
                             </div>
                             <div class="col-md-2">
                                 <a href="{{route('personnels.corbeille')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Corbeille <i class="bx bx-trash"></i></a>
@@ -85,7 +85,7 @@
                                                 </div>
                                             </div>
                                             <a href="{{route('personnels.modif',$personnels->uuid)}}" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">Modifier<i class="bx bx-edit"></i></a>
-                                            <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer">Supprimer<i class="bx bx-trash"></i></a>
+                                            <a class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#supprimer">Supprimer<i class="bx bx-x"></i></a>
                                             {{-- Modal pour confirmer la suppression  --}}
                                             <div class="modal fade" id="supprimer" aria-labelledby="supprimer" aria-hidden="true">
                                                 <div class="modal-dialog center">

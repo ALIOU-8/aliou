@@ -135,10 +135,10 @@ class AuthController extends Controller
 
     public function login_store (Request $request){
         $credits = $request->validate([
-            'email'=>'required',
+            'matricule'=>'required',
             'password'=>'required'
         ]);
-        $user = User::where('email', $request->email)->first();         
+        $user = User::where('matricule', $request->matricule)->first();         
         if($user){
             $droitUser = $user->droit;
             if($user->statut==0)
