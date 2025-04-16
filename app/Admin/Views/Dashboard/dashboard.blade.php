@@ -5,7 +5,7 @@
     <ul class="breadcrumbs">
         <li><a href="">Home</a></li>
         {{-- <li class="divider">/</li>
-        <li><a href="" class="active">Dashboard</a></li> --}}
+        <li><a href="" class="active">Tableau de bord</a></li> --}}
     </ul>
     <div class="container justify-content-center">
         <div class="row d-flex justify-content-center">
@@ -26,7 +26,7 @@
                                         <div class="user-count">{{$personnel}}</div>
                                       </div>
                                     </div>
-                                    <a href="{{ route('personnels.imprimer') }}"><i class="fas fa-print icon-print"></i></a>
+                                    <a href="{{ route('personnels.imprimer') }}" target="_blank"><i class="fas fa-print icon-print"></i></a>
                                   </div>
                                 </div>
                               </div>
@@ -43,7 +43,7 @@
                                         <div class="user-count">{{$contribuable}}</div>
                                       </div>
                                     </div>
-                                    <a href="{{ route('contribuable.imprimer') }}"><i class="fas fa-print icon-print"></i></a>
+                                    <a href="{{ route('contribuable.imprimer') }}" target="_blank"><i class="fas fa-print icon-print"></i></a>
                                   </div>
                                 </div>
                               </div>
@@ -60,7 +60,7 @@
                                         <div class="user-count">{{$bien}}</div>
                                       </div>
                                     </div>
-                                    <a href="{{ route('bien.imprimer') }}"><i class="fas fa-print icon-print"></i></a>
+                                    <a href="{{ route('bien.imprimer') }}" target="_blank"><i class="fas fa-print icon-print"></i></a>
                                   </div>
                                 </div>
                               </div>
@@ -77,7 +77,7 @@
                                         <div class="user-count">{{$user}}</div>
                                       </div>
                                     </div>
-                                    <a href="{{ route('bien.imprimer') }}"><i class="fas fa-print icon-print"></i></a>
+                                    <a href="{{ route('user.imprimer') }}" target="_blank"><i class="fas fa-print icon-print"></i></a>
                                   </div>
                                 </div>
                               </div>
@@ -109,7 +109,7 @@
                                         <div class="user-count">{{$bienrecencer}}</div>
                                       </div>
                                     </div>
-                                    <a href="{{ route('bien.imprimer') }}"><i class="fas fa-print icon-print"></i></a>
+                                    <a href="{{ route('bien.recenser.imprimer') }}" target="_blank"><i class="fas fa-print icon-print"></i></a>
                                   </div>
                                 </div>
                               </div>
@@ -126,7 +126,7 @@
                                         <div class="user-count">{{$bien - $bienrecencer}}</div>
                                       </div>
                                     </div>
-                                    <a href="{{ route('bien.imprimer') }}"><i class="fas fa-print icon-print"></i></a>
+                                    <a href="{{ route('bien.nonrecenser.imprimer') }}" target="_blank"><i class="fas fa-print icon-print"></i></a>
                                   </div>
                                 </div>
                               </div>
@@ -143,7 +143,7 @@
                                         <div class="user-count">{{$bienImposer}}</div>
                                       </div>
                                     </div>
-                                    <a href="{{ route('bien.imprimer') }}"><i class="fas fa-print icon-print"></i></a>
+                                    <a href="{{ route('bien.imposer.imprimer') }}" target="_blank"><i class="fas fa-print icon-print"></i></a>
                                   </div>
                                 </div>
                               </div>
@@ -160,7 +160,7 @@
                                         <div class="user-count">{{$bien - $bienImposer}}</div>
                                       </div>
                                     </div>
-                                    <a href="{{ route('bien.imprimer') }}"><i class="fas fa-print icon-print"></i></a>
+                                    <a href="{{ route('bien.nonimposer.imprimer') }}" target="_blank"><i class="fas fa-print icon-print"></i></a>
                                   </div>
                                 </div>
                               </div>                              
@@ -170,7 +170,6 @@
             </div>
         </div>
     </div>
-
 </main>
 <main>
     <div class="container justify-content-center">

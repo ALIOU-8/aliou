@@ -18,6 +18,31 @@ class Bien extends Model
     {
         return $this->belongsTo(TypeBien::class);
     }
+
+    public function recensementCfu()
+    {
+        return $this->hasOne(Recensement_cfu::class);
+    }
+
+    public function recensementTpu()
+    {
+        return $this->hasOne(Recensement_tpu::class);
+    }
+    
+    public function recensementLicence()
+    {
+        return $this->hasOne(Recensement_licence::class);
+    }
+
+    public function recensementPatente()
+    {
+        return $this->hasOne(Recensement_patente::class);
+    }
+
+    public function impots()
+    {
+        return $this->hasMany(Impot::class);
+    }
     protected static function boot()
     {
         parent::boot();

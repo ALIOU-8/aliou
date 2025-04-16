@@ -56,7 +56,6 @@ class DashboardController extends Controller
             // Fusionner tous les IDs et retirer les doublons
             $allBienIIds = $cfuIIds->merge($tpuIIds)->merge($patenteIIds)->merge($licenceIIds)->unique();
             $bienImposer = $allBienIIds->count();
-            $bienImposer = Impot::where('annee_id', $annee->id)->where('type_impot', 'patente')->pluck('recensement_patente_id')->count();
 
             
         } else {

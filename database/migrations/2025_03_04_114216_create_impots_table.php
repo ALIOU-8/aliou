@@ -16,6 +16,7 @@ return new class extends Migration
             $table->uuid('uuid')->unique();
             $table->string('type_impot');
             $table->foreignId('annee_id')->constrained()->onUpdate('cascade');
+            $table->foreignId('bien_id')->constrained()->onUpdate('cascade');
             $table->foreignId('recensement_cfu_id')->nullable()->on('recensement_cfus')->onDelete('cascade');
             $table->foreignId('recensement_tpu_id')->nullable()->on('recensement_tpus')->onDelete('cascade');
             $table->foreignId('recensement_patente_id')->nullable()->on('recensement_patentes')->onDelete('cascade');

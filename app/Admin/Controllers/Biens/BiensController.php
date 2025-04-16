@@ -7,6 +7,7 @@ use App\Models\Annee;
 use App\Models\Bien;
 use App\Models\Contribuable;
 use App\Models\Historique;
+use App\Models\Impot;
 use App\Models\TypeBien;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -25,8 +26,7 @@ class BiensController extends Controller
         return view('Admin::Biens.Ajout',compact('contribuable','typeBien'));
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $request->validate([
             'contribuable_id'=>'required',
             'type_bien_id'=>'required',
@@ -271,21 +271,90 @@ class BiensController extends Controller
     }
 
 
-    public function getContribuable(Request $request)
-    {
-    $contribuable = Contribuable::find($request->id);
+    public function getContribuable(Request $request) {
+        $contribuable = Contribuable::find($request->id);
 
-    if ($contribuable) {
-        return response()->json([
-            'success' => true,
-            'contribuable' => [
-                'nom' => $contribuable->nom,
-                'prenom' => $contribuable->prenom
-            ]
-        ]);
+        if ($contribuable) {
+            return response()->json([
+                'success' => true,
+                'contribuable' => [
+                    'nom' => $contribuable->nom,
+                    'prenom' => $contribuable->prenom
+                ]
+            ]);
+        }
+
+        return response()->json(['success' => false]);
     }
 
-    return response()->json(['success' => false]);
+    // Imprimer la liste des biens recencés
+    public function imprimerBR()
+    {
+        $annee = Annee::where('active', 1)->firstOrFail();
+        $bien=Bien::where('delete',0)->where('annee_id', $annee->id)->orderBy('id','desc')
+                    ->with(['recensementCfu','recensementTpu','recensementLicence','recensementPatente'])
+                    ->whereHas('recensementCfu')
+                    ->orwhereHas('recensementTpu')
+                    ->orwhereHas('recensementLicence')
+                    ->orwhereHas('recensementPatente')
+                    ->get();
+        $pdf = Pdf::loadView('Admin::Biens.imprimerBR', compact('bien', 'annee'));
+        $annee=Annee::where('active',1)->first();
+        Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Imprimer',
+                'activite'=>'Biens Recensés',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
+        return $pdf->stream('bien.pdf'); 
+    }
+
+     // Imprimer la liste des biens non recencés
+     public function imprimerBNR()
+     {
+         $annee = Annee::where('active', 1)->firstOrFail();
+         $bien=Bien::where('delete',0)->where('annee_id', $annee->id)->orderBy('id','desc')
+                     ->whereDoesntHave('recensementCfu')
+                     ->whereDoesntHave('recensementTpu')
+                     ->whereDoesntHave('recensementLicence')
+                     ->whereDoesntHave('recensementPatente')
+                     ->get();
+         $pdf = Pdf::loadView('Admin::Biens.imprimerBR', compact('bien', 'annee'));
+         $annee=Annee::where('active',1)->first();
+         Historique::create(
+             [
+                 'user_id'=>Auth::user()->id,
+                 'action'=>'Imprimer',
+                 'activite'=>'Biens Recensés',
+                 'annee_id'=>$annee->id,
+                 'date'=>date('d:M:Y:H:i:s')
+             ]
+             );
+         return $pdf->stream('bien.pdf'); 
+     }
+
+    // Imprimer la liste des biens imposés
+    public function imprimerBI()
+    {
+        $annee = Annee::where('active', 1)->firstOrFail();
+        $bienIm=Impot::where('annee_id', $annee->id)->orderBy('id','desc')
+                    ->with(['recensement_cfu','recensement_tpu','recensement_licence','recensement_patente','bien'])
+                    ->get();
+        $pdf = Pdf::loadView('Admin::Biens.imprimerBI', compact('bienIm', 'annee'));
+        $annee=Annee::where('active',1)->first();
+        Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Imprimer',
+                'activite'=>'Biens Recensés',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
+        return $pdf->stream('bien.pdf'); 
     }
 
 }
