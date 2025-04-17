@@ -95,6 +95,10 @@ use Illuminate\Support\Facades\Route;
         ///
         Route::get('/get-contribuable', [BiensController::class, 'getContribuable'])->name('get.contribuable');
         Route::get('/imprimer',[BiensController::class,'imprimer'])->name('bien.imprimer');
+        Route::get('/imprimer_biens_recenses',[BiensController::class,'imprimerBR'])->name('bien.recenser.imprimer');
+        Route::get('/imprimer_biens_non_recenses',[BiensController::class,'imprimerBNR'])->name('bien.nonrecenser.imprimer');
+        Route::get('/imprimer_biens_imposes',[BiensController::class,'imprimerBI'])->name('bien.imposer.imprimer');
+        Route::get('/imprimer_biens_non_imposes',[BiensController::class,'imprimerBNI'])->name('bien.nonimposer.imprimer');
     });
 
     //Les routes pour la gestion CFU
@@ -212,6 +216,8 @@ use Illuminate\Support\Facades\Route;
         Route::get('/bloquer_utilisateur/{uuid}', [AuthController::class, 'bloquer'])->name('parametre.user.bloquer');
         Route::get('/corbeille_utilisateur', [AuthController::class, 'corbeille_user'])->name('parametre.user.corbeille');
         Route::get('/recherche-utilistateur', [AuthController::class, 'recherche'])->name('recherche.user');
+        Route::get('/imprimer',[AuthController::class,'imprimer'])->name('user.imprimer');
+
 
         // Configuration 
         Route::get('/configuration', [ParametreController::class, 'configuration'])->name('parametre.configuration');

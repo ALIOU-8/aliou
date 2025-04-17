@@ -4,8 +4,11 @@ namespace App\Auth\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Mail\ForgetPasswordMail;
+use App\Models\Annee;
+use App\Models\Historique;
 use App\Models\Personnel;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -23,8 +26,7 @@ class AuthController extends Controller
         return view('Admin::Parametre.Utilisateur.Liste',compact('Utilisateur'));
     }
 
-    public function recherche(Request $request)
-    {
+    public function recherche(Request $request) {
         if ($request->has('search')) {
             $search = $request->input('search');
             $Utilisateur=User::where(function ($q) use ($search) {
@@ -246,6 +248,24 @@ class AuthController extends Controller
         $user->update();
         toastr()->success('Mot de passe modifié');
         return redirect()->route('login');
+    }
+
+    public function imprimer()
+    {
+        $user=User::orderBy('id','desc')->get();
+        $annee = Annee::where('active', 1)->firstOrFail();
+        $pdf = Pdf::loadView('Admin::Parametre.Utilisateur.imprimer', compact('user', 'annee'));
+        $annee=Annee::where('active',1)->first();
+        Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Imprimer',
+                'activite'=>'Utilisateur',
+                'annee_id'=>$annee->id,
+                'date'=>date('d:M:Y:H:i:s')
+            ]
+            );
+        return $pdf->stream('user.pdf'); 
     }
 
 }

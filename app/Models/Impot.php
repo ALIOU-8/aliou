@@ -29,6 +29,11 @@ class Impot extends Model
         return $this->belongsTo(Annee::class);
     }
 
+    public function bien()
+    {
+        return $this->belongsTo(Bien::class);
+    }
+
     public function registre()
     {
         return $this->belongsTo(Registre::class);

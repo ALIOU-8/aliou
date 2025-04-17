@@ -432,7 +432,7 @@ class ImpotsController extends Controller
                     return back();
                 }
             }
-
+            $impot->bien_id = $recensement->bien_id;
             $impot->save();
             $annee=Annee::where('active',1)->first();
             Historique::create(
@@ -497,30 +497,25 @@ class ImpotsController extends Controller
         }
     }
 
-    public function imprimer_liste(String $type) {
-        $anneeActive=Annee::where('active',1)->first();
-        $impot  = Impot::where('type_impot',$type)->where('annee_id',$anneeActive->id)->first();
-
+    public function imprimer_liste($type) {
+        $annee=Annee::where('active',1)->first();
+        $impot  = Impot::where('annee_id',$annee->id)
+                 ->with(['recensement_cfu','recensement_tpu','recensement_licence','recensement_patente','bien']);
         if ($type == "cfu") {
-            $recensement=Recensement_cfu::where('id',$impot->recensement_cfu_id)->where('annee_id',$anneeActive->id)->with('occupant')->with('bien')->first();
-            $bien = Bien::where('id',$recensement->bien_id)->with('contribuable')->with('typeBien')->first();
+            $impot->where('type_impot', $type);
+        }elseif ($type == "tpu") {
+            $impot->where('type_impot', $type);
+        }elseif ($type == "patente") {
+            $impot->where('type_impot', $type);
+        }elseif ($type == "licence") {
+            $impot->where('type_impot', $type);
+        }elseif ($type == "tous") {
+            //On fais aucun filtre
         }
-        if ($type == "tpu") {
-            $recensement=Recensement_tpu::where('id',$impot->recensement_tpu_id)->where('annee_id',$anneeActive->id)->with('bien')->first();
-            $bien = Bien::where('id',$recensement->bien_id)->with('contribuable')->with('typeBien')->first();
-        }
-        if ($type == "patente") {
-            $recensement=Recensement_patente::where('id',$impot->recensement_patente_id)->where('annee_id',$anneeActive->id)->with('bien')->first();
-            $bien = Bien::where('id',$recensement->bien_id)->with('contribuable')->with('typeBien')->first();
-        }
-        if ($type == "licence") {
-            $recensement=Recensement_licence::where('id',$impot->recensement_licence_id)->where('annee_id',$anneeActive->id)->with('bien')->first();
-            $bien = Bien::where('id',$recensement->bien_id)->with('contribuable')->with('typeBien')->first();
-        }
-        if($recensement)
+        $impots = $impot->get();
+        if($impots)
         {
-            $pdf = Pdf::loadView('Admin::Impots.imprimer',compact('impot','recensement','bien'));
-            $annee=Annee::where('active',1)->first();
+            $pdf = Pdf::loadView('Admin::Impots.imprimerliste',compact('impots','annee','type'));
              Historique::create(
             [
                 'user_id'=>Auth::user()->id,

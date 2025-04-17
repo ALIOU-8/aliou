@@ -72,11 +72,11 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body d-flex gap-3">
-                                                <button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">CFU<i class="bx bxs-printer"></i></button>
-                                                <button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">TPU<i class="bx bxs-printer"></i></button>
-                                                <button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">PATENTE<i class="bx bxs-printer"></i></button>
-                                                <button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">LICENCE<i class="bx bxs-printer"></i></button>
-                                                <button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">TOUT<i class="bx bxs-printer"></i></button>
+                                                <a href="{{route('impot.imprimer.liste', ['type' => 'cfu'])}}"><button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">CFU<i class="bx bxs-printer"></i></button></a>
+                                                <a href="{{route('impot.imprimer.liste', ['type' => 'tpu'])}}"><button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">TPU<i class="bx bxs-printer"></i></button></a>
+                                                <a href="{{route('impot.imprimer.liste', ['type' => 'patente'])}}"><button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">PATENTE<i class="bx bxs-printer"></i></button></a>
+                                                <a href="{{route('impot.imprimer.liste', ['type' => 'licence'])}}"><button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">LICENCE<i class="bx bxs-printer"></i></button></a>
+                                                <a href="{{route('impot.imprimer.liste', ['type' => 'tous'])}}"><button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">TOUT<i class="bx bxs-printer"></i></button></a>
                                             </div>
                                         </div>
                                     </div>

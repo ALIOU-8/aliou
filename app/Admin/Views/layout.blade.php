@@ -28,7 +28,7 @@
             @if (Auth::user()->droit === "admin")
                 <li>
                     <a href="{{ route('dashboard') }}" class="{{ Route::is('dashboard') ? 'active' : '' }}">
-                        <i class="bx bxs-dashboard icon"></i>Dashboard
+                        <i class="bx bxs-dashboard icon"></i>Tableau de bord
                     </a>
                 </li>
                 <li>

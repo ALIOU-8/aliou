@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Impression</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { width: 100%; margin: 0 auto; }
+        .header-table { width: 100%; border-collapse: collapse; }
+        .header-table td { vertical-align: top; padding: 5px; }
+        .header-table h6 { margin: 2px 0; text-align: center; font-size: 12px; }
+        .img-container { text-align: center; }
+        .img-container img { width: 80px; height: auto; }
+        .table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .table th, .table td { border: 1px solid black; padding: 5px; text-align: center; font-size: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <table class="header-table">
+            <tr>
+                <td style="width: 40%;">
+                    <h6 class="text-uppercase">Ministère du budget</h6>
+                    <hr>
+                    <h6 class="text-uppercase">Inspection régionale des impôts de Mamou</h6>
+                    <hr>
+                    <h6 class="text-uppercase">Direction préfectorale des impôts de Mamou</h6>
+                    <hr>
+                    <h6 class="text-uppercase">N° ....../IRI/DPI/{{ $annee->annee }}</h6>
+                </td>
+                <td style="width: 20%;"></td>
+                <td style="width: 40%;">
+                    <h6>REPUBLIQUE DE GUINEE</h6>
+                    <hr>
+                    <h6>Travail-Justice-Solidarité</h6>
+                    <div class="img-container">
+                        <img src="{{ public_path('Admin/Assets/impot.jpg') }}" alt="Logo">
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <h4 style="text-align: center; margin-top: 10px;">Liste des utilisateurs</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>N°</th>
+                    <th>Matricule</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th>Téléphone</th>
+                    <th>Droit</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($user as $key=> $item )
+                    <tr>
+                        <td>{{ $key+1}}</td>
+                        <td>{{ $item->matricule }}</td>
+                        <td>{{ $item->nom }}</td>
+                        <td>{{ $item->prenom}}</td>
+                        <td>{{ $item->email }}</td>
+                        <td>{{ $item->telephone}}</td>
+                        <td>{{ $item->droit }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        <div style="margin-top: 20px; text-align: right;">
+            <div style="display: inline-block; text-align: center;">
+                <h6 style="margin: 0;">Mamou, le {{ \Carbon\Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY') }}</h6><br><br>
+                <h6 style="margin: 0;">Le Directeur</h6><br><br><br>
+                <h6 style="margin: 0;">LOUA Fassou</h6>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
