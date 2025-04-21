@@ -59,7 +59,7 @@
                                     @endforeach
                                     <tr>
                                         @if (count($personnel) == 0)
-                                        <th colspan="8" class="text-center">Aucun enregistrement trouvé pour le moment</th>
+                                        <td colspan="8" class="text-center">Aucun enregistrement trouvé pour le moment</td>
                                         @endif
                                     </tr>
                                 </tbody>

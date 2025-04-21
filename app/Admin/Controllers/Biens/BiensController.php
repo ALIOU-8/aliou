@@ -10,6 +10,7 @@ use App\Models\Historique;
 use App\Models\Impot;
 use App\Models\TypeBien;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -66,7 +67,7 @@ class BiensController extends Controller
                 'action'=>'Ajout',
                 'activite'=>'Bien',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         toastr()->success("Le bien $numero_bien a été ajouter avec succes.");
@@ -128,7 +129,7 @@ class BiensController extends Controller
                 'action'=>'Modifier',
                 'activite'=>'Bien',
                 'annee_id'=>$annee->id,
-               'date'=>date('d:M:Y:H:i:s')
+               'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
     toastr()->success("Bien mis à jour avec succès !");
@@ -210,18 +211,23 @@ class BiensController extends Controller
     {
         $bien=Bien::where('delete',0)->orderBy('id','desc')->get();
         $annee = Annee::where('active', 1)->firstOrFail();
-        $pdf = Pdf::loadView('Admin::Biens.imprimer', compact('bien', 'annee'));
-        $annee=Annee::where('active',1)->first();
-        Historique::create(
+        if(count($bien)!=0)
+        {
+            $pdf = Pdf::loadView('Admin::Biens.imprimer', compact('bien', 'annee'));
+            return $pdf->stream('bien.pdf'); 
+            $annee=Annee::where('active',1)->first();
+            Historique::create(
             [
                 'user_id'=>Auth::user()->id,
                 'action'=>'Imprimer',
                 'activite'=>'Bien',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
-        return $pdf->stream('bien.pdf'); 
+        }
+            return back(); 
+       
     }
 
     public function voir ($uuid) {
@@ -244,7 +250,7 @@ class BiensController extends Controller
                 'action'=>'supprimer',
                 'activite'=>'Bien',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         toastr()->success('Bien Supprimez avec Succes');
@@ -256,14 +262,13 @@ class BiensController extends Controller
         $bien->delete=0;
         $bien->update();
         $annee=Annee::where('active',1)->first();
-        Historique::create(
-            [
+        Historique::create([
                 'user_id'=>Auth::user()->id,
                 'action'=>'restorer',
                 'activite'=>'Bien',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
-            ]
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
+                ]
             );
         toastr()->success('Bien Supprimez avec Succes');
         return to_route('biens.liste');
@@ -298,7 +303,9 @@ class BiensController extends Controller
                     ->orwhereHas('recensementLicence')
                     ->orwhereHas('recensementPatente')
                     ->get();
-        $pdf = Pdf::loadView('Admin::Biens.imprimerBR', compact('bien', 'annee'));
+        if(count($bien)!=0)
+        {
+            $pdf = Pdf::loadView('Admin::Biens.imprimerBR', compact('bien', 'annee'));
         $annee=Annee::where('active',1)->first();
         Historique::create(
             [
@@ -306,10 +313,12 @@ class BiensController extends Controller
                 'action'=>'Imprimer',
                 'activite'=>'Biens Recensés',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+               'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
-        return $pdf->stream('bien.pdf'); 
+        return $pdf->stream('bien.pdf');  
+        }
+        return back();
     }
 
      // Imprimer la liste des biens non recencés
@@ -322,7 +331,9 @@ class BiensController extends Controller
                      ->whereDoesntHave('recensementLicence')
                      ->whereDoesntHave('recensementPatente')
                      ->get();
-         $pdf = Pdf::loadView('Admin::Biens.imprimerBR', compact('bien', 'annee'));
+        if(count($bien)!=0)
+        {
+            $pdf = Pdf::loadView('Admin::Biens.imprimerBR', compact('bien', 'annee'));
          $annee=Annee::where('active',1)->first();
          Historique::create(
              [
@@ -330,10 +341,12 @@ class BiensController extends Controller
                  'action'=>'Imprimer',
                  'activite'=>'Biens Recensés',
                  'annee_id'=>$annee->id,
-                 'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
              ]
              );
          return $pdf->stream('bien.pdf'); 
+        }
+        return back();
      }
 
     // Imprimer la liste des biens imposés
@@ -343,18 +356,23 @@ class BiensController extends Controller
         $bienIm=Impot::where('annee_id', $annee->id)->orderBy('id','desc')
                     ->with(['recensement_cfu','recensement_tpu','recensement_licence','recensement_patente','bien'])
                     ->get();
-        $pdf = Pdf::loadView('Admin::Biens.imprimerBI', compact('bienIm', 'annee'));
-        $annee=Annee::where('active',1)->first();
-        Historique::create(
-            [
-                'user_id'=>Auth::user()->id,
-                'action'=>'Imprimer',
-                'activite'=>'Biens Recensés',
-                'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
-            ]
-            );
-        return $pdf->stream('bien.pdf'); 
+        if(count($bienIm)!=0)
+        {
+            $pdf = Pdf::loadView('Admin::Biens.imprimerBI', compact('bienIm', 'annee'));
+            $annee=Annee::where('active',1)->first();
+            Historique::create(
+                [
+                    'user_id'=>Auth::user()->id,
+                    'action'=>'Imprimer',
+                    'activite'=>'Biens Recensés',
+                    'annee_id'=>$annee->id,
+                    'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
+                ]
+                );
+            return $pdf->stream('bien.pdf'); 
+        }
+        return back();
+        
     }
 
 }

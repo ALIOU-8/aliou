@@ -16,6 +16,7 @@
                 <div class="card border border-light">
                     <div class="card-body">
                         <div class="h5 text-center text-success">Année Recensement</div>
+                        <div class="h6 mb-3 text-danger"><span>NB:<span class="required-start text-danger text-bolder p-2">*</span>Tous les champs marqués d'une étoile sont obigatoires</span></div>
                         <form action="{{ isset($annee) ? route("parametre.configuration.annee.update",$annee->uuid) : route("parametre.configuration.annee.store") }}" method="post" class="form">
                             @csrf
                             @if(isset($annee))
@@ -23,21 +24,21 @@
                             @endif
                             <div class="row mt-4">
                                 <div class="col-md-4 mb-3">
-                                    <label for="annee">Année</label>
+                                    <label for="annee">Année<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control @error('annee') is-invalid @enderror" type="text" name="annee" value="{{ isset($annee) ? $annee->annee : old('annee') }}" placeholder="EX:2025">
                                     @error('annee')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label for="date_debut">Date Début</label>
+                                    <label for="date_debut">Date Début<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control @error('date_debut') is-invalid @enderror" type="Date" name="date_debut" value="{{ isset($annee) ? $annee->Date_debut : old('date_debut') }}" placeholder="la date debut du récensement">
                                     @error('date_debut')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label for="date_fin">Date Fin</label>
+                                    <label for="date_fin">Date Fin<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control @error('date_fin') is-invalid @enderror" type="Date" name="date_fin" value="{{ isset($annee) ? $annee->Date_fin : old('date_fin') }}" placeholder="la date fin du récensement">
                                     @error('date_fin')
                                         <p class="text-danger">{{ $message }}</p>

@@ -17,6 +17,7 @@
                     <div class="card-body">
                         <div class="">
                             <div class="h5 mb-2 text-center text-success">Ajout d'un type de bien</div>
+                            <div class="h6 mb-3 text-danger"><span>NB:<span class="required-start text-danger text-bolder p-2">*</span>champs obigatoire</span></div>
                             <form action="{{ isset($type_bien) ? route('parametre.configuration.type.bien.update',$type_bien->uuid) : route('parametre.configuration.type.bien.store') }}" method="POST" class="form">
                                 @csrf
                                 @if(isset($type_bien))
@@ -24,7 +25,7 @@
                                 @endif
                                 <div class="row mt-4">
                                     <div class="col-md-6 mb-3">
-                                        <input class="form-control" type="text" name="libelle" value="{{ isset($type_bien) ? $type_bien->libelle : old('libelle') }}" placeholder="Type de bien">
+                                        <input class="form-control" style="text-transform: uppercase" oninput="this.value=this.value.toUpperCase()" type="text" name="libelle" value="{{ isset($type_bien) ? $type_bien->libelle : old('libelle') }}" placeholder="Type de bien">
                                         @error('libelle')
                                             <p class="text-danger">{{ $message }}</p>
                                         @enderror
@@ -38,9 +39,6 @@
                         <hr>
                         <div class="h5 text-center text-success">La liste des types de biens</div>
                         <div class="row d-flex justify-content-between align-items-center me-1">
-                            <div class="col-md-2">
-                                <a href="" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
-                            </div>
                             <div class="col-md-2">
                                 <a href="{{route('parametre.configuration.type.biens.corbeille')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Corbeille <i class="bx bx-tra"></i></a>
                             </div>

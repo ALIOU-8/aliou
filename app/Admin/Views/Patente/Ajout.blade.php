@@ -14,12 +14,11 @@
                 <div class="card border border-light">
                     <div class="card-body">
                         <div class="h5 mb-2 text-center text-success"> Recensement Patente </div>
-                        <div class="h6 mb-3 text-success">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab mollitia ratione quaerat natus rem iusto asperiores facilis libero est doloremque velit, suscipit repellendus cupiditate illo dolor perspiciatis labore reiciendis vitae?</div>
-                        <form action="{{ route("patente.store") }}" method="POST" class="form">
+                        <div class="h6 mb-3 text-danger"><span>NB:<span class="required-start text-danger text-bolder p-2">*</span>Tous les champs marqués d'une étoile sont obigatoires</span></div>                        <form action="{{ route("patente.store") }}" method="POST" class="form">
                             @csrf
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="bien_id">Numero du bien</label>
+                                    <label class="form-label" for="bien_id">Numero du bien<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input type="text" class="form-control" value="{{$bien_recence->numero_bien }}" disabled>
                                     <input type="hidden" name="bien_id" id="bien_id"  value="{{ $bien_recence->id }}">                  
                                 </div> 
@@ -28,26 +27,26 @@
                                     <div class="h5 fw-bolder">Nom et Prénom : <span id="contribuable-name" class="fw-normal">{{ $bien_recence->contribuable->prenom.' '.$bien_recence->contribuable->nom  }}</span></div>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="annee_id">Année de recensement</label>
+                                    <label class="form-label" for="annee_id">Année de recensement<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input type="text" class="text-success form-control" value="{{ $annee->annee }}" disabled>
                                     <input type="hidden" name="annee_id" id=""  value="{{ $annee->id }}"> 
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="categorie">Catégorie</label>
+                                    <label class="form-label" for="categorie">Catégorie<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" name="categorie">
                                     @error('categorie')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="Date_rdv">Date du Rendez-vous</label>
+                                    <label class="form-label" for="Date_rdv">Date du Rendez-vous<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="date" name="Date_rdv">
                                     @error('Date_rdv')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>   
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="Date_recensement">Date de Rencensement</label>
+                                    <label class="form-label" for="Date_recensement">Date de Rencensement<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="date" name="Date_recensement">
                                     @error('Date_recensement')
                                         <p class="text-danger">{{ $message }}</p>

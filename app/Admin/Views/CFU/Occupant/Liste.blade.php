@@ -19,9 +19,6 @@
                                 <a href="{{route('cfu.occupant.ajout',$batiment->uuid)}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Nouveau <i class="bx bx-plus"></i></a>
                             </div>
                             <div class="col-md-2">
-                                <a href="" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
-                            </div>
-                            <div class="col-md-2">
                                 <a href="{{route('cfu.occupant.corbeille',$batiment->uuid)}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Corbeille <i class="bx bx-trash"></i></a>
                             </div>
                             <div class="col-md-4 ms-auto">

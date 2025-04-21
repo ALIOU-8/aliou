@@ -138,7 +138,7 @@ class TPUController extends Controller
                 'action'=>'Ajout',
                 'activite'=>'TPU',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
                 toastr()->success("Recensement effectué avec succes");
@@ -205,7 +205,7 @@ class TPUController extends Controller
                 'action'=>'Mofifier',
                 'activite'=>'TPU',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
                 toastr()->success("Recensement Modifier avec succes");
@@ -226,7 +226,7 @@ class TPUController extends Controller
                 'action'=>'Imprimer',
                 'activite'=>'TPU',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         return $pdf->stream('tpu.pdf'); 

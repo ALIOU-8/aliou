@@ -18,10 +18,34 @@
             <div class="col-md-9">
                 <div class="card border shadow mb-5">
                     <div class="card-body border sahadow">
-                        <div class="header">
-                            <img src="{{asset('Admin/Assets/image1.jpg')}}" class="img rounded-circle me-4" alt="">
-                            <a href="" class="btn btn-outline-success me-4">Changer de profil</a>
-                            <a href="" class="btn btn-outline-success">Supprimer profil</a>
+                        <div class="header"> 
+                            <img  src="{{asset('/storage/profil/'.$user->image)}}" class="img rounded-circle me-4" alt="">
+                            <a href="" class="btn btn-outline-success me-4" data-bs-toggle="modal" data-bs-target="#nouveau">Changer de profil</a>
+                            {{-- modal pour le profil --}}
+                            <div class="modal fade" id="nouveau" tabindex="-1" aria-labelledby="nouveau" aria-hidden="true">
+                                <div class="modal-dialog center">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h6 class="modal-title"> <div class="h6 mb-3 text-danger"><span>NB:<span class="required-start text-danger text-bolder p-2">*</span>champ obligatoire maximum 5 Mo</span></div></h6>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="" action="{{ route('profil.change',$user->uuid) }}" method="POST" enctype="multipart/form-data">
+                                                @csrf
+                                                @method('put')
+                                                <div class="form-group">
+                                                    <label for="numero_bien">photo<span class="required-start text-danger text-bolder p-2">*</span></label>
+                                                    <input type="file" id="image" name="image" class="form-control" placeholder="entrez votre photo">
+                                                    @error('image')
+                                                        <p class="text-danger">{{ $message }}</p>
+                                                    @enderror
+                                                </div>                                                        
+                                                <button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">Enregistrez<i class="bx bx-save"></i><i class="bx bx-check"></i></button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <hr>
                         <form action="{{route('profil.modif',$user->uuid)}}" method="POST">
@@ -30,28 +54,28 @@
                             <div class="text-center h5">Informations Professionnelles</div>
                             <div class="row mt-4">
                                 <div class="col-6 mb-3">
-                                    <label for="nom">Nom</label>
+                                    <label for="nom">Nom<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input type="text" name="nom" value="{{$user->nom}}" id="nom" class="form-control">
                                     @error('nom')
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="col-6 mb-3">
-                                    <label for="prenom">Prénom</label>
+                                    <label for="prenom">Prénom<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input type="text" name="prenom" value="{{$user->prenom}}" id="prenom" class="form-control">
                                     @error('prenom')
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="col-6">
-                                    <label for="email">Email</label>
+                                    <label for="email">Email<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input type="text" name="email" value="{{$user->email}}" id="email" class="form-control">
                                     @error('email')
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="col-6">
-                                    <label for="telephone">Téléphone</label>
+                                    <label for="telephone">Téléphone<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input type="text" name="telephone" value="{{$user->telephone}}" id="telephone" class="form-control">
                                     @error('telephone')
                                     <p class="text-danger">{{ $message }}</p>
@@ -69,21 +93,21 @@
                             <div class="text-center h5">Informations Personnelles</div>
                             <div class="row mt-4">
                                 <div class="col-6 mb-3">
-                                    <label for="old_password">Ancien mot de passe</label>
+                                    <label for="old_password">Ancien mot de passe<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input type="password" name="old_password" id="old_password" class="form-control">
                                     @error('old_password')
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="col-6 mb-3">
-                                    <label for="password">Nouveau mot de passe</label>
+                                    <label for="password">Nouveau mot de passe<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input type="password" name="password" id="password" class="form-control">
                                     @error('password')
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="col-6 mb-3">
-                                    <label for="password_confirmation">Confirmez mot de passe</label>
+                                    <label for="password_confirmation">Confirmez mot de passe<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input type="password" name="password_confirmation" id="password_confirmation" class="form-control">
                                     @error('password_confirmation')
                                     <p class="text-danger">{{ $message }}</p>

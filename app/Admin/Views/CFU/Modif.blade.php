@@ -20,12 +20,14 @@
                             @method('put')
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="bien_id">Numero du bien</label>
+                                    <label class="form-label" for="bien_id">Numero du bien<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <select class="form-control" name="bien_id" id="bien_id">
                                         <option selected value="{{$recencement_cfu->bien_id}}">{{ $recencement_cfu->bien->numero_bien }}</option>
                                         @foreach ($bien as $biens)
                                         @if($recencement_cfu->bien_id != $biens->id)
+                                        @if($biens->typeBien->libelle=="BATIMENT" || $biens->typeBien->libelle=="BATIMENTS")
                                         <option value="{{$biens->id}}">{{ $biens->numero_bien }}</option>
+                                        @endif
                                         @endif
                                         @endforeach
                                     </select>                
@@ -35,12 +37,12 @@
                                         <div class="h5 fw-bolder">Nom et Prénom : <span id="contribuable-name" class="fw-normal"></span></div>
                                     </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="annee_id">Année de recensement</label>
+                                    <label class="form-label" for="annee_id">Année de recensement<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input type="text" class="text-success form-control" value="{{ $recencement_cfu->annee->annee }}" disabled>
                                     <input type="hidden" name="annee_id" id=""  value="{{ $recencement_cfu->annee_id }}"> 
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="statut">Statut</label>
+                                    <label class="form-label" for="statut">Statut<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <select name="statut" class="form-control" id="">
                                         <option selected  value="{{ $recencement_cfu->statut }}">{{ $recencement_cfu->statut }}</option>
                                         @foreach ($statut as $statuts )
@@ -54,7 +56,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="type">Type</label>
+                                    <label class="form-label" for="type">Type<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <select name="type" class="form-control" id="">
                                         <option selected value="{{ $recencement_cfu->type }}">{{ $recencement_cfu->type }}</option>
                                         @foreach ($type as $types )
@@ -68,14 +70,14 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="date_rdv">Date du Rendez-vous</label>
+                                    <label class="form-label" for="date_rdv">Date du Rendez-vous<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="date" value="{{ $recencement_cfu->date_rdv }}" name="date_rdv">
                                     @error('date_rdv')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="date_recensement">Date Recensement</label>
+                                    <label class="form-label" for="date_recensement">Date Recensement<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="date"  value="{{ $recencement_cfu->date_recensement }}" name="date_recensement">
                                     @error('date_recensement')
                                     <p class="text-danger">{{ $message }}</p>
@@ -84,21 +86,21 @@
                                 <hr>      
                                 <div class="text-center h5 text-success">Caractéristiques du batiment</div>         
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="nbre_etage">Nombre d'étage</label>
+                                    <label class="form-label" for="nbre_etage">Nombre d'étage<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="number" value="{{ $recencement_cfu->nbre_etage }}" name="nbre_etage">
                                     @error('nbre_etage')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="surface">Surface</label>
+                                    <label class="form-label" for="surface">Surface<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" value="{{ $recencement_cfu->surface }}" name="surface">
                                     @error('surface')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="nature_fondation">Nature fondation</label>
+                                    <label class="form-label" for="nature_fondation">Nature fondation<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <select name="nature_fondation" class="form-control" id="">
                                         <option selected value="{{ $recencement_cfu->nature_fondation }}">{{ $recencement_cfu->nature_fondation }}</option>
                                      @foreach ($n_fondation as $n_fondations )
@@ -112,7 +114,7 @@
                                 @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="nature_mur">Nature mur</label>
+                                    <label class="form-label" for="nature_mur">Nature mur<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <select name="nature_mur" class="form-control" id="">
                                         <option selected value="{{ $recencement_cfu->nature_mur }}">{{ $recencement_cfu->nature_mur }}</option>
                                         @foreach ($n_mur as $n_murs )
@@ -126,7 +128,7 @@
                                 @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="nature_toit">Nature toit</label>
+                                    <label class="form-label" for="nature_toit">Nature toit<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <select name="nature_toit"  class="form-control" id="">
                                         <option  selected value="{{ $recencement_cfu->nature_toit }}">{{ $recencement_cfu->nature_toit }}</option>
                                         @foreach ($n_toit as $n_toits )
@@ -140,14 +142,14 @@
                                 @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label"  for="nombre_unite">Nombre unité</label>
+                                    <label class="form-label"  for="nombre_unite">Nombre unité<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" value="{{ $recencement_cfu->nombre_unite }}" type="number" name="nombre_unite">
                                     @error('nombre_unite')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
                                 </div>                
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="nombre_unite_occuper">Nombre unité Occupée</label>
+                                    <label class="form-label" for="nombre_unite_occuper">Nombre unité Occupée<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="number" value="{{ $recencement_cfu->nombre_unite_occuper }}" name="nombre_unite_occuper">
                                     @error('nombre_unite_occuper')
                                     <p class="text-danger">{{ $message }}</p>

@@ -59,6 +59,8 @@
             text-align: center;
             margin-bottom: 20px;
             font-weight: 500;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 15px;
         }
 
         .info-section {
@@ -181,10 +183,10 @@
                 </div>
                 
                 <!-- Section détails de paiement -->
-                <div style="display: flex; margin-top: 20px;">
+                <div style="display: flex; margin-top: 20px">
                     <div class="payment-dates">
                         <div class="date-box">Date de mise en recouvrement</div>
-                        <div class="date-box">Date limite de paiement</div>
+                        <div class="date-box">Date limite de paiement: <span style="text-align:center;color:#d32f2f">{{ $impot->date_limite}}</span></div>
                         <div class="date-box warning-note">
                             Au-delà de cette date, votre impôt sera majoré et des poursuites seront engagées contre vous
                         </div>

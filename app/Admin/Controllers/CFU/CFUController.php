@@ -22,9 +22,16 @@ class CFUController extends Controller
     }
 
     public function ajout ($uuid) {
-        $bien_recence=Bien::where('uuid',$uuid)->firstOrFail();
+        $bien_recence=Bien::where('uuid',$uuid)->with('typeBien')->firstOrFail();
         $annee=Annee::where('active',1)->firstOrFail();
-        return view('Admin::CFU.Ajout',compact('bien_recence','annee'));
+        ////verifier si le type est batiment car c'est un CFU
+        if($bien_recence->typeBien->libelle=='BATIMENTS' || $bien_recence->typeBien->libelle=='BATIMENT')
+        {
+            return view('Admin::CFU.Ajout',compact('bien_recence','annee'));
+        }else{
+            toastr()->error('Ce bien n\'est pas un batiment');
+            return back();
+        }
     }
 
     public function store (Request $request) {
@@ -33,8 +40,10 @@ class CFUController extends Controller
             'surface'=>'required',
             'nature_mur'=>'required',
             'nature_toit'=>'required',
-            'nombre_unite'=>'required',
-            'nombre_unite_occuper'=>'required',
+            'nombre_unite' => ['required', 'numeric'],
+            'nombre_unite_occuper' => ['required', 'numeric', 'lte:nombre_unite'],
+             ], [
+            'nombre_unite_occuper.lte' => "Le nombre d'unités occupées ne peut pas dépasser le nombre total d'unités.",
             'date_recensement'=>'required',
             'date_rdv'=>'required',
             'statut'=>'required',
@@ -57,7 +66,7 @@ class CFUController extends Controller
 
            
         $recensement_cfu= new Recensement_cfu();
-        $recensement_cfu->user_id=1;
+        $recensement_cfu->user_id=Auth::user()->id;
         $recensement_cfu->bien_id=$request->bien_id;
         $recensement_cfu->annee_id=$request->annee_id;
         $recensement_cfu->nature_fondation=$request->nature_fondation;
@@ -79,7 +88,7 @@ class CFUController extends Controller
                 'action'=>'Ajout',
                 'activite'=>'CFU',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         toastr()->success('Recensement effectué avec succèss');
@@ -98,7 +107,7 @@ class CFUController extends Controller
      
          // Récupérer les biens non recensés
          $bien = Bien::whereNotIn('id', $biensRecenses)
-                      ->where('delete', 0)
+                      ->where('delete', 0)->with('typeBien')
                       ->get();
         $type=['personne_physique','personne_morale'];            
         $statut=['prive','etat_collectivite'];            
@@ -180,7 +189,7 @@ class CFUController extends Controller
                 'action'=>'Mofier',
                 'activite'=>'CFU',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
                 toastr()->success('Recensement modifié avec succèss');
@@ -258,7 +267,7 @@ class CFUController extends Controller
                 'action'=>'Imprimer',
                 'activite'=>'CFU',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+              'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         return $pdf->stream('cfu.pdf'); 

@@ -9,6 +9,7 @@ use App\Models\Historique;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class InvitationController extends Controller
 {
@@ -60,7 +61,7 @@ class InvitationController extends Controller
                 'action'=>'Ajout',
                 'activite'=>'Invitation',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         toastr()->success('invitation enregistré avec succes');
@@ -97,7 +98,7 @@ class InvitationController extends Controller
                 'action'=>'Modifier',
                 'activite'=>'Invitation',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         toastr()->success('invitation modifié avec succes');
@@ -114,7 +115,7 @@ class InvitationController extends Controller
                 'action'=>'Imprimer',
                 'activite'=>'Invitation',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         $pdf = Pdf::loadView('Admin::Parametre.Configuration.Invitation.Imprimer', compact('invitation','annee'));

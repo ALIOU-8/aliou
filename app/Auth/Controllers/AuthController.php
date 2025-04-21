@@ -7,6 +7,7 @@ use App\Mail\ForgetPasswordMail;
 use App\Models\Annee;
 use App\Models\Historique;
 use App\Models\Personnel;
+use App\Models\Session;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -121,13 +122,20 @@ class AuthController extends Controller
     public function bloquer (string $uuid){
         $user = User::where('uuid',$uuid)->first();
         $message = "";
-        if($user->statut == 0) {
-            $user->statut = 1;  
-            $message = "Utilisateur bloqué avec succès !";
-        }
-        else {
-            $user->statut = 0;   
-            $message = "Utilisateur débloqué avec succès !";
+        if($user->droit=='admin')
+        {
+            toastr()->error("Impossible de bloqué un administrateur !");
+            return back();
+        }else{
+            if($user->statut == 0) {
+                $user->statut = 1;  
+                Session::where('user_id',$user->id)->delete();
+                $message = "Utilisateur bloqué avec succès !";
+            }
+            else {
+                $user->statut = 0;   
+                $message = "Utilisateur débloqué avec succès !";
+            }
         }
         $user->update();
         toastr()->success("$message");

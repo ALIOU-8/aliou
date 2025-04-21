@@ -45,7 +45,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('/profil',[ProfilController::class, 'index'])->name('profil');
     Route::put('/profil/{uuid}',[ProfilController::class, 'modif'])->name('profil.modif');
     Route::put('/mdpUpdate/{uuid}',[ProfilController::class, 'mdp_update'])->name('profil.modif.mdp');
-
+    Route::put('/changer/{uuid}',[ProfilController::class,'change'])->name('profil.change');
 
     //Les routes pour les contribuales
     Route::prefix('contribuables')->group(function () {

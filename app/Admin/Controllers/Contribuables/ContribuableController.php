@@ -7,6 +7,7 @@ use App\Models\Annee;
 use App\Models\Contribuable;
 use App\Models\Historique;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -25,20 +26,23 @@ class ContribuableController extends Controller
         $contribuables = Contribuable::where('delete', 0)
         ->with('bien')// Charge les biens associés
         ->orderBy('id', 'desc')
-        ->get();    
-        $annee = Annee::where('active', 1)->firstOrFail();
-        $pdf =Pdf::loadView('Admin::Contribuables.imprimer', compact('contribuables', 'annee'));
-        $annee=Annee::where('active',1)->first();
-        Historique::create(
-            [
-                'user_id'=>Auth::user()->id,
-                'action'=>'Imprimer',
-                'activite'=>'Contribuable',
-                'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
-            ]
-            );
-        return $pdf->stream('contribuable.pdf'); 
+        ->get(); 
+        if(count($contribuables)!=0)
+        {$annee = Annee::where('active', 1)->firstOrFail();
+            $pdf =Pdf::loadView('Admin::Contribuables.imprimer', compact('contribuables', 'annee'));
+            $annee=Annee::where('active',1)->first();
+            Historique::create(
+                [
+                    'user_id'=>Auth::user()->id,
+                    'action'=>'Imprimer',
+                    'activite'=>'Contribuable',
+                    'annee_id'=>$annee->id,
+                    'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
+                ]
+                );
+            return $pdf->stream('contribuable.pdf'); 
+        }
+        return back();
     }
     public function recherche(Request $request)
     {
@@ -103,7 +107,7 @@ class ContribuableController extends Controller
                 'action'=>'Ajout',
                 'activite'=>'contribuable',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         toastr()->success('Contribuable Ajoutez avec Succes');
@@ -135,7 +139,7 @@ class ContribuableController extends Controller
                 'action'=>'Modifier',
                 'activite'=>'contribuable',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
             toastr()->success('Contribuable modifié avec succès');
@@ -154,7 +158,7 @@ class ContribuableController extends Controller
                 'action'=>'Supprimer',
                 'activite'=>'contribuable',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         toastr()->success('Contribuable Supprimez avec Succes');
@@ -172,7 +176,7 @@ class ContribuableController extends Controller
                 'action'=>'Restorer',
                 'activite'=>'contribuable',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         toastr()->success('Contribuable restaurez avec Succes');
@@ -180,7 +184,7 @@ class ContribuableController extends Controller
     }
 
     public function restaurer () {
-        $contribuables = Contribuable::where('delete',1)->Orderby('id','Desc')->get();
+        $contribuables = Contribuable::where('delete',1)->Orderby('id','Desc')->paginate(10);
         return view('Admin::Contribuables.Corbeille',compact('contribuables'));
     }
 }

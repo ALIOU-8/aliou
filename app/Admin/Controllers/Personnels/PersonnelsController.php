@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use App\Models\Historique;
+use Carbon\Carbon;
+
 class PersonnelsController extends Controller
 {
     public function index () {
@@ -73,15 +75,13 @@ class PersonnelsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'matricule'=>'required|unique:personnels',
-            'nom'=>'required',
-            'prenom'=>'required',
-            'telephone'=>'required|unique:personnels',
+            'matricule' => ['required', 'unique:personnels', 'regex:/^\d{6}[A-Za-z]$/'],
+            'nom' => ['required', 'regex:/^[A-Za-z]+$/'],
+            'prenom' => ['required', 'regex:/^[A-Za-z]+( [0-9])?$/'],
+            'telephone' => ['required', 'unique:personnels', 'regex:/^\d+$/'],
             'fonction'=>'required',
             'hierachie'=>'required'
-
         ]);
-
         $personnel=new Personnel();
         $personnel->matricule=$request->matricule;
         $personnel->nom=$request->nom;
@@ -97,7 +97,7 @@ class PersonnelsController extends Controller
                 'action'=>'Ajout',
                 'activite'=>'personnel',
                 'annee_id'=>$annee->id,
-               'date'=>date('d:M:Y:H:i:s')
+               'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         toastr()->success('Personnel enregistré avec succes');
@@ -138,7 +138,7 @@ class PersonnelsController extends Controller
                 'action'=>'Modifier',
                 'activite'=>'personnel',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         toastr()->success('Personnel modifié avec succes');
@@ -160,8 +160,9 @@ class PersonnelsController extends Controller
 
     public function imprimer () {
         $personnel = Personnel::where('delete', 0)->orderBy('id', 'desc')->get();
-        $annee = Annee::where('active', 1)->firstOrFail();
-
+        if(count($personnel)!=0)
+        {
+            $annee = Annee::where('active', 1)->firstOrFail();
         $pdf = Pdf::loadView('Admin::Personnels.Imprimer', compact('personnel', 'annee'));
         $annee=Annee::where('active',1)->first();
         Historique::create(
@@ -170,11 +171,12 @@ class PersonnelsController extends Controller
                 'action'=>'Imprimer',
                 'activite'=>'personnel',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         return $pdf->stream('personnels.pdf'); 
-
+        }
+        return back();
     }
 
     public function corbeille () {
@@ -194,7 +196,7 @@ class PersonnelsController extends Controller
                 'action'=>'Supprimer',
                 'activite'=>'personnel',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         toastr()->success('personnel Supprimez avec Succes');
@@ -212,7 +214,7 @@ class PersonnelsController extends Controller
                 'action'=>'Restaurer',
                 'activite'=>'personnel',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         toastr()->success('personnel restaurez avec Succes');

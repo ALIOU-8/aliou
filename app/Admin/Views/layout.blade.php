@@ -157,7 +157,7 @@
             </div>
             <span class="divider"></span>
             <div class="profile">
-                <img src="{{asset('Admin/Assets/image1.jpg')}}" alt="">
+                <img  src="{{asset('/storage/profil/'.Auth()->user()->image)}}" alt="">
                 <ul class="profile-link">
                     <li><a href="{{route('profil')}}"><i class="bx bxs-user-circle icon"></i>Profil</a></li>
                     {{-- <li><a href=""><i class="bx bxs-cog icon"></i>Setting</a></li> --}}

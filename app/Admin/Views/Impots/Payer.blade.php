@@ -14,6 +14,7 @@
                 <div class="card border border-light">
                     <div class="card-body">
                         <div class="h5 mb-2 text-center text-success"> Fiche de paye de Mr/Mme {{$bien->contribuable->nom . ' ' . $bien->contribuable->prenom}}  </div>
+                        <div class="h6 mb-3 text-danger"><span>NB:<span class="required-start text-danger text-bolder p-2">*</span>Tous les champs marqués d'une étoile sont obigatoires</span></div>
                         <div class="">
                             <form action="{{route('impot.payement',$impot->uuid)}}" method="POST" class="row">
                                 @csrf
@@ -26,14 +27,14 @@
                                     <input type="text" class="form-control" value="{{ number_format($montantRestant, 0, ',', ' ') }} GNF" name="montant_restant" disabled >
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="montant">Montant </label>
+                                    <label for="montant">Montant<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input type="text" name="montant"  class="form-control">
                                     @error('montant')
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="num_quitance">Numéro de quitance </label>
+                                    <label for="num_quitance">Numéro de quitance<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input type="text" name="num_quitance"  class="form-control">
                                     @error('num_quitance')
                                     <p class="text-danger">{{ $message }}</p>
@@ -46,7 +47,6 @@
                         </div>
                         <hr>
                         <div class="h5 mb-2 text-center text-success"> Historique de Paiement </div>
-                        <div class="h6 mb-3 text-success">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab mollitia ratione quaerat natus rem iusto asperiores facilis libero est doloremque velit, suscipit repellendus cupiditate illo dolor perspiciatis labore reiciendis vitae?</div>
                         <div class="historique_de_paiement">
                             <div class="table-responsive">
                                 <table class="table table-bordered table-hover table-striped">

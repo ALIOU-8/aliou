@@ -49,21 +49,21 @@
                                 <hr>      
                                 <div class="text-center h5 text-success">Imposition du bien</div>         
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="montant_brute">Montant Brute</label>
+                                    <label class="form-label" for="montant_brute">Montant Brute<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" name="montant_brute" value="{{$impot->montant_brute}}">
                                     @error('montant_brute')
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="montant_a_payer">Montant à payer</label>
+                                    <label class="form-label" for="montant_a_payer">Montant à payer<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" name="montant_a_payer" value="{{$impot->montant_a_payer}}">
                                     @error('montant_a_payer')
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="date_limite">Date limite</label>
+                                    <label class="form-label" for="date_limite">Date limite<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="date" name="date_limite" value="{{$impot->date_limite}}">
                                     @error('date_limite')
                                     <p class="text-danger">{{ $message }}</p>
@@ -92,14 +92,14 @@
                                 </div>
                                 @if($impot->type_impot=='patente')
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="droit_fixe">Droit fixe</label>
+                                    <label class="form-label" for="droit_fixe">Droit fixe<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" name="droit_fixe" value="{{$impot->droit_fixe}}">
                                     @error('droit_fixe')
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="droit_proportionnel">Droit proportionnel</label>
+                                    <label class="form-label" for="droit_proportionnel">Droit proportionnel<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" name="droit_proportionnel" value="{{$impot->droit_proportionnel}}">
                                     @error('droit_proportionnel')
                                     <p class="text-danger">{{ $message }}</p>

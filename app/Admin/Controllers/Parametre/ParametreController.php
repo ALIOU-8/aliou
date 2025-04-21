@@ -75,7 +75,7 @@ class ParametreController extends Controller
             'libelle'=>'required|unique:type_biens'
         ]);
         $type_bien=new TypeBien();
-        $type_bien->libelle=$request->libelle;
+        $type_bien->libelle=strtoupper($request->libelle);
         $type_bien->save();
         toastr()->success("Type bien enregistrer avec success");
         return back();
@@ -90,7 +90,7 @@ class ParametreController extends Controller
             ],
         ]);
         $type_bien=TypeBien::where('uuid',$uuid)->firstOrFail();
-        $type_bien->libelle=$request->libelle;
+        $type_bien->libelle=strtoupper($request->libelle);
         $type_bien->update();
         toastr()->success("Type bien modifier avec success");
         return  to_route('parametre.configuration.type.biens');
@@ -139,7 +139,7 @@ class ParametreController extends Controller
             ]
         );
         $fonction=new Fonction();
-        $fonction->libelle=$request->libelle;
+        $fonction->libelle=strtoupper($request->libelle);
         $fonction->save();
         toastr()->success("Fonction Ajoutée avec succes");
         return back();
@@ -155,7 +155,7 @@ class ParametreController extends Controller
             ]
         );
         $fonction=Fonction::where('uuid',$uuid)->firstOrFail();
-        $fonction->libelle=$request->libelle;
+        $fonction->libelle=strtoupper($request->libelle);
         $fonction->update();
         toastr()->success("Fonction modifiée avec succes");
         return to_route('parametre.configuration.fonction');
@@ -249,6 +249,27 @@ class ParametreController extends Controller
             'date_debut' => 'required|date',
             'date_fin' => 'required|date|after_or_equal:date_debut',
         ]);
+        $annee = $request->annee;
+
+        // Tes dates sont bien au format Y-m-d, donc on parse correctement :
+        $debut = Carbon::createFromFormat('Y-m-d', $request->date_debut);
+        $fin = Carbon::createFromFormat('Y-m-d', $request->date_fin);
+
+        // Début et fin d'année à comparer
+        $debutAnnee = Carbon::createFromDate($annee, 1, 1)->startOfDay();
+        $finAnnee = Carbon::createFromDate($annee, 12, 31)->endOfDay();
+
+        if ($debut->lt($debutAnnee) || $debut->gt($finAnnee)) {
+            toastr()->error("La date de début doit être comprise dans l'année $annee.");
+            return back();
+        }
+
+        if ($fin->lt($debutAnnee) || $fin->gt($finAnnee)) {
+            toastr()->error("La date de fin doit être comprise dans l'année $annee.");
+            return back();
+        }
+
+
          // Désactiver toutes les autres années
         Annee::query()->update(['active' => 0]);
         if($request->date_debut > $request->date_fin )
@@ -273,16 +294,36 @@ class ParametreController extends Controller
     {
         $request->validate(
             [
-                'annee' => ['max:4',
+                'annee' => [
                 'required',
-                Rule::unique('annees')->ignore($uuid,'uuid'),
-                 // Exclure l'ID actuel
-                 'date_debut'=>'required',
-                'date_fin'=>'required',
-                 
+                'integer',
+                'min:2025',
+                Rule::unique('annees','annee')->ignore($uuid,'uuid'), // Exclure l'ID actuel
             ],
+            'date_debut' => 'required|date',
+            'date_fin' => 'required|date|after_or_equal:date_debut',
             ]
         );
+        $annee = $request->annee;
+
+        // Tes dates sont bien au format Y-m-d, donc on parse correctement :
+        $debut = Carbon::createFromFormat('Y-m-d', $request->date_debut);
+        $fin = Carbon::createFromFormat('Y-m-d', $request->date_fin);
+
+        // Début et fin d'année à comparer
+        $debutAnnee = Carbon::createFromDate($annee, 1, 1)->startOfDay();
+        $finAnnee = Carbon::createFromDate($annee, 12, 31)->endOfDay();
+
+        if ($debut->lt($debutAnnee) || $debut->gt($finAnnee)) {
+            toastr()->error("La date de début doit être comprise dans l'année $annee.");
+            return back();
+        }
+
+        if ($fin->lt($debutAnnee) || $fin->gt($finAnnee)) {
+            toastr()->error("La date de fin doit être comprise dans l'année $annee.");
+            return back();
+        }
+
         if($request->date_debut > $request->date_fin )
         {
             toastr()->error('La date debut doit être inférieur a la date de fin');

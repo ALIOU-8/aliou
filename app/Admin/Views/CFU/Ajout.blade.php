@@ -19,7 +19,7 @@
                             @csrf
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="bien_id">Numero du bien</label>
+                                    <label class="form-label" for="bien_id">Numero du bien<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input type="text" class="form-control" value="{{$bien_recence->numero_bien }}" disabled>
                                     <input type="hidden" name="bien_id" id="bien_id"  value="{{ $bien_recence->id }}">                  
                                 </div> 
@@ -28,12 +28,12 @@
                                     <div class="h5 fw-bolder">Nom et Prénom : <span id="contribuable-name" class="fw-normal">{{ $bien_recence->contribuable->prenom.' '.$bien_recence->contribuable->nom  }}</span></div>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="annee_id">Année de recensement</label>
+                                    <label class="form-label" for="annee_id">Année de recensement<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input type="text" class="text-success form-control" value="{{ $annee->annee }}" disabled>
                                     <input type="hidden" name="annee_id" id=""  value="{{ $annee->id }}"> 
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="statut">Statut</label>
+                                    <label class="form-label" for="statut">Statut<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <select name="statut" class="form-control" id="">
                                         <option value=""></option>
                                         <option value="prive">Privé</option>
@@ -44,7 +44,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="type">Type</label>
+                                    <label class="form-label" for="type">Type<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <select name="type" class="form-control" id="">
                                         <option value=""></option>
                                         <option value="personne_physique">Personne physique</option>
@@ -55,14 +55,14 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="date_rdv">Date du Rendez-vous</label>
+                                    <label class="form-label" for="date_rdv">Date du Rendez-vous<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="date" name="date_rdv">
                                     @error('date_rdv')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="date_recensement">Date Recensement</label>
+                                    <label class="form-label" for="date_recensement">Date Recensement<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="date" name="date_recensement">
                                     @error('date_recensement')
                                     <p class="text-danger">{{ $message }}</p>
@@ -71,21 +71,21 @@
                                 <hr>      
                                 <div class="text-center h5 text-success">Caractéristiques du batiment</div>         
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="nbre_etage">Nombre d'étage</label>
+                                    <label class="form-label" for="nbre_etage">Nombre d'étage<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="number" name="nbre_etage">
                                     @error('nbre_etage')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="surface">Surface</label>
+                                    <label class="form-label" for="surface">Surface<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" name="surface">
                                     @error('surface')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="nature_fondation">Nature fondation</label>
+                                    <label class="form-label" for="nature_fondation">Nature fondation<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <select name="nature_fondation" class="form-control" id="">
                                         <option value=""></option>
                                         <option value="legere">Légère</option>
@@ -96,7 +96,7 @@
                                 @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="nature_mur">Nature mur</label>
+                                    <label class="form-label" for="nature_mur">Nature mur<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <select name="nature_mur" class="form-control" id="">
                                         <option value=""></option>
                                         <option value="banco">Banco</option>
@@ -107,7 +107,7 @@
                                 @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="nature_toit">Nature toit</label>
+                                    <label class="form-label" for="nature_toit">Nature toit<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <select name="nature_toit"  class="form-control" id="">
                                         <option value=""></option>
                                         <option value="vegetale">Végétale</option>
@@ -119,16 +119,16 @@
                                 @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="nombre_unite">Nombre unité</label>
+                                    <label class="form-label" for="nombre_unite">Nombre unité<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control"  type="number" name="nombre_unite">
-                                    @error('nombre_unite')
+                                @error('nombre_unite')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
                                 </div>                
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="nombre_unite_occuper">Nombre unité Occupée</label>
+                                    <label class="form-label" for="nombre_unite_occuper">Nombre unité Occupée<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="number" name="nombre_unite_occuper">
-                                    @error('nombre_unite_occuper')
+                                @error('nombre_unite_occuper')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
                                 </div>                

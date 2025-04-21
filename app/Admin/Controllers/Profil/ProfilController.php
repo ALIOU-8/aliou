@@ -15,7 +15,23 @@ class ProfilController extends Controller
         $user = Auth::user();
         return view('Admin::Profil.profil',compact('user'));
     }
+    public function  change(Request $request, string $uuid)
+    {
+        $request->validate([
+            'image'=>'required|image|max:5120'
+        ]);
 
+        $profile=$request->file('image');
+        $extension=$profile->getClientOriginalExtension();
+        $nomImage=pathinfo($profile->getClientOriginalName(),PATHINFO_FILENAME);
+        $monImage=$nomImage.''.'_'.time().'.'.$extension;
+        $profile->storeAs('public/profil',$monImage);
+        $user=User::where('uuid',$uuid)->firstOrFail();
+        $user->image=$monImage;
+        $user->update();
+        toastr()->success("Profil changer avec succès");
+        return back();
+    }
     public function modif(Request $request, string $uuid){
         $request->validate([
             'nom'=>'required',

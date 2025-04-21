@@ -60,7 +60,7 @@ class PatenteController extends Controller
                 'action'=>'Ajout',
                 'activite'=>'patente',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
                 toastr()->success("Recensement effectué avec succes");
@@ -108,7 +108,7 @@ class PatenteController extends Controller
                 'action'=>'Modifier',
                 'activite'=>'Patente',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
                 toastr()->success("Recensement Modifier avec succes");
@@ -215,7 +215,7 @@ class PatenteController extends Controller
                 'action'=>'Imprimer',
                 'activite'=>'Patente',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         return $pdf->stream('patente.pdf'); 

@@ -8,6 +8,7 @@ use App\Models\Bien;
 use App\Models\Historique;
 use App\Models\Occupant;
 use App\Models\Recensement_cfu;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -57,7 +58,7 @@ class OccupantController extends Controller
                 'action'=>'Ajout',
                 'activite'=>'occupant',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         toastr()->success('Occupant ajouté avec succèss');
@@ -75,7 +76,7 @@ class OccupantController extends Controller
                 'action'=>'Supprimer',
                 'activite'=>'occupant',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         toastr()->success('Occupant supprimé avec Succès');
@@ -117,7 +118,7 @@ class OccupantController extends Controller
                 'action'=>'Modifier',
                 'activite'=>'occupant',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         toastr()->success('Occupant modifié avec succèss');
@@ -142,7 +143,7 @@ class OccupantController extends Controller
                 'action'=>'Restorer',
                 'activite'=>'occupant',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         toastr()->success('Occupant restauré avec Succès');

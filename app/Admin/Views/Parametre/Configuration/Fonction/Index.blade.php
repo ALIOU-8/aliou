@@ -17,6 +17,7 @@
                     <div class="card-body">
                         <div class="">
                             <div class="h5 mb-2 text-center text-success">Ajout d'une fonction</div>
+                            <div class="h6 mb-3 text-danger"><span>NB:<span class="required-start text-danger text-bolder p-2">*</span>champ obigatoire</span></div>
                             <form action="{{ isset($fonction) ? route('parametre.configuration.fonction.update',$fonction->uuid) : route('parametre.configuration.fonction.store') }}" method="POST" class="form">
                                 @csrf
                                 @if(isset($fonction))
@@ -25,7 +26,7 @@
                                 @endif
                                 <div class="row mt-4">
                                     <div class="col-md-6 mb-3">
-                                        <input class="form-control" type="text" name="libelle" value="{{ isset($fonction) ? $fonction->libelle : old('libelle') }}" placeholder="Fonction">
+                                        <input class="form-control" type="text" name="libelle" oninput="this.value=this.value.toUpperCase()" value="{{ isset($fonction) ? $fonction->libelle : old('libelle') }}" placeholder="Fonction">
                                     </div>  
                                     @error('libelle')
                                     <p class="text-danger">{{ $message }}</p>    
@@ -39,9 +40,6 @@
                         <hr>
                         <div class="h5 text-center text-success">La liste des fonctions</div>
                         <div class="row d-flex justify-content-between align-items-center me-1">
-                            <div class="col-md-2">
-                                <a href="" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Imprimer <i class="bx bx-printer"></i></a>
-                            </div>
                             <div class="col-md-2">
                                 <a href="{{route('parametre.configuration.fonction.corbeille')}}" class="btn btn-outline-success btn-sm-lg d-flex align-items-center justify-content-center gap-1">Corbeille <i class="bx bx-tra"></i></a>
                             </div>

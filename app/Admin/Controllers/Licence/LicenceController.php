@@ -60,7 +60,7 @@ class LicenceController extends Controller
                 'action'=>'Ajout',
                 'activite'=>'Licence',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
                 toastr()->success("Recensement effectué avec succes");
@@ -124,7 +124,7 @@ class LicenceController extends Controller
                 'action'=>'Modifier',
                 'activite'=>'Licence',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
                 toastr()->success("Recensement Modifier avec succes");
@@ -218,7 +218,7 @@ class LicenceController extends Controller
                 'action'=>'Imprimer',
                 'activite'=>'Licence',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         return $pdf->stream('licence.pdf'); 

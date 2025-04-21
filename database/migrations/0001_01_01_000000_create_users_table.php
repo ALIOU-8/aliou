@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->enum('statut',[0,1])->default(0);
-            $table->string('image')->default('image.jpg');
+            $table->string('image',)->default('user_icon.png');
             $table->rememberToken();
             $table->timestamps();
         });

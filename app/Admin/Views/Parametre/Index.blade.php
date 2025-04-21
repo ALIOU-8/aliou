@@ -13,7 +13,7 @@
                     <div class="card-body">
                         <div class="h5 text-success text-center mb-4">Paramètre de l'application</div>
                         <div class="row mb-3">
-                            <div class="col-md-4 mb-4">
+                            <div class="col-md-3 mb-4">
                                 <div class="card border shadow p-1">
                                     <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-user"></i>Comptabilité</div>
                                     <hr class="m-0">
@@ -22,21 +22,30 @@
                                     </div>
                                 </div>
                             </div>   
-                            <div class="col-md-4 mb-4">
+                            <div class="col-md-3 mb-4">
                                 <div class="card border shadow p-1">
-                                    <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-user"></i>Gestion des utilisateurs</div>
+                                    <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-user"></i>Gestion utilisateurs</div>
                                     <hr class="m-0">
                                     <div class="mt-1 mb-1 p-3">
-                                        <a href="{{route('parametre.user')}}" class="btn btn-sm-lg btn-outline-success w-100">Ajouter</a>
+                                        <a href="{{route('parametre.user')}}" class="btn btn-sm-lg btn-outline-success w-100">Gerer</a>
                                     </div>
                                 </div>
                             </div>   
-                            <div class="col-md-4 mb-4">
+                            <div class="col-md-3 mb-4">
                                 <div class="card border shadow p-1">
                                     <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-cog"></i>Gestion Interne</div>
                                     <hr class="m-0">
                                     <div class="mt-1 mb-1 p-3">
                                         <a href="{{route('parametre.configuration')}}" class="btn btn-sm-lg btn-outline-success w-100">Configurer</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-4">
+                                <div class="card border shadow p-1">
+                                    <div class="h5 text-center m-1 d-flex align-items-center gap-2"><i class="bx bxs-cog"></i>Gestion Site</div>
+                                    <hr class="m-0">
+                                    <div class="mt-1 mb-1 p-3">
+                                        <a href="#" class="btn btn-sm-lg btn-outline-success w-100">Configurer</a>
                                     </div>
                                 </div>
                             </div>

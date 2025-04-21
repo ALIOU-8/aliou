@@ -16,61 +16,65 @@
                 <div class="card border border-light">
                     <div class="card-body">
                         <div class="h5 mb-2 text-center text-success"> Ajout d'un occupant pour le bâtiment " {{$nombatiment->libelle}} "</div>
-                        <div class="h6 mb-3 text-success">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab mollitia ratione quaerat natus rem iusto asperiores facilis libero est doloremque velit, suscipit repellendus cupiditate illo dolor perspiciatis labore reiciendis vitae?</div>
+                        <div class="h6 mb-3 text-danger"><span>NB:<span class="required-start text-danger text-bolder p-2">*</span>Tous les champs marqués d'une étoile sont obigatoires</span></div>
                         <form action="{{route('cfu.occupant.store',$cfu->uuid)}}" class="form">
                             @csrf
                             <div class="row">                               
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="nom">Nom</label>
+                                    <label class="form-label" for="nom">Nom<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" value="{{old('nom')}}" name="nom">
                                     @error('nom')
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="prenom">Prénom</label>
+                                    <label class="form-label" for="prenom">Prénom<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" value="{{old('prenom')}}" name="prenom">
                                     @error('prenom')
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="niveau">Niveau</label>
+                                    <label class="form-label" for="niveau">Niveau<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" value="{{old('niveau')}}" name="niveau">
                                     @error('niveau')
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="unite">Unité</label>
-                                    <input class="form-control" type="text" value="{{old('unite')}}" name="unite">
+                                    <label class="form-label" for="unite">Unité<span class="required-start text-danger text-bolder p-2">*</span></label>
+                                    <select class="form-control" name="unite" id="">
+                                        @for ($i=1;$i<=$cfu->nombre_unite;$i++)
+                                        <option value="{{ $i }}">{{ $i }}</option>
+                                        @endfor
+                                    </select>
                                     @error('unite')
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="activite">Activité</label>
+                                    <label class="form-label" for="activite">Activité<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" value="{{old('activite')}}" name="activite">
                                     @error('activite')
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="valeur_locative">Valeur locative</label>
+                                    <label class="form-label" for="valeur_locative">Valeur locative<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" value="{{old('valeur_locative')}}" name="valeur_locative">
                                     @error('valeur_locative')
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="type_occupant">type d'occupant</label>
+                                    <label class="form-label" for="type_occupant">type d'occupant<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" value="{{old('type_occupant')}}" name="type_occupant">
                                     @error('type_occupant')
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="observation">Observation</label>
+                                    <label class="form-label" for="observation">Observation<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" value="{{old('observation')}}" name="observation">
                                     @error('observation')
                                     <p class="text-danger">{{ $message }}</p>

@@ -47,8 +47,8 @@ body .table-responsive th{
 /* Dashboard card */
 body .card-custom {
     position: relative; /* Pour positionner des éléments internes */
-    background: linear-gradient(135deg, #b30000 10%, #478e09 90%); /* Dégradé entre le rouge et le vert foncé */
-    color: white;
+    background: white;/* Dégradé entre le rouge et le vert foncé */
+    color: #478e09;
     font-weight: bolder;
     border-radius: 1rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -67,7 +67,7 @@ body .icon-user {
 }
 
 body .icon-print {
-    color: #e0e0e0;
+    color: #478e09;
     font-size: 1.3rem;
     position: absolute; /* Pour le placer précisément dans la carte */
     top: 15px;
@@ -79,7 +79,7 @@ body .icon-print {
 }
 
 body .icon-print:hover {
-    color: white;
+    color: red;
     cursor: pointer;
 }
 

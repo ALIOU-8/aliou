@@ -15,6 +15,7 @@ use App\Models\Historique;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class ImpotsController extends Controller
 {
@@ -83,7 +84,7 @@ class ImpotsController extends Controller
                 'action'=>'Modifier',
                 'activite'=>'Impôt',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         toastr()->success('Imposition modifié avec succèss');
@@ -123,7 +124,7 @@ class ImpotsController extends Controller
                 'action'=>'Imprimer',
                 'activite'=>'Avis',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
              return $pdf->stream('impôt.pdf'); 
@@ -241,7 +242,7 @@ class ImpotsController extends Controller
                 'action'=>'Payer',
                 'activite'=>'Impôt',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         // Mise à jour du statut de l'impôt
@@ -441,7 +442,7 @@ class ImpotsController extends Controller
                 'action'=>'Ajout',
                 'activite'=>'Impôt',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
             toastr()->success('Imposition effectué avec succèss');
@@ -522,7 +523,7 @@ class ImpotsController extends Controller
                 'action'=>'Imprimer',
                 'activite'=>'Impôt',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
              return $pdf->stream('impôt.pdf'); 

@@ -18,40 +18,39 @@
                 <div class="card border border-light">
                     <div class="card-body">
                         <div class="h5 mb-2 text-center text-success">Nouvelle Invitation</div>
-                        <div class="h6 mb-3 text-success">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab mollitia ratione quaerat natus rem iusto asperiores facilis libero est doloremque velit, suscipit repellendus cupiditate illo dolor perspiciatis labore reiciendis vitae?</div>
-                        <form action="{{route('parametre.configuration.invitation.store')}}" method="post" class="form">
+                        <div class="h6 mb-3 text-danger"><span>NB:<span class="required-start text-danger text-bolder p-2">*</span>Tous les champs marqués d'une étoile sont obigatoires</span></div>                        <form action="{{route('parametre.configuration.invitation.store')}}" method="post" class="form">
                             @csrf
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="nom">Nom</label>
+                                    <label class="form-label" for="nom">Nom<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" name="nom" value="{{ old('nom') }}">
                                     @error('nom')
                                         <p class="text-danger">{{$message}}</p>
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="prenom">Prenom</label>
+                                    <label class="form-label" for="prenom">Prenom<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" value="{{ old('prenom') }}" name="prenom">
                                     @error('prenom')
                                         <p class="text-danger">{{$message}}</p>
                                     @enderror
                                 </div>                               
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="date_rdv">Date du rendez-vous</label>
+                                    <label class="form-label" for="date_rdv">Date du rendez-vous<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="date" value="{{ old('date_rdv') }}" name="date_rdv">
                                     @error('date_rdv')
                                         <p class="text-danger">{{$message}}</p>
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="motif">Motif</label>
+                                    <label class="form-label" for="motif">Motif<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" value="{{ old('motif') }}" name="motif">
                                     @error('motif')
                                         <p class="text-danger">{{$message}}</p>
                                     @enderror
                                 </div>                          
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="se_munir">Se munir</label>
+                                    <label class="form-label" for="se_munir">Se munir<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" value="{{ old('se_munir') }}" name="se_munir">
                                     @error('se_munir')
                                         <p class="text-danger">{{$message}}</p>

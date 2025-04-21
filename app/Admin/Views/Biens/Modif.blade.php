@@ -14,13 +14,12 @@
                 <div class="card border border-light">
                     <div class="card-body">
                         <div class="h5 mb-2 text-center text-success">Modificatioin d'un bien</div>
-                        <div class="h6 mb-3 text-success">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab mollitia ratione quaerat natus rem iusto asperiores facilis libero est doloremque velit, suscipit repellendus cupiditate illo dolor perspiciatis labore reiciendis vitae?</div>
-                        <form action="{{route('biens.update',$bien->uuid)}}" method="post" class="form">
+                        <div class="h6 mb-3 text-danger"><span>NB:<span class="required-start text-danger text-bolder p-2">*</span>Tous les champs marqués d'une étoile sont obigatoires</span></div>                        <form action="{{route('biens.update',$bien->uuid)}}" method="post" class="form">
                             @csrf
                             @method('put')
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="contribuable_id">Propriétaire du bien</label>
+                                    <label class="form-label" for="contribuable_id">Propriétaire du bien<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <select name="contribuable_id" id="contribuable_id" class="form-control">
                                         @foreach ($contribuable as $contribuables)
                                             <option value="{{ $contribuables->id }}" 
@@ -41,7 +40,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="type_bien_id">Type de bien</label>
+                                    <label class="form-label" for="type_bien_id">Type de bien<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <select name="type_bien_id" id="type_bien_id" class="form-control">
                                         <option selected value="{{ $bien->type_bien_id }}">{{ $bien->typeBien->libelle }}</option>
                                         @foreach ($typeBien as $typeBiens )
@@ -55,14 +54,14 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="libelle">Libéllé</label>
+                                    <label class="form-label" for="libelle">Libéllé<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" name="libelle" value="{{ $bien->libelle}}">
                                     @error('libelle')
                                         <p class="text-danger">{{$message}}</p>
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="adresse">Adresse</label>
+                                    <label class="form-label" for="adresse">Adresse<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" value="{{ $bien->adresse }}" name="adresse">
                                     @error('adresse')
                                         <p class="text-danger">{{$message}}</p>

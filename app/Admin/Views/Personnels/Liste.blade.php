@@ -65,10 +65,10 @@
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <p class="h6 text-center">Direction Générale des Impôts de MAMOU</p>
-                                                            <div class="h5 text-center">Carte de travail</div>
+                                                            <p class="h6 text-center bg-success text-white text-bolder">Direction Générale des Impôts de MAMOU</p>
+                                                            <div class="h5 text-center"></div>
                                                             <div class="d-flex">
-                                                                <img class="img me-3" src="{{asset('Admin/Assets/image1.jpg')}}" height="150px" alt="">
+                                                                {{-- <img class="img me-3" src="{{asset('Admin/Assets/image1.jpg')}}" height="150px" alt=""> --}}
                                                                 <div class="">
                                                                     <div class="h5"> Nom & Prénom : <small> {{$personnels->nom.' '.$personnels->prenom }}</small> </div>
                                                                     <div class="h5"> Matricule : <small>{{ $personnels->matricule }}</small></div>
@@ -78,9 +78,9 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="modal-footer">
+                                                        {{-- <div class="modal-footer">
                                                             <button type="submit" class="btn btn-outline-success btn-sm mt-2 d-flex align-items-center gap-1">Imprimer <i class="bx bx-printer"></i></button>
-                                                        </div>
+                                                        </div> --}}
                                                     </div>
                                                 </div>
                                             </div>

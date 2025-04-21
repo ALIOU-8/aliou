@@ -14,40 +14,39 @@
                 <div class="card border border-light">
                     <div class="card-body">
                         <div class="h5 mb-2 text-center text-success">Ajout d'un personnel</div>
-                        <div class="h6 mb-3 text-success">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab mollitia ratione quaerat natus rem iusto asperiores facilis libero est doloremque velit, suscipit repellendus cupiditate illo dolor perspiciatis labore reiciendis vitae?</div>
-                        <form action="{{ route('personnels.store') }}" method="POST" class="form">
+                        <div class="h6 mb-3 text-danger"><span>NB:<span class="required-start text-danger text-bolder p-2">*</span>Tous les champs marqués d'une étoile sont obigatoires</span></div>                        <form action="{{ route('personnels.store') }}" method="POST" class="form">
                             @csrf
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="matricule">Matricule</label>
+                                    <label class="form-label" for="matricule">Matricule<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" name="matricule" value="{{ old('matricule') }}">
                                     @error('matricule')
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="nom">Nom</label>
+                                    <label class="form-label" for="nom">Nom<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" name="nom" value="{{ old('nom') }}">
                                     @error('nom')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="prenom">Prénom</label>
+                                    <label class="form-label" for="prenom">Prénom<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" name="prenom" value="{{ old('prenom') }}">
                                     @error('prenom')
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="telephone">Téléphone</label>
+                                    <label class="form-label" for="telephone">Téléphone<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <input class="form-control" type="text" name="telephone" value="{{ old('telephone') }}">
                                     @error('telephone')
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="fonction">Fonction</label>
+                                    <label class="form-label" for="fonction">Fonction<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <select name="fonction" class="form-control" id="">
                                         <option value=""></option>
                                         @foreach ($fonction as $fonctions )
@@ -59,7 +58,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="hierachie">Hiérachie</label>
+                                    <label class="form-label" for="hierachie">Hiérachie<span class="required-start text-danger text-bolder p-2">*</span></label>
                                     <select name="hierachie" class="form-control" id="">
                                         <option  value=""></option>
                                         @foreach ($hierachie as $hierachies)
