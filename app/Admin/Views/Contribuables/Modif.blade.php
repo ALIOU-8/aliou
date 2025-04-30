@@ -19,37 +19,51 @@
                             @method('put')
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="nom">Nom<span class="required-start text-danger text-bolder p-2">*</span></label>
-                                    <input class="form-control @error('nom') is-invalid @enderror" type="text" name="nom"  value="{{$contribuables->nom}}">
+                                    <label class="form-label" for="nom">Nom
+                                        <span class="required-start text-danger text-bolder p-2">*</span>
+                                    </label>
+                                    <input class="form-control @error('nom') is-invalid @enderror" type="text" name="nom" value="{{ old('nom', $contribuables->nom) }}">
                                     @error('nom')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
+                            
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="prenom">Prénom<span class="required-start text-danger text-bolder p-2">*</span></label>
-                                    <input class="form-control @error('prenom') is-invalid @enderror" type="text" name="prenom" value="{{ $contribuables->prenom}}">
-                                   @error('prenom')
+                                    <label class="form-label" for="prenom">Prénom
+                                        <span class="required-start text-danger text-bolder p-2">*</span>
+                                    </label>
+                                    <input class="form-control @error('prenom') is-invalid @enderror" type="text" name="prenom" value="{{ old('prenom', $contribuables->prenom) }}">
+                                    @error('prenom')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
+                            
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="telephone">Téléphone<span class="required-start text-danger text-bolder p-2">*</span></label>
-                                    <input class="form-control @error('telephone') is-invalid @enderror" type="text" name="telephone" value="{{ $contribuables->telephone}}">
+                                    <label class="form-label" for="telephone">Téléphone
+                                        <span class="required-start text-danger text-bolder p-2">*</span>
+                                    </label>
+                                    <input class="form-control @error('telephone') is-invalid @enderror" type="text" name="telephone" value="{{ old('telephone', $contribuables->telephone) }}">
                                     @error('telephone')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
+                            
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="profession">Profession<span class="required-start text-danger text-bolder p-2">*</span></label>
-                                    <input class="form-control @error('profession') is-invalid @enderror" type="text" name="profession" value="{{ $contribuables->profession }}">
+                                    <label class="form-label" for="profession">Profession
+                                        <span class="required-start text-danger text-bolder p-2">*</span>
+                                    </label>
+                                    <input class="form-control @error('profession') is-invalid @enderror" type="text" name="profession" value="{{ old('profession', $contribuables->profession) }}">
                                     @error('profession')
-                                         <span class="text-danger">{{ $message }}</span>
+                                        <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
+                            
                                 <div class="d-flex justify-content-start">
-                                    <button class="btn btn-outline-success col-6 col-md-3 d-flex justify-content-center align-items-center gap-1">Validez la modification <i class="bx bx-save"></i></button>
+                                    <button class="btn btn-outline-success col-6 col-md-3 d-flex justify-content-center align-items-center gap-1">
+                                        Validez la modification <i class="bx bx-save"></i>
+                                    </button>
                                 </div>
-                            </div>
+                            </div>                            
                         </form>
                     </div>
                 </div>

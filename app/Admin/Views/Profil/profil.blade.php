@@ -30,12 +30,13 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form id="" action="{{ route('profil.change',$user->uuid) }}" method="POST" enctype="multipart/form-data">
+                                            <form id="profilForm" action="{{ route('profil.change',$user->uuid) }}" method="POST" enctype="multipart/form-data">
                                                 @csrf
                                                 @method('put')
                                                 <div class="form-group">
-                                                    <label for="numero_bien">photo<span class="required-start text-danger text-bolder p-2">*</span></label>
+                                                    <label for="image">photo<span class="required-start text-danger text-bolder p-2">*</span></label>
                                                     <input type="file" id="image" name="image" class="form-control" placeholder="entrez votre photo">
+                                                    <div id="photo_feedback" class="invalid-feedback">Numéro introuvable</div>
                                                     @error('image')
                                                         <p class="text-danger">{{ $message }}</p>
                                                     @enderror
@@ -125,4 +126,39 @@
     </div>
     
 </main>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#profilForm").on("submit", function (event) {
+            let fileInput = $("#image")[0];
+            let file = fileInput.files[0];
+    
+            if (!file) {
+                event.preventDefault();
+                $("#image").addClass("is-invalid");
+                $("#photo_feedback").text("Veuillez sélectionner une image.").show();
+                return;
+            }
+    
+            let allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/svg+xml', 'image/webp'];
+            if (!allowedTypes.includes(file.type)) {
+                event.preventDefault();
+                $("#image").addClass("is-invalid");
+                $("#photo_feedback").text("Type de fichier non autorisé. Choisissez une image valide.").show();
+                return;
+            }
+    
+            if (file.size > 5 * 1024 * 1024) { // 5 Mo
+                event.preventDefault();
+                $("#image").addClass("is-invalid");
+                $("#photo_feedback").text("L'image ne doit pas dépasser 5 Mo.").show();
+                return;
+            }
+    
+            // Si tout est bon
+            $("#image").removeClass("is-invalid");
+            $("#photo_feedback").hide();
+        });
+    });
+    </script>
 @endsection

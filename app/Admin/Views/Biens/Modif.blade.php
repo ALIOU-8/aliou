@@ -19,8 +19,11 @@
                             @method('put')
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="contribuable_id">Propriétaire du bien<span class="required-start text-danger text-bolder p-2">*</span></label>
-                                    <select name="contribuable_id" id="contribuable_id" class="form-control">
+                                    <label class="form-label" for="contribuable_id">Propriétaire du bien
+                                        <span class="required-start text-danger text-bolder p-2">*</span>
+                                    </label>
+                                    <select name="contribuable_id" id="contribuable_id" class="form-control @error('contribuable_id') is-invalid @enderror">
+                                        <option value=""></option>
                                         @foreach ($contribuable as $contribuables)
                                             <option value="{{ $contribuables->id }}" 
                                                 {{ old('contribuable_id', $bien->contribuable_id) == $contribuables->id ? 'selected' : '' }}>
@@ -28,49 +31,60 @@
                                             </option>
                                         @endforeach
                                     </select>
-                                    
                                     @error('contribuable_id')
-                                        <p class="text-danger">{{$message}}</p>
+                                        <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
+                            
                                 <div class="col-md-6 d-block">
                                     <div id="client-info" class="col-md-6 d-block" style="display: none;">
                                         <div class="h6 mt-2">Informations du client</div>
                                         <div class="h5 fw-bolder">Nom et Prénom : <span id="client-name" class="fw-normal"></span></div>
                                     </div>
                                 </div>
+                            
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="type_bien_id">Type de bien<span class="required-start text-danger text-bolder p-2">*</span></label>
-                                    <select name="type_bien_id" id="type_bien_id" class="form-control">
-                                        <option selected value="{{ $bien->type_bien_id }}">{{ $bien->typeBien->libelle }}</option>
-                                        @foreach ($typeBien as $typeBiens )
-                                        @if($bien->type_bien_id != $typeBiens->id)
-                                            <option value="{{ $typeBiens->id }}">{{ $typeBiens->libelle }}</option>
-                                        @endif
+                                    <label class="form-label" for="type_bien_id">Type de bien
+                                        <span class="required-start text-danger text-bolder p-2">*</span>
+                                    </label>
+                                    <select name="type_bien_id" id="type_bien_id" class="form-control @error('type_bien_id') is-invalid @enderror">
+                                        <option value=""></option>
+                                        @foreach ($typeBien as $typeBiens)
+                                            <option value="{{ $typeBiens->id }}" 
+                                                {{ old('type_bien_id', $bien->type_bien_id) == $typeBiens->id ? 'selected' : '' }}>
+                                                {{ $typeBiens->libelle }}
+                                            </option>
                                         @endforeach
                                     </select>
                                     @error('type_bien_id')
-                                        <p class="text-danger">{{$message}}</p>
+                                        <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
+                            
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="libelle">Libéllé<span class="required-start text-danger text-bolder p-2">*</span></label>
-                                    <input class="form-control" type="text" name="libelle" value="{{ $bien->libelle}}">
+                                    <label class="form-label" for="libelle">Libellé
+                                        <span class="required-start text-danger text-bolder p-2">*</span>
+                                    </label>
+                                    <input class="form-control @error('libelle') is-invalid @enderror" type="text" name="libelle" value="{{ old('libelle', $bien->libelle) }}">
                                     @error('libelle')
-                                        <p class="text-danger">{{$message}}</p>
+                                        <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
+                            
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="adresse">Adresse<span class="required-start text-danger text-bolder p-2">*</span></label>
-                                    <input class="form-control" type="text" value="{{ $bien->adresse }}" name="adresse">
+                                    <label class="form-label" for="adresse">Adresse
+                                        <span class="required-start text-danger text-bolder p-2">*</span>
+                                    </label>
+                                    <input class="form-control @error('adresse') is-invalid @enderror" type="text" name="adresse" value="{{ old('adresse', $bien->adresse) }}">
                                     @error('adresse')
-                                        <p class="text-danger">{{$message}}</p>
+                                        <p class="text-danger">{{ $message }}</p>
                                     @enderror
-                                </div>                               
+                                </div>
+                            
                                 <div class="d-flex justify-content-start">
                                     <button class="btn btn-outline-success col-6 col-md-3">Valider la modification</button>
                                 </div>
-                            </div>
+                            </div>                            
                         </form>
                     </div>
                 </div>

@@ -13,6 +13,10 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Recensement_cfu;
+use App\Models\Recensement_licence;
+use App\Models\Recensement_patente;
+use App\Models\Recensement_tpu;
 
 class BiensController extends Controller
 {
@@ -241,6 +245,16 @@ class BiensController extends Controller
     }
     public function delete($uuid) {
         $bien=Bien::where('uuid',$uuid)->firstOrFail();
+        ////verifier si le bien a été une fois recensé pour empêcher la suppression
+        $bienRTPU=Recensement_tpu::where('bien_id',$bien->id)->first();
+        $bienRCFU=Recensement_cfu::where('bien_id',$bien->id)->first();
+        $bienRPATENTE=Recensement_patente::where('bien_id',$bien->id)->first();
+        $bienLICENCE=Recensement_licence::where('bien_id',$bien->id)->first();
+        if($bienRTPU || $bienRCFU || $bienRPATENTE ||  $bienLICENCE )
+        {
+            toastr()->warning("Impossible de supprimer un bien récensé");
+            return back();
+        }
         $bien->delete=1;
         $bien->update();
         $annee=Annee::where('active',1)->first();

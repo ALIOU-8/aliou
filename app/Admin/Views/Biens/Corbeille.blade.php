@@ -57,7 +57,7 @@
                                     @endforeach 
                                     @if (count($bien) == 0)
                                         <tr>
-                                            <th colspan="6" class="text-center">Aucun enregistrement trouvé pour le moment</th>
+                                            <td colspan="6" class="text-center">Aucun enregistrement trouvé pour le moment</td>
                                         </tr> 
                                     @endif                                 
                                 </tbody>

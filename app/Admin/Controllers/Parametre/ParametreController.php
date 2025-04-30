@@ -12,6 +12,7 @@ use App\Models\Historique;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
+use App\Models\Personnel;
 
 class ParametreController extends Controller
 {
@@ -110,6 +111,13 @@ class ParametreController extends Controller
     public function delete_type_bien($uuid)
     {
         $type_bien=TypeBien::where('uuid',$uuid)->firstOrFail();
+        ///verifier si le type bien est utilisé
+        $verifType=Bien::where('type_bien_id',$type_bien->id)->first();
+        if($verifType)
+        {
+            toastr()->warning('Impossible de supprimer un type de bien utilsé');
+            return back();
+        }
         $type_bien->status=1;
         $type_bien->update();
         toastr()->success('Type bien Supprimez avec Succes');
@@ -175,6 +183,13 @@ class ParametreController extends Controller
     public function delete(string $uuid)
     {
         $fonction=Fonction::where('uuid',$uuid)->firstOrFail();
+        ///verifier si le type bien est utilisé
+        $fonctionVerif=Personnel::where('fonction_id',$fonction->id)->first();
+        if($fonctionVerif)
+        {
+            toastr()->warning('Impossible de supprimer une foncton  utilsée');
+            return back();
+        }
         $fonction->delete=1;
         $fonction->update();
         toastr()->success('Fonction Supprimez avec Succes');

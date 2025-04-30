@@ -18,8 +18,14 @@ class ProfilController extends Controller
     public function  change(Request $request, string $uuid)
     {
         $request->validate([
-            'image'=>'required|image|max:5120'
+            'image' => ['required', 'mimes:jpeg,jpg,png,gif,svg,webp', 'max:5120'],
+        ], [
+            'image.required' => 'L\'image est obligatoire.',
+            'image.mimes' => 'Seules les images de type jpeg, jpg, png, gif, svg ou webp sont autorisées.',
+            'image.max' => 'L\'image ne doit pas dépasser 5 Mo.',
         ]);
+        
+        
 
         $profile=$request->file('image');
         $extension=$profile->getClientOriginalExtension();

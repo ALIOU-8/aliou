@@ -85,10 +85,16 @@
                                                             <div class="text-start">{{ $biens->contribuable->nom.' '.$biens->contribuable->prenom }}</div>
                                                             <div class="text-start">{{ $biens->typeBien->libelle }}</div>
                                                             <div class="text-start">{{ $biens->libelle }}</div>
-                                                            <a class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1" href="{{route('tpu.ajout',$biens->uuid)}}">TPU</a>
+                                                            @if(Auth()->user()->droit=='cfu' || Auth()->user()->droit=='admin')
                                                             <a class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1" href="{{ route('cfu.ajout',$biens->uuid) }}">CFU</a>
+                                                            @endif
+                                                            @if(Auth()->user()->droit=='tpu' || Auth()->user()->droit=='admin')
+                                                            <a class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1" href="{{route('tpu.ajout',$biens->uuid)}}">TPU</a>
+                                                            @endif
+                                                            @if(Auth()->user()->droit=='patente' || Auth()->user()->droit=='admin' || Auth()->user()->droit=='licence')
                                                             <a class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1" href="{{ route('patente.ajout',$biens->uuid) }}">PATENTE</a>
                                                             <a class="btn btn-outline-danger btn-sm mt-2 d-flex align-items-center gap-1" href="{{ route('licence.ajout',$biens->uuid) }}">LICENCE</a>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </div>

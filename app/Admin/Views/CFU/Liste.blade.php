@@ -100,6 +100,16 @@
 </main>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    $(document).ready(function () {
+    $("#recensementForm").on("submit", function (event) {
+        var numeroBien = $("#numero_bien").val();
+        if (numeroBien.trim() === "") {
+            event.preventDefault();
+            $("#numero_bien").addClass("is-invalid");
+            $("#numero_bien_feedback").text("Veuillez entrer un numéro de bien valide").show();
+        }
+    });
+
     $("#numero_bien").on("input", function () {
         var numeroBien = $(this).val();
         if (numeroBien.length > 0) {
@@ -122,5 +132,7 @@
             $("#numero_bien_feedback").text("").hide();
         }
     });
+});
+
 </script>
 @endsection

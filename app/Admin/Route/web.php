@@ -31,23 +31,29 @@ use Illuminate\Support\Facades\Route;
 
     Route::get('/', function () {
         return view('Auth::login');
-    });
+    })->middleware('guest');
 
     //Les routes pour le dashboard
     Route::prefix('dashboard')->group(function () {
-        Route::get('/',[DashboardController::class, 'index'])->name('dashboard');
-        Route::get('/cfu',[DashboardController::class, 'cfu'])->name('dashboard.cfu');
-        Route::get('/tpu',[DashboardController::class, 'tpu'])->name('dashboard.tpu');
-        Route::get('/patente',[DashboardController::class, 'patente'])->name('dashboard.patente');
+        Route::get('/',[DashboardController::class, 'index'])->name('dashboard')->middleware('admin');
+        Route::get('/cfu',[DashboardController::class, 'cfu'])->name('dashboard.cfu')->middleware('cfu');
+        Route::get('/tpu',[DashboardController::class, 'tpu'])->name('dashboard.tpu')->middleware('tpu');
+        Route::get('/patente',[DashboardController::class, 'patente'])->name('dashboard.patente')->middleware('lpt');
     });
 
     //Les routes pour le profil
+    Route::group(['middleware' => ['auth']], function() {
     Route::get('/profil',[ProfilController::class, 'index'])->name('profil');
     Route::put('/profil/{uuid}',[ProfilController::class, 'modif'])->name('profil.modif');
     Route::put('/mdpUpdate/{uuid}',[ProfilController::class, 'mdp_update'])->name('profil.modif.mdp');
     Route::put('/changer/{uuid}',[ProfilController::class,'change'])->name('profil.change');
-
+    ///route d'erreur
+    Route::get('/erreur', function () {
+        return view('Admin::Erreur.erreur');
+    })->name('erreur');
+    });
     //Les routes pour les contribuales
+    Route::group(['middleware' => ['all']], function() {
     Route::prefix('contribuables')->group(function () {
         Route::get('/', [ContribuableController::class, 'index'])->name('contribuables.liste');
         Route::get('/ajout', [ContribuableController::class, 'ajout'])->name('contribuables.ajout');
@@ -62,24 +68,28 @@ use Illuminate\Support\Facades\Route;
         Route::get('/voir/{uuid}',[ContribuableController::class,'voir'])->name('contribuables.voir');
         Route::get('/imprimer',[ContribuableController::class,'imprimer'])->name('contribuable.imprimer');
     });
+    });
 
     //Les routes pour les personnels
+    Route::group(['middleware' => ['admin']], function() {
     Route::prefix('personnels')->group(function () {
-        Route::get('/', [PersonnelsController::class, 'index'])->name('personnels.liste');
-        Route::get('/ajout', [PersonnelsController::class, 'ajout'])->name('personnels.ajout');
-        Route::get('/modif/{uuid}', [PersonnelsController::class, 'modif'])->name('personnels.modif');
-        Route::get('/voir', [PersonnelsController::class, 'voir'])->name('personnels.voir');
-        Route::get('/imprimer', [PersonnelsController::class, 'imprimer'])->name('personnels.imprimer');
-        Route::get('/corbeille', [PersonnelsController::class, 'corbeille'])->name('personnels.corbeille');
-        Route::post('/store',[PersonnelsController::class,'store'])->name('personnels.store');
-        Route::put('/update/{uuid}',[PersonnelsController::class,'update'])->name('personnels.update');
-        Route::put('/supprime/{uuid}', [PersonnelsController::class,'delete'])->name('personnel.supprimer');
-        Route::put('/restaurer/{uuid}', [PersonnelsController::class, 'restaure'])->name('personnel.restor');
-        Route::get('/recherche', [PersonnelsController::class, 'recherche'])->name('personnel.recherche');
-        Route::get('/recherche-corbeille', [PersonnelsController::class, 'recherche_corbeille'])->name('personnel.recherche.corbeille');
+            Route::get('/', [PersonnelsController::class, 'index'])->name('personnels.liste');
+            Route::get('/ajout', [PersonnelsController::class, 'ajout'])->name('personnels.ajout');
+            Route::get('/modif/{uuid}', [PersonnelsController::class, 'modif'])->name('personnels.modif');
+            Route::get('/voir', [PersonnelsController::class, 'voir'])->name('personnels.voir');
+            Route::get('/imprimer', [PersonnelsController::class, 'imprimer'])->name('personnels.imprimer');
+            Route::get('/corbeille', [PersonnelsController::class, 'corbeille'])->name('personnels.corbeille');
+            Route::post('/store',[PersonnelsController::class,'store'])->name('personnels.store');
+            Route::put('/update/{uuid}',[PersonnelsController::class,'update'])->name('personnels.update');
+            Route::put('/supprime/{uuid}', [PersonnelsController::class,'delete'])->name('personnel.supprimer');
+            Route::put('/restaurer/{uuid}', [PersonnelsController::class, 'restaure'])->name('personnel.restor');
+            Route::get('/recherche', [PersonnelsController::class, 'recherche'])->name('personnel.recherche');
+            Route::get('/recherche-corbeille', [PersonnelsController::class, 'recherche_corbeille'])->name('personnel.recherche.corbeille');
+        });
     });
 
     //Les routes pour les biens
+    Route::group(['middleware' => ['all']], function() {
     Route::prefix('biens')->group(function () {
         Route::get('/', [BiensController::class, 'index'])->name('biens.liste');
         Route::get('/ajout', [BiensController::class, 'ajout'])->name('biens.ajout');
@@ -100,8 +110,10 @@ use Illuminate\Support\Facades\Route;
         Route::get('/imprimer_biens_imposes',[BiensController::class,'imprimerBI'])->name('bien.imposer.imprimer');
         Route::get('/imprimer_biens_non_imposes',[BiensController::class,'imprimerBNI'])->name('bien.nonimposer.imprimer');
     });
+    });
 
     //Les routes pour la gestion CFU
+    Route::group(['middleware' => ['cfu']], function() {
     Route::prefix('cfu')->group(function () {
         Route::get('/', [CFUController::class, 'index'])->name('cfu.liste');
         Route::get('/ajout/{uuid}', [CFUController::class, 'ajout'])->name('cfu.ajout');
@@ -115,7 +127,6 @@ use Illuminate\Support\Facades\Route;
         Route::get('/recherche', [CFUController::class, 'recherche'])->name('cfu.recherche');
         Route::get('/imprimer',[CFUController::class,'imprimer'])->name('cfu.imprimer');
     });
-
     //Les routes pour la gestion CFU/Occupant
     Route::prefix('cfu')->group(function () {
         Route::get('/occupant/{uuid}', [OccupantController::class, 'index'])->name('cfu.occupant.liste');
@@ -127,8 +138,9 @@ use Illuminate\Support\Facades\Route;
         Route::get('/occupant/corbeille/{uuid}', [OccupantController::class, 'corbeille'])->name('cfu.occupant.corbeille');
         Route::put('/occupant/restaure{uuid}', [OccupantController::class, 'restaure'])->name('cfu.occupant.restaure');
     });
-
+    });
     //Les routes pour la gestion TPU
+    Route::group(['middleware' => ['tpu']], function() {
     Route::prefix('tpu')->group(function () {
         Route::get('/', [TPUController::class, 'index'])->name('tpu.liste');
         Route::get('/ajout/{uuid}', [TPUController::class, 'ajout'])->name('tpu.ajout');
@@ -144,8 +156,9 @@ use Illuminate\Support\Facades\Route;
         Route::get('/recherche', [TPUController::class, 'recherche'])->name('tpu.recherche');
         Route::get('/imprimer',[TPUController::class,'imprimer'])->name('tpu.imprimer');
     });
-
+    });
     //Les routes pour la gestion Patente
+    Route::group(['middleware' => ['lpt']], function() {
     Route::prefix('patente')->group(function () {
         Route::get('/', [PatenteController::class, 'index'])->name('patente.liste');
         Route::get('/ajout/{uuid}', [PatenteController::class, 'ajout'])->name('patente.ajout');
@@ -160,7 +173,6 @@ use Illuminate\Support\Facades\Route;
         Route::get('/corbeille', [PatenteController::class, 'corbeille'])->name('patente.corbeille');
         Route::get('/imprimer',[PatenteController::class,'imprimer'])->name('patente.imprimer');
     });
-
     //Les routes pour la gestion Licence
     Route::prefix('licence')->group(function () {
         Route::get('/', [LicenceController::class, 'index'])->name('licence.liste');
@@ -175,8 +187,9 @@ use Illuminate\Support\Facades\Route;
         Route::post('/recense',[LicenceController::class,'recense'])->name('licence.recense');
         Route::get('/imprimer',[LicenceController::class,'imprimer'])->name('licence.imprimer');
     });
-
+    });
     //Les routes pour la gestion impot
+    Route::group(['middleware' => ['all']], function() {
     Route::prefix('impot')->group(function () {
         Route::get('/', [ImpotsController::class, 'index'])->name('impot.liste');
         Route::get('/ajout', [ImpotsController::class, 'ajout'])->name('impot.ajout');
@@ -185,8 +198,9 @@ use Illuminate\Support\Facades\Route;
         Route::get('/voir/{type}/{uuid}', [ImpotsController::class, 'voir'])->name('impot.voir');
         Route::get('/payer/{uuid}', [ImpotsController::class, 'payer'])->name('impot.payer');
         Route::post('/payement/{uuid}', [ImpotsController::class, 'payement'])->name('impot.payement');
+        Route::put('/payement-update/{uuid}', [ImpotsController::class, 'payement_update'])->name('impot.payement.update');
         Route::get('/recu/{uuid}', [ImpotsController::class, 'recu'])->name('impot.recu');
-        Route::put('/modif_payement/{uuid}', [ImpotsController::class, 'modif_payement'])->name('impot.modif.payement');
+        Route::get('/modif_payement/{uuid}', [ImpotsController::class, 'modif_payement'])->name('impot.modif.payement');
         Route::get('/imposition/{type}/{uuid}', [ImpotsController::class, 'imposition'])->name('impot.imposition');
         Route::post('/imposer/{type}/{uuid}', [ImpotsController::class, 'imposer'])->name('impot.imposer');
         Route::get('/recherche', [ImpotsController::class, 'recherche'])->name('impots.recherche');
@@ -194,7 +208,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/imprimer/{type}/{uuid}', [ImpotsController::class, 'imprimer'])->name('impot.imprimer');
         Route::get('/imprimer/{type}', [ImpotsController::class, 'imprimer_liste'])->name('impot.imprimer.liste');
     });
-
+    });
 
     //Les routes pour la gestion paiement
     Route::prefix('paiement')->group(function () {
@@ -204,64 +218,66 @@ use Illuminate\Support\Facades\Route;
     });
 
     //Les routes pour paramètre
-    Route::prefix('parametre')->group(function () {
-        Route::get('/', [ParametreController::class, 'index'])->name('parametre.index');
-        
-        // Utilisateur
-        Route::get('/utilisateur', [AuthController::class, 'user'])->name('parametre.user');
-        Route::get('/ajout_utilisateur', [AuthController::class, 'add_user'])->name('parametre.user.add');
-        Route::post('/ajout_utilisateur', [AuthController::class, 'inscription'])->name('parametre.user.inscription');
-        Route::get('/modification_utilisateur/{uuid}', [AuthController::class, 'modif_user'])->name('parametre.user.modif');
-        Route::put('/modification_utilisateur/{uuid}', [AuthController::class, 'modification'])->name('parametre.user.modification');
-        Route::get('/bloquer_utilisateur/{uuid}', [AuthController::class, 'bloquer'])->name('parametre.user.bloquer');
-        Route::get('/corbeille_utilisateur', [AuthController::class, 'corbeille_user'])->name('parametre.user.corbeille');
-        Route::get('/recherche-utilistateur', [AuthController::class, 'recherche'])->name('recherche.user');
-        Route::get('/imprimer',[AuthController::class,'imprimer'])->name('user.imprimer');
-
-
-        // Configuration 
-        Route::get('/configuration', [ParametreController::class, 'configuration'])->name('parametre.configuration');
-        
-        
-        // Type de bien
-        Route::get('/configuration/type_biens', [ParametreController::class, 'type_bien'])->name('parametre.configuration.type.biens');
-        Route::get('/configuration/type_biens/corbeille', [ParametreController::class, 'corbeille_bien'])->name('parametre.configuration.type.biens.corbeille');
-        Route::post('/configuration/type_biens/store',[ParametreController::class,'type_bien_store'])->name('parametre.configuration.type.bien.store');
-        Route::put('/configuration/type_biens/update/{uuid}',[ParametreController::class,'type_bien_update'])->name('parametre.configuration.type.bien.update');
-        Route::get('/configuration/type_biens/edit/{uuid}',[ParametreController::class,'type_bien_edit'])->name('parametre.configuration.type.bien.edit');
-        Route::put('/supprime-type-bien/{uuid}', [ParametreController::class,'delete_type_bien'])->name('type_bien.supprimer');
-        Route::put('/restaurer-type-bien/{uuid}', [ParametreController::class, 'restaure_type_bien'])->name('type_bien.resto');
-        Route::get('/recherche-type-bien', [ParametreController::class, 'recherche_type_bien'])->name('type_bien.recherche');
-        Route::get('/recherche-type-bien-corbeille', [ParametreController::class, 'recherche_type_bien_corbeille'])->name('type_bien.recherche.corbeille');
-        // Invitation
-        Route::get('/configuration/invitation', [InvitationController::class, 'invitation'])->name('parametre.configuration.invitation');
-        Route::get('/configuration/invitation/ajout', [InvitationController::class, 'ajout'])->name('parametre.configuration.invitation.ajout');
-        Route::post('/configuration/invitation/ajout', [InvitationController::class, 'store'])->name('parametre.configuration.invitation.store');
-        Route::get('/configuration/invitation/modif/{uuid}', [InvitationController::class, 'modif'])->name('parametre.configuration.invitation.modif');
-        Route::put('/configuration/invitation/modif/{uuid}', [InvitationController::class, 'update'])->name('parametre.configuration.invitation.update');
-        Route::get('/configuration/invitation/imprimer/{uuid}', [InvitationController::class, 'imprimer_invitation'])->name('parametre.configuration.imprimer');
-        Route::get('/recherche', [InvitationController::class, 'recherche'])->name('invitation.recherche');
-        
-        
-        // Fonction 
-        Route::get('/configuration/fonction', [ParametreController::class, 'fonction'])->name('parametre.configuration.fonction');
-        Route::get('/configuration/fonction/corbeille', [ParametreController::class, 'corbeille_fonction'])->name('parametre.configuration.fonction.corbeille');
-        Route::post('/configuration/fonction/store',[ParametreController::class,'fonction_store'])->name('parametre.configuration.fonction.store');
-        Route::put('/configuration/fonction/update/{uuid}',[ParametreController::class,'fonction_update'])->name('parametre.configuration.fonction.update');
-        Route::get('/configuration/fonction/edit/{uuid}',[ParametreController::class,'fonction_edit'])->name('parametre.configuration.fonction.edit');
-        Route::put('/supprime/{uuid}', [ParametreController::class, 'delete'])->name('fonction.supprime');
-        Route::get('/restaurer', [ParametreController::class, 'restaurer'])->name('fonction.restaurer');
-        Route::put('/restaurer/{uuid}', [ParametreController::class, 'restaure'])->name('fonction.resto');
-        Route::get('/recherche-fonction', [ParametreController::class, 'recherche'])->name('fonction.recherche');
-        Route::get('/recherche-fonction-corbeille', [ParametreController::class, 'recherche_corbeille'])->name('fonction.recherche.corbeille');
-        // Annee 
-        Route::get('/configuration/annee', [ParametreController::class, 'annee'])->name('parametre.configuration.annee');
-        Route::post('/configuration/annee/store',[ParametreController::class,'annee_store'])->name('parametre.configuration.annee.store');
-        Route::put('/configuration/annee/update/{uuid}',[ParametreController::class,'annee_update'])->name('parametre.configuration.annee.update');
-        Route::get('/configuration/annee/edit/{uuid}',[ParametreController::class,'annee_edit'])->name('parametre.configuration.annee.edit');
-        Route::post('/annees//activer/{uuid}', [ParametreController::class, 'activer'])->name('annees.activer');
-        Route::get('/recherche-annee', [ParametreController::class, 'recherche_annee'])->name('annee.recherche');
-
-        ///comptabilité
-        Route::get('/compatabilité',[ParametreController::class,'comptabilite'])->name('compatabilite.index');
+    Route::group(['middleware' => ['admin']], function() {
+        Route::prefix('parametre')->group(function () {
+            Route::get('/', [ParametreController::class, 'index'])->name('parametre.index');
+            // Utilisateur
+            Route::get('/utilisateur', [AuthController::class, 'user'])->name('parametre.user');
+            Route::get('/ajout_utilisateur', [AuthController::class, 'add_user'])->name('parametre.user.add');
+            Route::post('/ajout_utilisateur', [AuthController::class, 'inscription'])->name('parametre.user.inscription');
+            Route::get('/modification_utilisateur/{uuid}', [AuthController::class, 'modif_user'])->name('parametre.user.modif');
+            Route::put('/modification_utilisateur/{uuid}', [AuthController::class, 'modification'])->name('parametre.user.modification');
+            Route::get('/bloquer_utilisateur/{uuid}', [AuthController::class, 'bloquer'])->name('parametre.user.bloquer');
+            Route::get('/corbeille_utilisateur', [AuthController::class, 'corbeille_user'])->name('parametre.user.corbeille');
+            Route::get('/recherche-utilistateur', [AuthController::class, 'recherche'])->name('recherche.user');
+            Route::get('/imprimer',[AuthController::class,'imprimer'])->name('user.imprimer');
+    
+    
+            // Configuration 
+            Route::get('/configuration', [ParametreController::class, 'configuration'])->name('parametre.configuration');
+            
+            
+            // Type de bien
+            Route::get('/configuration/type_biens', [ParametreController::class, 'type_bien'])->name('parametre.configuration.type.biens');
+            Route::get('/configuration/type_biens/corbeille', [ParametreController::class, 'corbeille_bien'])->name('parametre.configuration.type.biens.corbeille');
+            Route::post('/configuration/type_biens/store',[ParametreController::class,'type_bien_store'])->name('parametre.configuration.type.bien.store');
+            Route::put('/configuration/type_biens/update/{uuid}',[ParametreController::class,'type_bien_update'])->name('parametre.configuration.type.bien.update');
+            Route::get('/configuration/type_biens/edit/{uuid}',[ParametreController::class,'type_bien_edit'])->name('parametre.configuration.type.bien.edit');
+            Route::put('/supprime-type-bien/{uuid}', [ParametreController::class,'delete_type_bien'])->name('type_bien.supprimer');
+            Route::put('/restaurer-type-bien/{uuid}', [ParametreController::class, 'restaure_type_bien'])->name('type_bien.resto');
+            Route::get('/recherche-type-bien', [ParametreController::class, 'recherche_type_bien'])->name('type_bien.recherche');
+            Route::get('/recherche-type-bien-corbeille', [ParametreController::class, 'recherche_type_bien_corbeille'])->name('type_bien.recherche.corbeille');
+            // Invitation
+            Route::get('/configuration/invitation', [InvitationController::class, 'invitation'])->name('parametre.configuration.invitation');
+            Route::get('/configuration/invitation/ajout', [InvitationController::class, 'ajout'])->name('parametre.configuration.invitation.ajout');
+            Route::post('/configuration/invitation/ajout', [InvitationController::class, 'store'])->name('parametre.configuration.invitation.store');
+            Route::get('/configuration/invitation/modif/{uuid}', [InvitationController::class, 'modif'])->name('parametre.configuration.invitation.modif');
+            Route::put('/configuration/invitation/modif/{uuid}', [InvitationController::class, 'update'])->name('parametre.configuration.invitation.update');
+            Route::get('/configuration/invitation/imprimer/{uuid}', [InvitationController::class, 'imprimer_invitation'])->name('parametre.configuration.imprimer');
+            Route::get('/recherche', [InvitationController::class, 'recherche'])->name('invitation.recherche');
+            
+            
+            // Fonction 
+            Route::get('/configuration/fonction', [ParametreController::class, 'fonction'])->name('parametre.configuration.fonction');
+            Route::get('/configuration/fonction/corbeille', [ParametreController::class, 'corbeille_fonction'])->name('parametre.configuration.fonction.corbeille');
+            Route::post('/configuration/fonction/store',[ParametreController::class,'fonction_store'])->name('parametre.configuration.fonction.store');
+            Route::put('/configuration/fonction/update/{uuid}',[ParametreController::class,'fonction_update'])->name('parametre.configuration.fonction.update');
+            Route::get('/configuration/fonction/edit/{uuid}',[ParametreController::class,'fonction_edit'])->name('parametre.configuration.fonction.edit');
+            Route::put('/supprime/{uuid}', [ParametreController::class, 'delete'])->name('fonction.supprime');
+            Route::get('/restaurer', [ParametreController::class, 'restaurer'])->name('fonction.restaurer');
+            Route::put('/restaurer/{uuid}', [ParametreController::class, 'restaure'])->name('fonction.resto');
+            Route::get('/recherche-fonction', [ParametreController::class, 'recherche'])->name('fonction.recherche');
+            Route::get('/recherche-fonction-corbeille', [ParametreController::class, 'recherche_corbeille'])->name('fonction.recherche.corbeille');
+            // Annee 
+            Route::get('/configuration/annee', [ParametreController::class, 'annee'])->name('parametre.configuration.annee');
+            Route::post('/configuration/annee/store',[ParametreController::class,'annee_store'])->name('parametre.configuration.annee.store');
+            Route::put('/configuration/annee/update/{uuid}',[ParametreController::class,'annee_update'])->name('parametre.configuration.annee.update');
+            Route::get('/configuration/annee/edit/{uuid}',[ParametreController::class,'annee_edit'])->name('parametre.configuration.annee.edit');
+            Route::post('/annees//activer/{uuid}', [ParametreController::class, 'activer'])->name('annees.activer');
+            Route::get('/recherche-annee', [ParametreController::class, 'recherche_annee'])->name('annee.recherche');
+    
+            ///comptabilité
+            Route::get('/compatabilité',[ParametreController::class,'comptabilite'])->name('compatabilite.index');
+        });
     });
+   

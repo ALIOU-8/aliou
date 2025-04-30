@@ -14,7 +14,9 @@
                 <div class="card border border-light">
                     <div class="card-body">
                         <div class="h5 mb-2 text-center text-success"> Recensement CFU </div>
-                        <div class="h6 mb-3 text-success">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab mollitia ratione quaerat natus rem iusto asperiores facilis libero est doloremque velit, suscipit repellendus cupiditate illo dolor perspiciatis labore reiciendis vitae?</div>
+                        <div class="h6 mb-3 text-danger">
+                            <span>NB:<span class="required-start text-danger text-bolder p-2">*</span>Tous les champs marqués d'une étoile sont obligatoires</span>
+                        </div>
                         <form action="{{route('cfu.store')}}" method="POST" class="form">
                             @csrf
                             <div class="row">

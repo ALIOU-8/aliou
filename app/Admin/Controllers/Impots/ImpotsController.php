@@ -15,6 +15,7 @@ use App\Models\Historique;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 
 class ImpotsController extends Controller
@@ -404,7 +405,7 @@ class ImpotsController extends Controller
                 $recensement=Recensement_tpu::where('uuid',$uuid)->first();
                 $impot->recensement_tpu_id = $recensement->id;
                 // Création de l'impôt avec le bon rôle et article
-                $doublons=Impot::where('annee_id',$anneeActive->id)->where('recensement_cfu_id',$recensement->id)->where('type_impot',$type)->first();
+                $doublons=Impot::where('annee_id',$anneeActive->id)->where('recensement_tpu_id',$recensement->id)->where('type_impot',$type)->first();
                 if($doublons)
                 {
                     toastr()->error("ce bien est déja imposé en TPU pour cette année $anneeActive->annee ");
@@ -415,7 +416,7 @@ class ImpotsController extends Controller
                 $recensement=Recensement_patente::where('uuid',$uuid)->first();
                 $impot->recensement_patente_id = $recensement->id;
                 // Création de l'impôt avec le bon rôle et article
-                $doublons=Impot::where('annee_id',$anneeActive->id)->where('recensement_cfu_id',$recensement->id)->where('type_impot',$type)->first();
+                $doublons=Impot::where('annee_id',$anneeActive->id)->where('recensement_patente_id',$recensement->id)->where('type_impot',$type)->first();
                 if($doublons)
                 {
                     toastr()->error("ce bien est déja imposé en PATENTE pour cette année $anneeActive->annee ");
@@ -426,7 +427,7 @@ class ImpotsController extends Controller
                 $recensement=Recensement_licence::where('uuid',$uuid)->first();
                 $impot->recensement_licence_id = $recensement->id;
                 // Création de l'impôt avec le bon rôle et article
-                $doublons=Impot::where('annee_id',$anneeActive->id)->where('recensement_cfu_id',$recensement->id)->where('type_impot',$type)->first();
+                $doublons=Impot::where('annee_id',$anneeActive->id)->where('recensement_licence_id',$recensement->id)->where('type_impot',$type)->first();
                 if($doublons)
                 {
                     toastr()->error("ce bien est déja imposé en LICENCE pour cette année $anneeActive->annee ");
@@ -529,6 +530,72 @@ class ImpotsController extends Controller
              return $pdf->stream('impôt.pdf'); 
         }
         
+    }
+
+    public function modif_payement(Request $request,String $uuid)
+    {
+        $paiement = Paiement::where('uuid',$uuid)->firstOrFail();
+        return view('Admin::Impots.ModifPayer',compact('paiement'));
+    }
+
+    public function payement_update(Request $request,string $uuid)
+    {
+        $request->validate([
+            'montant' => 'required|numeric|min:4',
+            'num_quitance' => [
+                'required',
+                'numeric',
+                'min:4',
+                Rule::unique('paiements', 'num_quitance')->ignore($uuid, 'uuid'),
+            ],
+        ]);
+        // Vérifier si l'impôt existe
+        $anneeActive=Annee::where('active',1)->first();
+        $payement =Paiement::where('uuid',$uuid)->firstOrFail();
+        $impot = Impot::where('uuid',$payement->impot->uuid)->where('annee_id',$anneeActive->id)->first();
+
+        if (!$impot) {
+            toastr()->error('Impôt introuvable');
+            return back();
+        }
+
+        // Calcul du total des paiements déjà effectués
+        $totalPaye = Paiement::where('impot_id', $impot->id)->sum('montant_payer');
+        // Vérifier que le montant payé ne dépasse pas le montant dû
+        if ($request->montant > $impot->montant_a_payer - $totalPaye) {
+            toastr()->error('Le montant payé dépasse le montant dû.');
+            return back();
+        }
+
+        // Création du paiement
+        $payement =Paiement::where('uuid',$uuid)->firstOrFail();
+        $impot=Impot::where('uuid',$payement->impot->uuid)->firstOrFail();
+        $payement->user_id =Auth::user()->id;
+        $payement->impot_id = $impot->id;
+        $payement->montant_payer = $request->montant;
+        $payement->num_quitance = $request->num_quitance;
+        //$payement->montant_restant = $impot->montant_a_payer - ($totalPaye + $request->montant);
+        $payement->update();
+        $annee=Annee::where('active',1)->first();
+            Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'paiement modifier',
+                'activite'=>'Paiement',
+                'annee_id'=>$annee->id,
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
+            ]
+            );
+        // Mise à jour du statut de l'impôt
+        if ($payement->montant_restant <= 0) {
+            $impot->statut = "Payé";
+        } else {
+            $impot->statut = "Encours";
+        }
+        $impot->update();
+
+        toastr()->success('Paiement Modifier avec succès');
+        return to_route('impot.payer',$impot->uuid);
     }
     
 }

@@ -4,6 +4,7 @@ namespace App\Admin\Controllers\Contribuables;
 
 use App\Http\Controllers\Controller;
 use App\Models\Annee;
+use App\Models\Bien;
 use App\Models\Contribuable;
 use App\Models\Historique;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -149,6 +150,12 @@ class ContribuableController extends Controller
     public function delete(string $uuid)
     {
         $contribuable=Contribuable::where('uuid',$uuid)->firstOrFail();
+        $verifBien=Bien::where('contribuable_id',$contribuable->id)->first();
+        if($verifBien)
+        {
+            toastr()->warning('Impossible de supprimer un contribuable qui possède un bien');
+            return back();
+        }
         $contribuable->delete=1;
         $contribuable->update();
         $annee=Annee::where('active',1)->first();
