@@ -272,4 +272,22 @@ class CFUController extends Controller
             );
         return $pdf->stream('cfu.pdf'); 
     }
+    public function imprimerFiche(string $uuid)
+    {
+        $recensement_cfu=Recensement_cfu::where('uuid',$uuid)->with('occupant')->with('bien')->firstOrFail();
+        $bien = Bien::where('id',$recensement_cfu->bien_id)->with('contribuable')->first();
+        $ValeurLocative=Occupant::where('recensement_cfu_id',$recensement_cfu->id)->where('delete', 0)->sum('valeur_locative');
+        $pdf = Pdf::loadView('Admin::CFU.imprimerFiche', compact('recensement_cfu', 'bien','ValeurLocative'));
+        $annee=Annee::where('active',1)->first();
+        Historique::create(
+            [
+                'user_id'=>Auth::user()->id,
+                'action'=>'Imprimer',
+                'activite'=>'CFU',
+                'annee_id'=>$annee->id,
+              'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
+            ]
+            );
+        return $pdf->stream('cfu_fiche.pdf'); 
+    }
 }

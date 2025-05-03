@@ -126,6 +126,7 @@ use Illuminate\Support\Facades\Route;
         Route::post('/recense',[CFUController::class,'recense'])->name('cfu.recense');
         Route::get('/recherche', [CFUController::class, 'recherche'])->name('cfu.recherche');
         Route::get('/imprimer',[CFUController::class,'imprimer'])->name('cfu.imprimer');
+        Route::get('/imprimer-fiche/{uuid}',[CFUController::class,'imprimerFiche'])->name('cfu.fiche.imprime');
     });
     //Les routes pour la gestion CFU/Occupant
     Route::prefix('cfu')->group(function () {

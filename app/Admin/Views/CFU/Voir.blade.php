@@ -14,6 +14,7 @@
                 <div class="card border border-light">
                     <div class="card-body">
                         <div class="h5 mb-2 text-center text-success"> FICHE DE RECENSEMENT </div>
+                        <a href="{{ route('cfu.fiche.imprime',$recensement_cfu->uuid) }}" target="_blank" class="btn btn-outline-success">Imprimer <i class="bx bx-printer"></i></a>
                         {{-- <div class="h6 mb-3 text-success">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab mollitia ratione quaerat natus rem iusto asperiores facilis libero est doloremque velit, suscipit repellendus cupiditate illo dolor perspiciatis labore reiciendis vitae?</div> --}}
                             <div class="row">
                                 <div class="col-md-4 mb-1">

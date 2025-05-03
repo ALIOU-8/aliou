@@ -10,6 +10,7 @@ use App\Models\Personnel;
 use App\Models\Session;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -268,9 +269,9 @@ class AuthController extends Controller
             [
                 'user_id'=>Auth::user()->id,
                 'action'=>'Imprimer',
-                'activite'=>'Utilisateur',
+                'activite'=>'Bien',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
         return $pdf->stream('user.pdf'); 

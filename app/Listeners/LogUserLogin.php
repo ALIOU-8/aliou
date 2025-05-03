@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Models\Annee;
 use App\Models\Historique;
+use Carbon\Carbon;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -28,10 +29,10 @@ class LogUserLogin
         Historique::create(
             [
                 'user_id'=>Auth::user()->id,
-                'action'=>'Connecter',
-                'activite'=>'utilisateur',
+                'action'=>'Imprimer',
+                'activite'=>'Bien',
                 'annee_id'=>$annee->id,
-                'date'=>date('d:M:Y:H:i:s')
+                'date'=>Carbon::now()->locale('fr')->isoFormat('D MMMM YYYY [à] HH:mm:ss') 
             ]
             );
     }
