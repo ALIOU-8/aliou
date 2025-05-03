@@ -10,8 +10,10 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css">
-
-
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#0d6efd">
+    <link rel="icon" type="image/png" href="{{ asset('Admin/Assets/Impot.png') }}">
+    <link rel="manifest" href="/manifest.webmanifest?v=3">
 </head>
 <body>
     <!-- sidebar -->
@@ -186,6 +188,16 @@
     <script src="{{asset('Admin/JS/main.js')}}"></script>
     <script src="{{asset('Admin/JS/bootstrap.min.js')}}"></script>
     <script src="{{asset('Admin/JS/bootstrap.bundle.js')}}"></script>
-    
+    <script>
+        if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js')
+            .then(function(registration) {
+                console.log('Service Worker enregistré avec succès:', registration);
+            })
+            .catch(function(error) {
+                console.log('Erreur lors de l’enregistrement du Service Worker:', error);
+            });
+    }
+    </script>
 </body>
 </html>
