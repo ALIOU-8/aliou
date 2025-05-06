@@ -4,6 +4,7 @@ use App\Admin\Controllers\Biens\BiensController;
 use App\Admin\Controllers\CFU\CFUController;
 use App\Admin\Controllers\CFU\OccupantController;
 use App\Admin\Controllers\Contribuables\ContribuableController;
+use App\Admin\Controllers\Conversation\ConversationController;
 use App\Admin\Controllers\Dashboard\DashboardController;
 use App\Admin\Controllers\Impots\ImpotsController;
 use App\Admin\Controllers\Licence\LicenceController;
@@ -281,4 +282,18 @@ use Illuminate\Support\Facades\Route;
             Route::get('/compatabilité',[ParametreController::class,'comptabilite'])->name('compatabilite.index');
         });
     });
+
+
+
+
+    //la route des messageries
+    
+Route::middleware('auth')->group(function () {
+    Route::get('/conversation', [ConversationController::class, 'index'])->name('conversation');
+    Route::get('/conversation_show/{user}', [conversationController::class, 'show'])->name('conversation_show');
+    Route::get('/conversation_edit/{id}', [conversationController::class, 'store'])->name('conversation_edit');
+    Route::post('/conversation-store/{user}', [conversationController::class, 'store'])->name('conversation_store');
+    Route::put('/conversation-update/{id}', [conversationController::class, 'update'])->name('conversation_update');
+    Route::delete('/conversation-delete/{id}', [conversationController::class, 'destroy'])->name('conversation_destroy');
+});
    
